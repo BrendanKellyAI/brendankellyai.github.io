@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import sys
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -191,3 +192,19 @@ def validate_all(
     check_no_dashes_in_files(data_files, result)
 
     return result
+
+
+def main() -> int:
+    result = validate_all()
+    for warning in result.warnings:
+        print(f"warning: {warning}", file=sys.stderr)
+    if not result.ok:
+        for error in result.errors:
+            print(f"error: {error}", file=sys.stderr)
+        return 1
+    print("Content data is valid.")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

@@ -4,6 +4,7 @@ from hub.models import Episode, Season
 from hub.validation import (
     ValidationResult,
     check_no_dashes_in_files,
+    main,
     validate_all,
     validate_episodes,
     validate_site,
@@ -268,3 +269,15 @@ def test_filename_mismatch_fails():
     result = ValidationResult()
     validate_episodes({wrong_path: ep}, [SEASON_S1], Path("static/episodes"), result)
     assert any("file name does not match" in error for error in result.errors)
+
+
+def test_main_returns_zero_for_the_real_seed_data(capsys):
+    assert main() == 0
+    assert "Content data is valid." in capsys.readouterr().out
+
+
+def test_main_returns_one_when_validation_fails(monkeypatch, capsys):
+    failing_result = ValidationResult(errors=["something is wrong"])
+    monkeypatch.setattr("hub.validation.validate_all", lambda: failing_result)
+    assert main() == 1
+    assert "something is wrong" in capsys.readouterr().err
