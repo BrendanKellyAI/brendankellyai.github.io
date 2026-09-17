@@ -4,6 +4,10 @@
 {% block title %}The season guide, {{ site.name }}{% endblock %}
 {% block meta_description %}Every season of {{ site.descriptor }}, in order.{% endblock %}
 
+{% block structured_data %}
+<script type="application/ld+json">{{ series_jsonld | tojson }}</script>
+{% endblock %}
+
 {% block content %}
 <h1>The season guide</h1>
 <p>Two technical seasons, then one leadership season that applies them.</p>

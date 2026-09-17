@@ -4,6 +4,10 @@
 {% block title %}{{ episode.code }}, {{ episode.title }}, {{ site.name }}{% endblock %}
 {% block meta_description %}{{ episode.summary }}{% endblock %}
 
+{% block structured_data %}
+<script type="application/ld+json">{{ work_jsonld | tojson }}</script>
+{% endblock %}
+
 {% block content %}
 {% if season %}
 <p><a href="/seasons/{{ season_url_slug(season) }}/">{{ season.code }} {{ season.title }}</a></p>

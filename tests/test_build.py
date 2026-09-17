@@ -80,6 +80,11 @@ def fixture_project(tmp_path):
     static_dir = tmp_path / "static"
     (static_dir / "css").mkdir(parents=True)
     (static_dir / "css" / "style.css").write_text("body {}", encoding="utf-8")
+    (static_dir / "icons").mkdir(parents=True)
+    for filename in ("favicon.ico", "favicon.svg", "apple-touch-icon.png"):
+        (static_dir / "icons" / filename).write_bytes(b"fake icon")
+    (static_dir / "social").mkdir(parents=True)
+    (static_dir / "social" / "default-og.png").write_bytes(b"fake og image")
     _make_episode_static_files(static_dir, "s0-series-intro", "bk-s0-series-intro-v1.pdf")
     _make_episode_static_files(static_dir, "s1-e2-tokens", "bk-s1-e2-tokens-v1.pdf")
 
@@ -103,6 +108,32 @@ def test_build_writes_every_page_for_seed_data(tmp_path):
 
     assert not (output_dir / "episodes").exists()
 
+    assert (output_dir / "sitemap.xml").exists()
+    assert (output_dir / "robots.txt").exists()
+    assert (output_dir / "feed.xml").exists()
+    assert (output_dir / "favicon.ico").exists()
+    assert (output_dir / "favicon.svg").exists()
+    assert (output_dir / "apple-touch-icon.png").exists()
+
+    sitemap_xml = (output_dir / "sitemap.xml").read_text(encoding="utf-8")
+    assert "https://brendankellyai.github.io/seasons/s1-how-llms-work/" in sitemap_xml
+    assert "404" not in sitemap_xml
+
+    robots_txt = (output_dir / "robots.txt").read_text(encoding="utf-8")
+    assert "Sitemap: https://brendankellyai.github.io/sitemap.xml" in robots_txt
+
+    feed_xml = (output_dir / "feed.xml").read_text(encoding="utf-8")
+    assert "<feed xmlns=" in feed_xml
+
+    about_html = (output_dir / "about" / "index.html").read_text(encoding="utf-8")
+    assert '"@type": "Person"' in about_html
+
+    seasons_html = (output_dir / "seasons" / "index.html").read_text(encoding="utf-8")
+    assert '"@type": "CreativeWorkSeries"' in seasons_html
+
+    not_found_html = (output_dir / "404.html").read_text(encoding="utf-8")
+    assert 'name="robots" content="noindex"' in not_found_html
+
 
 def test_build_writes_pages_for_published_episodes(fixture_project, tmp_path):
     data_dir, static_dir = fixture_project
@@ -117,6 +148,14 @@ def test_build_writes_pages_for_published_episodes(fixture_project, tmp_path):
 
     home_html = (output_dir / "index.html").read_text(encoding="utf-8")
     assert "Tokens" in home_html
+
+    episode_html = s1e2_page.read_text(encoding="utf-8")
+    assert '"@type": "CreativeWork"' in episode_html
+    assert 'property="og:type" content="article"' in episode_html
+
+    feed_xml = (output_dir / "feed.xml").read_text(encoding="utf-8")
+    assert "Tokens" in feed_xml
+    assert "<entry>" in feed_xml
 
     s1_page_html = (output_dir / "seasons" / "s1-how-llms-work" / "index.html").read_text(
         encoding="utf-8"

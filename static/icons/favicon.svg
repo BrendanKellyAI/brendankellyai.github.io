@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" rx="8" fill="rgb(11, 31, 58)"/>
+  <text x="32" y="42" font-family="Arial, sans-serif" font-weight="700" font-size="28"
+        text-anchor="middle" fill="rgb(184, 224, 74)">BK</text>
+</svg>
