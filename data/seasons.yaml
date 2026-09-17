@@ -1,0 +1,104 @@
+- code: S1
+  number: 1
+  slug: how-llms-work
+  title: How LLMs work
+  type: technical
+  description: What a large language model does, from tokens and attention to hallucination and reasoning.
+
+- code: S2
+  number: 2
+  slug: retrieval-and-rag
+  title: Retrieval and RAG
+  type: technical
+  description: Grounding models in your own data with embeddings, search, chunking, reranking, and retrieval-augmented generation (RAG).
+
+- code: S3
+  number: 3
+  slug: ai-strategy
+  title: AI strategy and use case selection
+  type: leadership
+  description: Choosing where AI earns its place, building the business case, and knowing when not to use it.
+
+- code: S4
+  number: 4
+  slug: adapting-models
+  title: Adapting models
+  type: technical
+  description: Prompting, structured output, fine-tuning, quantisation, and choosing the right model for the task.
+
+- code: S5
+  number: 5
+  slug: agent-fundamentals
+  title: Agent fundamentals
+  type: technical
+  description: How agents plan, use tools, and remember, including common design patterns and the Model Context Protocol (MCP).
+
+- code: S6
+  number: 6
+  slug: ai-economics
+  title: AI economics
+  type: leadership
+  description: Build versus buy, managed versus self-hosted, lock-in, and the unit economics of AI features.
+
+- code: S7
+  number: 7
+  slug: data-for-ai
+  title: Data for AI
+  type: technical
+  description: Ingestion, document parsing, structured data, and the data quality every AI system depends on.
+
+- code: S8
+  number: 8
+  slug: evaluation
+  title: Evaluation
+  type: technical
+  description: Proving AI systems work, with golden sets, model-based judging, trajectory evaluation, and regression gates.
+
+- code: S9
+  number: 9
+  slug: ai-teams
+  title: Building AI teams and operating models
+  type: leadership
+  description: Team structures, hiring, skills, and how AI teams work with the rest of the organisation.
+
+- code: S10
+  number: 10
+  slug: reliability-and-traceability
+  title: "Agents in production: reliability and traceability"
+  type: technical
+  description: Tracing, failure modes, retries, and keeping humans in the loop.
+
+- code: S11
+  number: 11
+  slug: security
+  title: "Agents in production: security"
+  type: technical
+  description: Prompt injection, guardrails, tool permissions, and limiting the blast radius.
+
+- code: S12
+  number: 12
+  slug: delivery-and-adoption
+  title: Delivery, adoption, and change
+  type: leadership
+  description: Moving from pilot to production, aligning stakeholders, and getting AI adopted.
+
+- code: S13
+  number: 13
+  slug: performance-and-cost
+  title: "Agents in production: performance and cost"
+  type: technical
+  description: Latency budgets, caching, inference optimisation, and token economics.
+
+- code: S14
+  number: 14
+  slug: resilience
+  title: "Agents in production: resilience"
+  type: technical
+  description: What happens when an agent gets it wrong, and how to recover.
+
+- code: S15
+  number: 15
+  slug: governance
+  title: Governance and the regulated EU enterprise
+  type: leadership
+  description: The EU AI Act, data sovereignty, audit trails, and responsible AI in regulated industries.
