@@ -43,6 +43,16 @@ uv run pytest
 uv run ruff check
 ```
 
+## Deploy
+
+`.github/workflows/deploy.yml` lints, validates the content data, runs the tests, builds the
+site, checks internal links, and deploys `_site/` to GitHub Pages on every push to `main`. A
+schema error, a broken internal link, or an un-supplied `TO_BE_SUPPLIED` placeholder while
+`launch: true` is set in `data/site.yaml` fails the workflow before anything deploys.
+
+This repository's GitHub Pages source must be set to "GitHub Actions" (Settings > Pages) for the
+workflow's deploy step to work. It is currently set to deploy from the `main` branch directly.
+
 ## Publish an episode
 
 See the publishing workflow in the build specification.

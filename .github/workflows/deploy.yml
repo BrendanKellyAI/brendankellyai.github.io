@@ -1,0 +1,75 @@
+name: Deploy hub to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow only one concurrent deployment, skipping runs queued between the run
+# in progress and the latest queued. Do not cancel in progress runs, so a
+# production deployment always completes.
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v10.1.0
+        with:
+          enable-cache: true
+
+      - name: Set up Python
+        run: uv python install
+
+      - name: Install dependencies
+        run: uv sync --locked
+
+      - name: Lint
+        run: uv run ruff check
+
+      # Validation rules also run inside the build step below, but a
+      # dedicated step here matches the build spec's phase 5 checklist and
+      # fails fast on a schema error or an un-supplied placeholder blocked
+      # by launch: true in data/site.yaml.
+      - name: Validate content data
+        run: uv run python -m hub.validation
+
+      - name: Test
+        run: uv run pytest
+
+      - name: Build
+        run: uv run python -m hub.build
+
+      - name: Check internal links
+        run: uv run python -m hub.link_checker
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v6
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: "_site"
+
+  deploy:
+    needs: build
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5
