@@ -80,6 +80,7 @@ class SiteSettings(NoDashModel):
     newsletter_name: str
     newsletter_url: str
     lab_repo_url: str
+    about_bio: str
     current_season: str
     launch: bool = False
 

@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% from "_macros.html" import season_tile %}
+
+{% block title %}The season guide, {{ site.name }}{% endblock %}
+{% block meta_description %}Every season of {{ site.descriptor }}, in order.{% endblock %}
+
+{% block content %}
+<h1>The season guide</h1>
+<p>Two technical seasons, then one leadership season that applies them.</p>
+
+<div class="season-legend">
+  <span><span class="season-legend-swatch technical" aria-hidden="true"></span>Technical season</span>
+  <span><span class="season-legend-swatch leadership" aria-hidden="true"></span>Leadership season</span>
+  <span><span class="season-legend-swatch current" aria-hidden="true"></span>Current season</span>
+</div>
+
+<div class="season-grid">
+  {% for season in seasons %}
+  {{ season_tile(season, season.code == site.current_season) }}
+  {% endfor %}
+</div>
+
+<p>The field moves quickly. Seasons and episodes may be added as the series progresses.</p>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% from "_macros.html" import placeholder %}
+
+{% block title %}About, {{ site.name }}{% endblock %}
+{% block meta_description %}About {{ site.name }}, the author of {{ site.descriptor }}.{% endblock %}
+
+{% block content %}
+<h1>About</h1>
+
+{% if site.about_bio != TO_BE_SUPPLIED %}
+<p>{{ site.about_bio }}</p>
+{% else %}
+{{ placeholder("Biography to be supplied by Brendan Kelly.") }}
+{% endif %}
+
+<h2>Follow and contact</h2>
+<ul class="link-list">
+  <li><a href="{{ site.linkedin_profile_url }}">LinkedIn<span class="visually-hidden"> (opens LinkedIn)</span></a></li>
+</ul>
+
+<p>Code is published under the MIT licence in <a href="{{ site.lab_repo_url }}">applied-ai-lab<span class="visually-hidden"> (opens GitHub)</span></a>. Decks and articles are not.</p>
+{% endblock %}

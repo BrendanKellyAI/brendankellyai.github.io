@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% from "_macros.html" import season_tile, placeholder %}
+
+{% block title %}{{ site.name }}, {{ site.descriptor }}{% endblock %}
+{% block meta_description %}{{ site.description if site.description != TO_BE_SUPPLIED else site.descriptor }}{% endblock %}
+
+{% block content %}
+<h1>{{ site.name }}</h1>
+<p class="brand-descriptor">{{ site.descriptor }}</p>
+
+{% if site.description != TO_BE_SUPPLIED %}
+<p>{{ site.description }}</p>
+{% else %}
+{{ placeholder("Site description to be supplied by Brendan Kelly.") }}
+{% endif %}
+
+<h2>The season guide</h2>
+<div class="season-grid">
+  {% for season in seasons %}
+  {{ season_tile(season, season.code == site.current_season) }}
+  {% endfor %}
+</div>
+<p><a href="/seasons/">See the full season guide</a></p>
+
+<h2>Latest episode</h2>
+{% if latest_episode %}
+<p>
+  <span class="episode-badge">{{ latest_episode.code }}</span>
+  <a href="/episodes/{{ episode_url_slug(latest_episode) }}/">{{ latest_episode.title }}</a>
+</p>
+<p>{{ latest_episode.summary }}</p>
+{% else %}
+<p>No episodes have been published yet. The series intro is coming soon.</p>
+{% endif %}
+
+<h2>Where to follow</h2>
+<ul class="link-list">
+  <li><a href="{{ site.linkedin_profile_url }}">Follow on LinkedIn<span class="visually-hidden"> (opens LinkedIn)</span></a></li>
+  {% if site.newsletter_url != TO_BE_SUPPLIED %}
+  <li><a href="{{ site.newsletter_url }}">Subscribe to {{ site.newsletter_name }}</a></li>
+  {% else %}
+  <li>{{ placeholder("Newsletter link to be supplied once the newsletter is created.") }}</li>
+  {% endif %}
+  <li><a href="{{ site.lab_repo_url }}">applied-ai-lab on GitHub<span class="visually-hidden"> (opens GitHub)</span></a></li>
+</ul>
+{% endblock %}

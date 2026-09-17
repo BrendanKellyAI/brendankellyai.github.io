@@ -213,6 +213,7 @@ def test_current_season_missing_fails():
             "newsletter_name": "Applied AI with Brendan Kelly",
             "newsletter_url": "https://example.com/newsletter",
             "lab_repo_url": "https://github.com/BrendanKellyAI/applied-ai-lab",
+            "about_bio": "A short biography.",
             "current_season": "S99",
             "launch": False,
         }
@@ -235,6 +236,7 @@ def test_launch_true_with_unsupplied_field_fails():
             "newsletter_name": "Applied AI with Brendan Kelly",
             "newsletter_url": "https://example.com/newsletter",
             "lab_repo_url": "https://github.com/BrendanKellyAI/applied-ai-lab",
+            "about_bio": "A short biography.",
             "current_season": "S1",
             "launch": True,
         }

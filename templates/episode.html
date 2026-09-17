@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% from "_macros.html" import decision_rule, external_link %}
+
+{% block title %}{{ episode.code }}, {{ episode.title }}, {{ site.name }}{% endblock %}
+{% block meta_description %}{{ episode.summary }}{% endblock %}
+
+{% block content %}
+{% if season %}
+<p><a href="/seasons/{{ season_url_slug(season) }}/">{{ season.code }} {{ season.title }}</a></p>
+{% endif %}
+<span class="episode-badge">{{ episode.code }}</span>
+<h1>{{ episode.title }}</h1>
+<p class="brand-descriptor">{{ format_label(episode.format.value) }} &middot; {{ episode.publish_date | format_date }}</p>
+
+<img src="/static/episodes/{{ episode_url_slug(episode) }}/{{ episode.cover_image }}"
+     alt="Cover of the {{ episode.code }} deck, {{ episode.title }}." width="1200" height="627">
+
+<p>{{ episode.summary }}</p>
+
+{% if episode.decision_rule %}
+{{ decision_rule(episode.decision_rule) }}
+{% endif %}
+
+<ul class="link-list">
+  {{ external_link(episode.linkedin_url, "LinkedIn post", "LinkedIn") }}
+  {{ external_link("/static/episodes/" ~ episode_url_slug(episode) ~ "/" ~ episode.deck_pdf, "PDF deck", "the PDF deck") }}
+  {% if episode.format.value == "field_note" %}
+  {{ external_link(episode.article_url, "LinkedIn article", "LinkedIn") }}
+  {{ external_link(site.lab_repo_url ~ "/tree/main/" ~ episode.lab_path, "Experiment folder in applied-ai-lab", "GitHub") }}
+  {% elif episode.lab_path %}
+  {{ external_link(site.lab_repo_url ~ "/tree/main/" ~ episode.lab_path, "Episode folder in applied-ai-lab", "GitHub") }}
+  {% endif %}
+</ul>
+
+{% if episode.format.value == "playbook" and episode.playbook_slides %}
+<h2>Template walkthrough</h2>
+<ol class="playbook-slides">
+  {% for slide in episode.playbook_slides %}
+  <li><img src="/static/episodes/{{ episode_url_slug(episode) }}/{{ slide.file }}" alt="{{ slide.alt }}"></li>
+  {% endfor %}
+</ol>
+{% endif %}
+
+<nav aria-label="Episode navigation">
+  <ul class="link-list">
+    {% if previous_episode %}
+    <li><a href="/episodes/{{ episode_url_slug(previous_episode) }}/">Previous: {{ previous_episode.code }} {{ previous_episode.title }}</a></li>
+    {% endif %}
+    {% if next_episode %}
+    <li><a href="/episodes/{{ episode_url_slug(next_episode) }}/">Next: {{ next_episode.code }} {{ next_episode.title }}</a></li>
+    {% endif %}
+    {% if season %}
+    <li><a href="/seasons/{{ season_url_slug(season) }}/">Back to {{ season.code }} {{ season.title }}</a></li>
+    {% endif %}
+  </ul>
+</nav>
+{% endblock %}

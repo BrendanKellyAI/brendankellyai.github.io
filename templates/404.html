@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title %}Page not found, {{ site.name }}{% endblock %}
+{% block meta_description %}This page could not be found.{% endblock %}
+
+{% block content %}
+<h1>Page not found</h1>
+<p>That page does not exist, or has moved.</p>
+<ul class="link-list">
+  <li><a href="/">Home</a></li>
+  <li><a href="/seasons/">Season guide</a></li>
+</ul>
+{% endblock %}

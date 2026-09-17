@@ -21,6 +21,13 @@ uv run python -m hub.build
 
 Output is written to `_site/` and is not committed.
 
+To check the built pages against the W3C Nu Html Checker (requires network access, so it is not
+part of the test suite):
+
+```
+uv run python scripts/check_html.py
+```
+
 ## Develop
 
 ```
