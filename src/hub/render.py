@@ -83,7 +83,7 @@ def load_site_data(data_dir=DATA_DIR) -> SiteData:
 def make_environment() -> Environment:
     env = Environment(
         loader=FileSystemLoader(TEMPLATES_DIR),
-        autoescape=select_autoescape(["html"]),
+        autoescape=select_autoescape(["html", "xml"]),
         trim_blocks=True,
         lstrip_blocks=True,
     )

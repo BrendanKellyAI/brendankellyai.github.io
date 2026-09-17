@@ -11,6 +11,7 @@ from hub.render import (
     make_environment,
     season_url_slug,
 )
+from hub.structured_data import creative_work_jsonld
 
 SEASON_S1 = Season.model_validate(
     {
@@ -87,15 +88,18 @@ def test_environment_renders_episode_page_for_a_published_episode():
             "lab_path": "episodes/s1-e2-tokens",
         }
     )
+    site = load_site_data(DATA_DIR).site
     env = make_environment()
     template = env.get_template("episode.html")
     html = template.render(
-        site=load_site_data(DATA_DIR).site,
+        site=site,
         season=season,
         episode=episode,
         previous_episode=None,
         next_episode=None,
         active_nav="seasons",
+        social_image_path="/static/episodes/s1-e2-tokens/og.png",
+        work_jsonld=creative_work_jsonld(site, episode, season),
     )
     assert "Tokens" in html
     assert "Decision rule" in html
@@ -125,15 +129,18 @@ def test_environment_renders_playbook_slides():
             "playbook_slides": [{"file": "slide1.png", "alt": "Step one of the playbook."}],
         }
     )
+    site = load_site_data(DATA_DIR).site
     env = make_environment()
     template = env.get_template("episode.html")
     html = template.render(
-        site=load_site_data(DATA_DIR).site,
+        site=site,
         season=SEASON_S1,
         episode=episode,
         previous_episode=None,
         next_episode=None,
         active_nav="seasons",
+        social_image_path="/static/episodes/s1-e3-playbook-example/og.png",
+        work_jsonld=creative_work_jsonld(site, episode, SEASON_S1),
     )
     assert "Step one of the playbook." in html
     assert "slide1.png" in html
@@ -160,15 +167,18 @@ def test_environment_renders_field_note_links():
             "lab_path": "field-notes/s1-e7-lost-in-the-middle",
         }
     )
+    site = load_site_data(DATA_DIR).site
     env = make_environment()
     template = env.get_template("episode.html")
     html = template.render(
-        site=load_site_data(DATA_DIR).site,
+        site=site,
         season=SEASON_S1,
         episode=episode,
         previous_episode=None,
         next_episode=None,
         active_nav="seasons",
+        social_image_path="/static/episodes/s1-e7-lost-in-the-middle/og.png",
+        work_jsonld=creative_work_jsonld(site, episode, SEASON_S1),
     )
     assert "LinkedIn article" in html
     assert "Experiment folder in applied-ai-lab" in html
@@ -192,15 +202,18 @@ def test_environment_renders_s0_episode_without_season():
             "og_image": "og.png",
         }
     )
+    site = load_site_data(DATA_DIR).site
     env = make_environment()
     template = env.get_template("episode.html")
     html = template.render(
-        site=load_site_data(DATA_DIR).site,
+        site=site,
         season=None,
         episode=episode,
         previous_episode=None,
         next_episode=None,
         active_nav="seasons",
+        social_image_path="/static/episodes/s0-series-intro/og.png",
+        work_jsonld=creative_work_jsonld(site, episode, None),
     )
     assert "Applied AI: the series" in html
     assert "Decision rule" not in html

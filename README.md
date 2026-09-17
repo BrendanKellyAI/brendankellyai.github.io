@@ -28,6 +28,13 @@ part of the test suite):
 uv run python scripts/check_html.py
 ```
 
+The favicon set and the default social share image are generated once from the BK monogram and
+committed to `static/`. Regenerate them (requires Pillow, not a project dependency) with:
+
+```
+python scripts/generate_brand_assets.py
+```
+
 ## Develop
 
 ```

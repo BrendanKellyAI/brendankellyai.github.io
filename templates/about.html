@@ -4,6 +4,10 @@
 {% block title %}About, {{ site.name }}{% endblock %}
 {% block meta_description %}About {{ site.name }}, the author of {{ site.descriptor }}.{% endblock %}
 
+{% block structured_data %}
+<script type="application/ld+json">{{ person_jsonld | tojson }}</script>
+{% endblock %}
+
 {% block content %}
 <h1>About</h1>
 

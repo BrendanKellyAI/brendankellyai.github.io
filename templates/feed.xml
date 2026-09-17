@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>{{ site.name }}, {{ site.descriptor }}</title>
+  <subtitle>{{ site.description if site.description != TO_BE_SUPPLIED else site.descriptor }}</subtitle>
+  <link href="{{ site.base_url }}/feed.xml" rel="self"/>
+  <link href="{{ site.base_url }}/"/>
+  <id>{{ site.base_url }}/</id>
+  <updated>{{ updated }}</updated>
+  <author><name>{{ site.name }}</name></author>
+  {% for episode in episodes %}
+  <entry>
+    <title>{{ episode.code }}, {{ episode.title }}</title>
+    <link href="{{ site.base_url }}/episodes/{{ episode_url_slug(episode) }}/"/>
+    <id>{{ site.base_url }}/episodes/{{ episode_url_slug(episode) }}/</id>
+    <published>{{ entry_timestamp(episode) }}</published>
+    <updated>{{ entry_timestamp(episode) }}</updated>
+    <summary>{{ episode.summary }}</summary>
+    {% if episode.decision_rule %}
+    <content type="text">{{ episode.decision_rule }}</content>
+    {% endif %}
+  </entry>
+  {% endfor %}
+</feed>
