@@ -1,0 +1,45 @@
+{% macro season_tile(season, is_current) %}
+{% if is_current %}
+  {% set tile_class = "season-tile-current" %}
+{% elif season.type.value == "technical" %}
+  {% set tile_class = "season-tile-technical" %}
+{% else %}
+  {% set tile_class = "season-tile-leadership" %}
+{% endif %}
+<a class="season-tile {{ tile_class }}" href="/seasons/{{ season_url_slug(season) }}/">
+  <span class="season-tile-code">{{ season.code }}</span>
+  <span class="season-tile-title">{{ season.title }}</span>
+</a>
+{% endmacro %}
+
+{% macro episode_row(episode) %}
+<li class="episode-row">
+  <span class="episode-badge">{{ episode.code }}</span>
+  {% if episode.status.value == "published" %}
+  <a class="episode-row-title" href="/episodes/{{ episode_url_slug(episode) }}/">{{ episode.title }}</a>
+  {% else %}
+  <span class="episode-row-title">{{ episode.title }}</span>
+  {% endif %}
+  <span class="episode-row-format">{{ format_label(episode.format.value) }}</span>
+  {% if episode.status.value == "published" %}
+  <span class="episode-row-date">{{ episode.publish_date | format_date }}</span>
+  {% else %}
+  <span class="episode-row-status">Coming soon</span>
+  {% endif %}
+</li>
+{% endmacro %}
+
+{% macro decision_rule(statement) %}
+<div class="decision-rule">
+  <span class="decision-rule-label">Decision rule</span>
+  <p class="decision-rule-statement">{{ statement }}</p>
+</div>
+{% endmacro %}
+
+{% macro external_link(url, label, service_note) %}
+<li><a href="{{ url }}">{{ label }}<span class="visually-hidden"> (opens {{ service_note }})</span></a></li>
+{% endmacro %}
+
+{% macro placeholder(note) %}
+<p class="placeholder">{{ note }}</p>
+{% endmacro %}

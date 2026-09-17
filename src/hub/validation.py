@@ -11,7 +11,7 @@ from hub.models import FORMATS_REQUIRING_DECISION_RULE, Episode, EpisodeStatus, 
 _DASH_CHARS = "—–"
 _MAX_PDF_BYTES = 3 * 1024 * 1024
 _TO_BE_SUPPLIED = "TO_BE_SUPPLIED"
-_WARN_IF_UNSUPPLIED = ("description", "newsletter_url")
+_WARN_IF_UNSUPPLIED = ("description", "newsletter_url", "about_bio")
 
 
 @dataclass

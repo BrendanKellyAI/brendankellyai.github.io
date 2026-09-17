@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en-IE">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}{{ site.name }}, {{ site.descriptor }}{% endblock %}</title>
+  <meta name="description" content="{% block meta_description %}{{ site.descriptor }} by {{ site.name }}{% endblock %}">
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+  <a class="skip-link" href="#content">Skip to content</a>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="/">
+        <span class="monogram" aria-hidden="true">BK</span>
+        <span>
+          <span class="brand-name">{{ site.name }}</span>
+          <span class="brand-descriptor">{{ site.descriptor }}</span>
+        </span>
+      </a>
+      <nav class="site-nav" aria-label="Primary">
+        <ul>
+          <li><a href="/"{% if active_nav == "home" %} aria-current="page"{% endif %}>Home</a></li>
+          <li><a href="/seasons/"{% if active_nav == "seasons" %} aria-current="page"{% endif %}>Season guide</a></li>
+          <li><a href="/about/"{% if active_nav == "about" %} aria-current="page"{% endif %}>About</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+  <main id="content">
+    <div class="wrap">
+      {% block content %}{% endblock %}
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>{{ site.name }}, {{ site.descriptor }}.</p>
+      <ul>
+        <li><a href="{{ site.linkedin_profile_url }}">LinkedIn<span class="visually-hidden"> (opens LinkedIn)</span></a></li>
+        {% if site.newsletter_url != TO_BE_SUPPLIED %}
+        <li><a href="{{ site.newsletter_url }}">{{ site.newsletter_name }}</a></li>
+        {% endif %}
+        <li><a href="{{ site.lab_repo_url }}">applied-ai-lab on GitHub</a></li>
+      </ul>
+      <p>Code is published under the MIT licence in applied-ai-lab. Decks and articles are not.</p>
+    </div>
+  </footer>
+</body>
+</html>

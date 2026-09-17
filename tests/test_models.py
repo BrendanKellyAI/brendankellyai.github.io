@@ -31,6 +31,7 @@ VALID_SITE = {
     "newsletter_name": "Applied AI with Brendan Kelly",
     "newsletter_url": "https://example.com/newsletter",
     "lab_repo_url": "https://github.com/BrendanKellyAI/applied-ai-lab",
+    "about_bio": "A short biography.",
     "current_season": "S1",
     "launch": False,
 }
