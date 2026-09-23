@@ -40,6 +40,11 @@ def format_date(value) -> str:
     return value.strftime("%d %B %Y").lstrip("0")
 
 
+def has_value(value: str | None) -> bool:
+    """True when a site.yaml field holds real content, not a placeholder or blank."""
+    return bool(value) and value != TO_BE_SUPPLIED
+
+
 @dataclass
 class SiteData:
     site: SiteSettings
@@ -91,6 +96,7 @@ def make_environment() -> Environment:
     env.globals["season_url_slug"] = season_url_slug
     env.globals["format_label"] = format_label
     env.globals["TO_BE_SUPPLIED"] = TO_BE_SUPPLIED
+    env.globals["has_value"] = has_value
     env.filters["format_date"] = format_date
     return env
 

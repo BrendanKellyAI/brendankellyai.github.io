@@ -50,10 +50,13 @@ PUBLISHED_REQUIRED_FIELDS = {
 
 
 def test_seed_data_passes_validation():
+    # The real seed data changes as the owner fills in placeholders (site
+    # description, about_bio, and so on), so this only checks that it is
+    # schema valid and free of hard errors. Warning behaviour for specific
+    # TO_BE_SUPPLIED fields is covered by the fixture based tests below,
+    # which do not depend on the current state of data/site.yaml.
     result = validate_all()
     assert result.ok, result.errors
-    assert any("description" in warning for warning in result.warnings)
-    assert any("newsletter_url" in warning for warning in result.warnings)
 
 
 def test_duplicate_episode_code_fails():

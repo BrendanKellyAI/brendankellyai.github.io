@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from hub.models import Episode, Season, SiteSettings
-from hub.render import episode_url_slug
+from hub.render import episode_url_slug, has_value
 
 
 def _absolute(site: SiteSettings, path: str) -> str:
@@ -28,7 +28,7 @@ def creative_work_series_jsonld(site: SiteSettings) -> dict:
         "url": _absolute(site, "/seasons/"),
         "author": {"@type": "Person", "name": site.name},
     }
-    if site.description != "TO_BE_SUPPLIED":
+    if has_value(site.description):
         data["description"] = site.description
     return data
 

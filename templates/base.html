@@ -64,7 +64,7 @@
       <p>{{ site.name }}, {{ site.descriptor }}.</p>
       <ul>
         <li><a href="{{ site.linkedin_profile_url }}">LinkedIn<span class="visually-hidden"> (opens LinkedIn)</span></a></li>
-        {% if site.newsletter_url != TO_BE_SUPPLIED %}
+        {% if has_value(site.newsletter_url) %}
         <li><a href="{{ site.newsletter_url }}">{{ site.newsletter_name }}</a></li>
         {% endif %}
         <li><a href="{{ site.lab_repo_url }}">applied-ai-lab on GitHub</a></li>
