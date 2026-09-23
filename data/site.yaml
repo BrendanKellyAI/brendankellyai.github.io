@@ -1,9 +1,10 @@
 name: Brendan Kelly
 descriptor: Applied AI
-description: A 15-season series on applied AI, structured like a TV series: technical seasons on how AI works in production, and leadership seasons on how to decide, organise, and govern it.
+description: "A 15-season series on applied AI, structured like a TV series: technical seasons on how AI works in production, and leadership seasons on how to decide, organise, and govern it."
 base_url: https://brendankellyai.github.io
 linkedin_profile_url: https://www.linkedin.com/in/brendan-kelly-irl
 newsletter_name: Applied AI with Brendan Kelly
+newsletter_url: ""
 lab_repo_url: https://github.com/BrendanKellyAI/applied-ai-lab
 about_bio: Brendan Kelly is a Director of Software Engineering with more than 20 years across engineering and engineering leadership. Applied AI is where he learns in public. Every episode tests a claim against published code and results, and ends with a decision rule worth keeping. When a claim fails, the episode says so.
 current_season: S1
