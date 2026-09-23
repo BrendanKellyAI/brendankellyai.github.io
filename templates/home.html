@@ -2,13 +2,13 @@
 {% from "_macros.html" import season_tile, placeholder %}
 
 {% block title %}{{ site.name }}, {{ site.descriptor }}{% endblock %}
-{% block meta_description %}{{ site.description if site.description != TO_BE_SUPPLIED else site.descriptor }}{% endblock %}
+{% block meta_description %}{{ site.description if has_value(site.description) else site.descriptor }}{% endblock %}
 
 {% block content %}
 <h1>{{ site.name }}</h1>
 <p class="brand-descriptor">{{ site.descriptor }}</p>
 
-{% if site.description != TO_BE_SUPPLIED %}
+{% if has_value(site.description) %}
 <p>{{ site.description }}</p>
 {% else %}
 {{ placeholder("Site description to be supplied by Brendan Kelly.") }}
@@ -36,7 +36,7 @@
 <h2>Where to follow</h2>
 <ul class="link-list">
   <li><a href="{{ site.linkedin_profile_url }}">Follow on LinkedIn<span class="visually-hidden"> (opens LinkedIn)</span></a></li>
-  {% if site.newsletter_url != TO_BE_SUPPLIED %}
+  {% if has_value(site.newsletter_url) %}
   <li><a href="{{ site.newsletter_url }}">Subscribe to {{ site.newsletter_name }}</a></li>
   {% else %}
   <li>{{ placeholder("Newsletter link to be supplied once the newsletter is created.") }}</li>

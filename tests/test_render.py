@@ -7,6 +7,7 @@ from hub.render import (
     episode_url_slug,
     format_date,
     format_label,
+    has_value,
     load_site_data,
     make_environment,
     season_url_slug,
@@ -49,6 +50,16 @@ def test_format_label():
 
 def test_format_date_strips_leading_zero():
     assert format_date(date(2026, 10, 6)) == "6 October 2026"
+
+
+def test_has_value_rejects_placeholder_and_blank():
+    assert has_value("TO_BE_SUPPLIED") is False
+    assert has_value("") is False
+    assert has_value(None) is False
+
+
+def test_has_value_accepts_real_content():
+    assert has_value("A real newsletter URL") is True
 
 
 def test_adjacent_finds_neighbours():

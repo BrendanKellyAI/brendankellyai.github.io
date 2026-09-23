@@ -11,7 +11,7 @@
 {% block content %}
 <h1>About</h1>
 
-{% if site.about_bio != TO_BE_SUPPLIED %}
+{% if has_value(site.about_bio) %}
 <p>{{ site.about_bio }}</p>
 {% else %}
 {{ placeholder("Biography to be supplied by Brendan Kelly.") }}

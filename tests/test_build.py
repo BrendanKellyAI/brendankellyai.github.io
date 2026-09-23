@@ -115,6 +115,17 @@ def test_build_writes_every_page_for_seed_data(tmp_path):
     assert (output_dir / "favicon.svg").exists()
     assert (output_dir / "apple-touch-icon.png").exists()
 
+
+def test_build_never_emits_an_empty_href(tmp_path):
+    # Regression test: a blank (not TO_BE_SUPPLIED) site.yaml field, such as
+    # newsletter_url: "", must not render as <a href="">, which is a broken
+    # link. This covers the real seed data as it changes over time.
+    output_dir = tmp_path / "_site"
+    build(output_dir=output_dir)
+
+    for html_file in output_dir.rglob("*.html"):
+        assert 'href=""' not in html_file.read_text(encoding="utf-8"), html_file
+
     sitemap_xml = (output_dir / "sitemap.xml").read_text(encoding="utf-8")
     assert "https://brendankellyai.github.io/seasons/s1-how-llms-work/" in sitemap_xml
     assert "404" not in sitemap_xml

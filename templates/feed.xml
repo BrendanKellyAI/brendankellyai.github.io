@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <title>{{ site.name }}, {{ site.descriptor }}</title>
-  <subtitle>{{ site.description if site.description != TO_BE_SUPPLIED else site.descriptor }}</subtitle>
+  <subtitle>{{ site.description if has_value(site.description) else site.descriptor }}</subtitle>
   <link href="{{ site.base_url }}/feed.xml" rel="self"/>
   <link href="{{ site.base_url }}/"/>
   <id>{{ site.base_url }}/</id>
