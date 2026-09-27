@@ -130,6 +130,15 @@ def test_build_never_emits_an_empty_href(tmp_path):
     for html_file in output_dir.rglob("*.html"):
         assert 'href=""' not in html_file.read_text(encoding="utf-8"), html_file
 
+
+def test_home_page_has_no_newsletter_placeholder(tmp_path):
+    # Without a newsletter URL, the home page omits the newsletter row
+    # entirely rather than showing a "to be supplied" placeholder.
+    output_dir = tmp_path / "_site"
+    build(output_dir=output_dir)
+    home_html = (output_dir / "index.html").read_text(encoding="utf-8")
+    assert "Newsletter link to be supplied" not in home_html
+
     sitemap_xml = (output_dir / "sitemap.xml").read_text(encoding="utf-8")
     assert "https://brendankellyai.github.io/seasons/s1-how-llms-work/" in sitemap_xml
     assert "404" not in sitemap_xml
