@@ -27,8 +27,8 @@
 {% endif %}
 
 <ul class="link-list">
-  {{ external_link(episode.linkedin_url, "LinkedIn post", "LinkedIn") }}
-  {{ external_link("/static/episodes/" ~ episode_url_slug(episode) ~ "/" ~ episode.deck_pdf, "PDF deck", "the PDF deck") }}
+  {{ external_link(episode.linkedin_url, "LinkedIn post", "LinkedIn", new_window=true) }}
+  {{ external_link("/static/episodes/" ~ episode_url_slug(episode) ~ "/" ~ episode.deck_pdf, "PDF deck", "the PDF deck", new_window=true) }}
   {% if episode.format.value == "field_note" %}
   {{ external_link(episode.article_url, "LinkedIn article", "LinkedIn") }}
   {{ external_link(site.lab_repo_url ~ "/tree/main/" ~ episode.lab_path, "Experiment folder in applied-ai-lab", "GitHub") }}

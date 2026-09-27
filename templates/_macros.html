@@ -36,8 +36,12 @@
 </div>
 {% endmacro %}
 
-{% macro external_link(url, label, service_note) %}
+{% macro external_link(url, label, service_note, new_window=false) %}
+{% if new_window %}
+<li><a href="{{ url }}" target="_blank" rel="noopener noreferrer">{{ label }}<span class="visually-hidden"> (opens {{ service_note }} in a new tab)</span></a></li>
+{% else %}
 <li><a href="{{ url }}">{{ label }}<span class="visually-hidden"> (opens {{ service_note }})</span></a></li>
+{% endif %}
 {% endmacro %}
 
 {% macro placeholder(note) %}
