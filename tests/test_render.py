@@ -143,6 +143,13 @@ def test_environment_renders_episode_page_for_a_published_episode():
     assert "/static/episodes/s1-e2-tokens/cover.png" in html
     assert "episodes/s1-e2-tokens" in html
 
+    new_tab = 'target="_blank" rel="noopener noreferrer"'
+    assert f'href="https://www.linkedin.com/posts/example" {new_tab}' in html
+    assert f'href="/static/episodes/s1-e2-tokens/bk-s1-e2-tokens-v1.pdf" {new_tab}' in html
+    assert "(opens LinkedIn in a new tab)" in html
+    assert "(opens the PDF deck in a new tab)" in html
+    assert html.count('target="_blank"') == 2
+
 
 def test_environment_renders_playbook_slides():
     episode = Episode.model_validate(
