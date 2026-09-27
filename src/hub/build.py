@@ -15,6 +15,7 @@ from hub.render import (
     episode_url_slug,
     load_site_data,
     make_environment,
+    png_size,
     season_url_slug,
 )
 from hub.structured_data import creative_work_jsonld, creative_work_series_jsonld, person_jsonld
@@ -83,7 +84,9 @@ def _render_season_pages(env, data: SiteData, output_dir: Path) -> None:
         _write_page(output_dir, url_path, html)
 
 
-def _render_episode_pages(env, data: SiteData, output_dir: Path) -> None:
+def _render_episode_pages(
+    env, data: SiteData, output_dir: Path, static_source_dir: Path
+) -> None:
     template = env.get_template("episode.html")
     unseasoned = [ep for ep in data.all_episodes if ep.season is None]
 
@@ -102,6 +105,10 @@ def _render_episode_pages(env, data: SiteData, output_dir: Path) -> None:
                 active_nav="seasons",
                 canonical_path=url_path,
                 social_image_path=_episode_og_image_path(episode),
+                cover_size=png_size(
+                    static_source_dir / "episodes" / episode_url_slug(episode)
+                    / episode.cover_image
+                ),
                 og_type="article",
                 work_jsonld=creative_work_jsonld(data.site, episode, season),
             )
@@ -190,7 +197,7 @@ def build(
     _render_home(env, data, output_dir)
     _render_seasons_index(env, data, output_dir)
     _render_season_pages(env, data, output_dir)
-    _render_episode_pages(env, data, output_dir)
+    _render_episode_pages(env, data, output_dir, static_source_dir)
     _render_about(env, data, output_dir)
     _render_404(env, data, output_dir)
     _render_sitemap(env, data, output_dir)

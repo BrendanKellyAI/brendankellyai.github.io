@@ -4,14 +4,14 @@ number: 0
 slug: season-intro
 title: "Season 1: How LLMs work"
 format: season_intro
-status: planned
-publish_date: null
-summary: null
+status: published
+publish_date: 2026-09-27
+summary: What large language models (LLMs) actually do, from the first token to reasoning.
 decision_rule: null
-linkedin_url: null
-deck_pdf: null
-cover_image: null
-og_image: null
+linkedin_url: https://lnkd.in/p/dGZGQvwz
+deck_pdf: bk-s1-e0-season-intro-v1.pdf
+cover_image: cover.png
+og_image: og.png
 lab_path: null
 article_url: null
 playbook_slides: []

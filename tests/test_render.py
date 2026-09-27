@@ -10,6 +10,7 @@ from hub.render import (
     has_value,
     load_site_data,
     make_environment,
+    png_size,
     season_url_slug,
 )
 from hub.structured_data import creative_work_jsonld
@@ -62,6 +63,25 @@ def test_has_value_accepts_real_content():
     assert has_value("A real newsletter URL") is True
 
 
+def test_png_size_reads_dimensions(tmp_path):
+    header = (
+        b"\x89PNG\r\n\x1a\n"
+        + (13).to_bytes(4, "big")
+        + b"IHDR"
+        + (1080).to_bytes(4, "big")
+        + (1350).to_bytes(4, "big")
+    )
+    path = tmp_path / "cover.png"
+    path.write_bytes(header)
+    assert png_size(path) == (1080, 1350)
+
+
+def test_png_size_returns_none_for_non_png(tmp_path):
+    path = tmp_path / "cover.jpg"
+    path.write_bytes(b"\xff\xd8\xff not a png at all, just some bytes")
+    assert png_size(path) is None
+
+
 def test_adjacent_finds_neighbours():
     items = ["a", "b", "c"]
     assert adjacent(items, "a") == (None, "b")
@@ -74,8 +94,12 @@ def test_load_site_data_groups_episodes_by_season():
     assert len(data.seasons) == 15
     assert len(data.episodes_for("S1")) == 13
     assert data.episodes_for("S2") == []
-    assert data.latest_episode is None
-    assert data.published_episodes == []
+    published = data.published_episodes
+    assert all(ep.status.value == "published" for ep in published)
+    if published:
+        assert data.latest_episode.publish_date == max(ep.publish_date for ep in published)
+    else:
+        assert data.latest_episode is None
 
 
 def test_environment_renders_episode_page_for_a_published_episode():

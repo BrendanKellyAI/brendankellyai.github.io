@@ -16,8 +16,9 @@
 <h1>{{ episode.title }}</h1>
 <p class="brand-descriptor">{{ format_label(episode.format.value) }} &middot; {{ episode.publish_date | format_date }}</p>
 
-<img src="/static/episodes/{{ episode_url_slug(episode) }}/{{ episode.cover_image }}"
-     alt="Cover of the {{ episode.code }} deck, {{ episode.title }}." width="1200" height="627">
+<img class="episode-cover" src="/static/episodes/{{ episode_url_slug(episode) }}/{{ episode.cover_image }}"
+     alt="Cover of the {{ episode.code }} deck, {{ episode.title }}."
+     {%- if cover_size %} width="{{ cover_size[0] }}" height="{{ cover_size[1] }}"{% endif %}>
 
 <p>{{ episode.summary }}</p>
 

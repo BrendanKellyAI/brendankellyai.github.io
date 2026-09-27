@@ -32,7 +32,7 @@ def test_sitemap_paths_covers_home_seasons_and_about_but_not_404():
     assert "/seasons/" in paths
     assert "/about/" in paths
     assert "/seasons/s1-how-llms-work/" in paths
-    assert len(paths) == 3 + 15
+    assert len(paths) == 3 + 15 + len(SEED_DATA.published_episodes)
     assert "/404.html" not in paths
 
 

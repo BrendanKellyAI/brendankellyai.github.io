@@ -90,6 +90,14 @@ img {
   border-radius: 4px;
 }
 
+.episode-cover {
+  display: block;
+  width: 100%;
+  max-width: 480px;
+  margin: 1.5rem 0;
+  border: 1px solid var(--hair);
+}
+
 a {
   color: var(--white);
   text-decoration: underline;

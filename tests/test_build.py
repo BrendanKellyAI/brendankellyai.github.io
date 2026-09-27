@@ -2,6 +2,7 @@ import pytest
 
 from hub.build import build
 from hub.loaders import DATA_DIR
+from hub.render import episode_url_slug, load_site_data
 
 SITE_YAML = """\
 name: Brendan Kelly
@@ -106,7 +107,10 @@ def test_build_writes_every_page_for_seed_data(tmp_path):
     season_dirs = list((output_dir / "seasons").iterdir())
     assert len([p for p in season_dirs if p.is_dir()]) == 15
 
-    assert not (output_dir / "episodes").exists()
+    data = load_site_data(DATA_DIR)
+    for episode in data.all_episodes:
+        page = output_dir / "episodes" / episode_url_slug(episode) / "index.html"
+        assert page.exists() == (episode in data.published_episodes), episode.code
 
     assert (output_dir / "sitemap.xml").exists()
     assert (output_dir / "robots.txt").exists()
