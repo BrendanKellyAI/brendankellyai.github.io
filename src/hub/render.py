@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from pathlib import Path
 
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
@@ -38,6 +39,18 @@ def format_label(format_value: str) -> str:
 
 def format_date(value) -> str:
     return value.strftime("%d %B %Y").lstrip("0")
+
+
+_PNG_SIGNATURE = b"\x89PNG\r\n\x1a\n"
+
+
+def png_size(path: Path) -> tuple[int, int] | None:
+    """Width and height from a PNG header, or None if the file is not a PNG."""
+    with path.open("rb") as handle:
+        header = handle.read(24)
+    if len(header) < 24 or not header.startswith(_PNG_SIGNATURE):
+        return None
+    return int.from_bytes(header[16:20], "big"), int.from_bytes(header[20:24], "big")
 
 
 def has_value(value: str | None) -> bool:
