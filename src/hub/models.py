@@ -11,6 +11,7 @@ from pydantic import BaseModel, ConfigDict, model_validator
 _DASH_CHARS = "—–"
 _SUMMARY_MAX_WORDS = 30
 _SENTENCE_END = (".", "!", "?")
+_SENTENCE_BREAK = re.compile(r"[.!?](?=\s|$)")
 
 
 class SeasonType(StrEnum):
@@ -134,7 +135,8 @@ class Episode(NoDashModel):
             raise ValueError(
                 f"summary has {word_count} words, over the {_SUMMARY_MAX_WORDS} word limit"
             )
-        terminal_count = sum(summary.count(mark) for mark in _SENTENCE_END)
+        # A mark only ends a sentence when followed by a space or the end, so "9.2" is not one.
+        terminal_count = len(_SENTENCE_BREAK.findall(summary))
         if terminal_count > 1 or (terminal_count == 1 and not summary.endswith(_SENTENCE_END)):
             raise ValueError(f"summary is not a single sentence: {summary!r}")
         return self

@@ -4,14 +4,14 @@ number: 2
 slug: tokens
 title: Tokens
 format: explainer
-status: planned
-publish_date: null
-summary: null
-decision_rule: null
-linkedin_url: null
-deck_pdf: null
-cover_image: null
-og_image: null
-lab_path: null
+status: published
+publish_date: 2026-09-29
+summary: Tokens are the unit every model reads, writes, and bills in, and one sentence can need up to 9.2 times as many tokens in Amharic as in English.
+decision_rule: Budget, limit, and price in tokens, measured on your own traffic in every language you serve.
+linkedin_url: https://lnkd.in/p/dzcEMH9X
+deck_pdf: bk-s1-e2-tokens-v1.pdf
+cover_image: cover.png
+og_image: og.png
+lab_path: episodes/s1-e2-tokens
 article_url: null
 playbook_slides: []
