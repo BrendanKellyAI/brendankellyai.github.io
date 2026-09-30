@@ -9,7 +9,7 @@ publish_date: 2026-09-30
 summary: Embeddings place text as coordinates on a map of meaning, but similar is not the same as relevant, so treat your embedding model as a versioned dependency.
 decision_rule: "Treat the embedding model as a versioned dependency: pin it, test it on your own queries, and re-embed when it changes."
 linkedin_url: https://lnkd.in/p/drkVge8j
-deck_pdf: bk-s1-e3-embeddings-v1.pdf
+deck_pdf: bk-s1-e3-embeddings-v6.pdf
 cover_image: cover.png
 og_image: og.png
 lab_path: episodes/s1-e3-embeddings

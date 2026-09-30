@@ -230,7 +230,7 @@ The build fails if any rule is broken:
 - Published episodes have a publish date, summary, LinkedIn URL, deck PDF, cover image, and social image.
 - Published explainers, field notes, playbooks, and decision frameworks have a decision rule. Series intros, season intros, and recaps do not require one.
 - Field notes have an article URL and a lab path. Playbooks have at least one playbook slide with alt text.
-- Every referenced file exists; PDFs are under 3 MB.
+- Every referenced file exists; PDFs are under 5 MB (raised from 3 MB on 1 October 2026 at the owner's request).
 - Deck file names match `bk-<episode-code>-<slug>-v<number>.pdf`, for example `bk-s1-e2-tokens-v1.pdf`. When a new version is published, the old PDF is removed from the episode folder, so only the current version is served and a stale cached copy can never be linked.
 - `current_season` exists.
 - No em dash (U+2014) or en dash (U+2013) appears in any data file or template.
