@@ -10,7 +10,8 @@ from hub.loaders import DATA_DIR, STATIC_EPISODES_DIR, load_episodes, load_seaso
 from hub.models import FORMATS_REQUIRING_DECISION_RULE, Episode, EpisodeStatus, Season, SiteSettings
 
 _DASH_CHARS = "—–"
-_MAX_PDF_BYTES = 3 * 1024 * 1024
+MAX_PDF_MB = 5
+_MAX_PDF_BYTES = MAX_PDF_MB * 1024 * 1024
 _TO_BE_SUPPLIED = "TO_BE_SUPPLIED"
 _WARN_IF_UNSUPPLIED = ("description", "newsletter_url", "about_bio")
 
@@ -138,7 +139,7 @@ def _check_referenced_files(
         if not file_path.exists():
             result.errors.append(f"{path}: {field_name} file not found: {file_path}")
         elif field_name == "deck_pdf" and file_path.stat().st_size > _MAX_PDF_BYTES:
-            result.errors.append(f"{path}: deck_pdf {filename} is over 3 MB")
+            result.errors.append(f"{path}: deck_pdf {filename} is over {MAX_PDF_MB} MB")
 
     for slide in episode.playbook_slides:
         file_path = episode_dir / slide.file

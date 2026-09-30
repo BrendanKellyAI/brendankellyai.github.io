@@ -2,6 +2,7 @@ from pathlib import Path
 
 from hub.models import Episode, Season
 from hub.validation import (
+    MAX_PDF_MB,
     ValidationResult,
     check_no_dashes_in_files,
     main,
@@ -182,12 +183,12 @@ def test_pdf_over_size_limit_fails(tmp_path):
     ep = episode(status="published", **PUBLISHED_REQUIRED_FIELDS)
     episode_dir = tmp_path / f"{ep.code_slug}-{ep.slug}"
     episode_dir.mkdir(parents=True)
-    (episode_dir / ep.deck_pdf).write_bytes(b"0" * (3 * 1024 * 1024 + 1))
+    (episode_dir / ep.deck_pdf).write_bytes(b"0" * (MAX_PDF_MB * 1024 * 1024 + 1))
     (episode_dir / ep.cover_image).write_bytes(b"cover")
     (episode_dir / ep.og_image).write_bytes(b"og")
     result = ValidationResult()
     validate_episodes({path_for(ep): ep}, [SEASON_S1], tmp_path, result)
-    assert any("over 3 MB" in error for error in result.errors)
+    assert any(f"over {MAX_PDF_MB} MB" in error for error in result.errors)
 
 
 def test_referenced_files_within_size_limit_pass(tmp_path):

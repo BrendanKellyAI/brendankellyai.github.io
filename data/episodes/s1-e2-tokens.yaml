@@ -9,7 +9,7 @@ publish_date: 2026-09-29
 summary: Tokens are the unit every model reads, writes, and bills in, and one sentence can need up to 9.2 times as many tokens in Amharic as in English.
 decision_rule: Budget, limit, and price in tokens, measured on your own traffic in every language you serve.
 linkedin_url: https://lnkd.in/p/dzcEMH9X
-deck_pdf: bk-s1-e2-tokens-v1.pdf
+deck_pdf: bk-s1-e2-tokens-v4.pdf
 cover_image: cover.png
 og_image: og.png
 lab_path: episodes/s1-e2-tokens
