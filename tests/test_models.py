@@ -110,6 +110,12 @@ def test_summary_at_word_limit_passes():
     assert episode.summary == summary
 
 
+def test_summary_with_a_decimal_number_is_one_sentence():
+    summary = "One sentence can need up to 9.2 times as many tokens in Amharic."
+    episode = Episode.model_validate({**VALID_EPISODE, "summary": summary})
+    assert episode.summary == summary
+
+
 def test_summary_multiple_sentences_rejected():
     with pytest.raises(ValidationError, match="single sentence"):
         Episode.model_validate(
