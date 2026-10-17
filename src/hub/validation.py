@@ -6,8 +6,22 @@ import sys
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from hub.loaders import DATA_DIR, STATIC_EPISODES_DIR, load_episodes, load_seasons, load_site
-from hub.models import FORMATS_REQUIRING_DECISION_RULE, Episode, EpisodeStatus, Season, SiteSettings
+from hub.loaders import (
+    DATA_DIR,
+    STATIC_EPISODES_DIR,
+    load_course_map,
+    load_episodes,
+    load_seasons,
+    load_site,
+)
+from hub.models import (
+    FORMATS_REQUIRING_DECISION_RULE,
+    CourseMap,
+    Episode,
+    EpisodeStatus,
+    Season,
+    SiteSettings,
+)
 
 _DASH_CHARS = "—–"
 MAX_PDF_MB = 5
@@ -164,6 +178,35 @@ def validate_episodes(
         _check_referenced_files(path, episode, static_dir, result)
 
 
+def validate_course_map(
+    course_map: CourseMap,
+    episodes: dict[Path, Episode],
+    seasons: list[Season],
+    result: ValidationResult,
+) -> None:
+    """Every map link must point at a real episode or season, and every slide tag must be named."""
+    targets = {season.code for season in seasons} | {ep.code_slug for ep in episodes.values()}
+    for concept in course_map.concepts:
+        for target in concept.links:
+            if target not in targets:
+                result.errors.append(
+                    f"course-map.yaml: concept {concept.id!r} links to unknown {target!r}"
+                )
+    for pair in course_map.links:
+        if len(pair) != 2:
+            result.errors.append(f"course-map.yaml: link {pair!r} must name exactly two items")
+            continue
+        for target in pair:
+            if target not in targets:
+                result.errors.append(f"course-map.yaml: link {pair!r} names unknown {target!r}")
+    for path, episode in episodes.items():
+        unknown = sorted(set(episode.slide_sections) - set(course_map.sections))
+        if unknown:
+            result.errors.append(
+                f"{path}: slide_sections uses tags not in course-map.yaml sections: {unknown}"
+            )
+
+
 def check_no_dashes_in_files(paths: list[Path], result: ValidationResult) -> None:
     for path in paths:
         text = path.read_text(encoding="utf-8")
@@ -181,15 +224,19 @@ def validate_all(
     site = load_site(data_dir / "site.yaml")
     seasons = load_seasons(data_dir / "seasons.yaml")
     episodes = load_episodes(data_dir / "episodes")
+    course_map = load_course_map(data_dir / "course-map.yaml")
 
     validate_site(site, seasons, result)
     validate_episodes(episodes, seasons, static_dir, result)
+    validate_course_map(course_map, episodes, seasons, result)
 
     data_files = [
         data_dir / "site.yaml",
         data_dir / "seasons.yaml",
         *sorted((data_dir / "episodes").glob("*.yaml")),
     ]
+    if (data_dir / "course-map.yaml").exists():
+        data_files.append(data_dir / "course-map.yaml")
     check_no_dashes_in_files(data_files, result)
 
     return result

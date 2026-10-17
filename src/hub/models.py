@@ -113,6 +113,7 @@ class Episode(NoDashModel):
     lab_path: str | None = None
     article_url: str | None = None
     playbook_slides: list[PlaybookSlide] = []
+    slide_sections: list[str] = []
 
     @property
     def code_slug(self) -> str:
@@ -152,3 +153,19 @@ class Episode(NoDashModel):
                 f"bk-{self.code_slug}-{self.slug}-v<number>.pdf"
             )
         return self
+
+
+class Concept(NoDashModel):
+    """An idea on the course map, linked to episodes (by code slug) and seasons (by code)."""
+
+    id: str
+    label: str
+    links: list[str]
+
+
+class CourseMap(NoDashModel):
+    """Slide section names, and the concepts and cross-links drawn on the course map."""
+
+    sections: dict[str, str] = {}
+    concepts: list[Concept] = []
+    links: list[list[str]] = []

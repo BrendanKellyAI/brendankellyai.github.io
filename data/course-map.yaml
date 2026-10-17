@@ -1,0 +1,76 @@
+# The course map drawn on the home and season pages, and the section names used to
+# group an episode's slides into chapters.
+#
+# sections: the tag on each slide (Mental model, Data, ...). An episode lists one tag per
+#   slide in `slide_sections`; consecutive slides with the same tag become one chapter.
+# concepts: ideas that link lessons together. `links` takes episode codes in lowercase
+#   with a hyphen (s1-e2) or season codes (S2). Planned episodes can be linked too.
+# links: extra lesson-to-lesson connections, such as "S1 E8 covers this" on a slide.
+
+sections:
+  cover: Cover
+  why: Why it matters
+  model: Mental model
+  concepts: Concepts
+  data: Data
+  breaks: Where it breaks
+  eng: For engineers
+  practice: In practice
+  leaders: For leaders
+  rule: Decision rule
+  map: Series map
+
+concepts:
+  - id: tokens
+    label: Tokens
+    links: [s1-e1, s1-e2, s1-e3, s1-e6]
+  - id: next-token
+    label: Next-token prediction
+    links: [s1-e1, s1-e5, s1-e8]
+  - id: statelessness
+    label: Statelessness
+    links: [s1-e1, s1-e6]
+  - id: probability
+    label: Probability
+    links: [s1-e1, s1-e8, s1-e9]
+  - id: cost
+    label: Token cost
+    links: [s1-e2, s1-e10, s1-e11, S6, S13]
+  - id: tokeniser
+    label: Tokeniser
+    links: [s1-e2]
+  - id: vectors
+    label: Vectors
+    links: [s1-e3, s1-e4]
+  - id: similarity
+    label: Cosine similarity
+    links: [s1-e3, S2]
+  - id: attention
+    label: Attention
+    links: [s1-e4, s1-e5, s1-e7]
+  - id: context
+    label: Context
+    links: [s1-e1, s1-e6, s1-e7, S2]
+  - id: grounding
+    label: Grounding
+    links: [s1-e9, S2, S7]
+  - id: evaluation
+    label: Evaluation
+    links: [s1-e9, S8, S10]
+  - id: reasoning
+    label: Reasoning
+    links: [s1-e2, s1-e10, s1-e11]
+  - id: agents
+    label: Agents
+    links: [S5, S10, S11, S14]
+  - id: governance
+    label: Governance
+    links: [S11, S15, S12]
+
+links:
+  - [s1-e1, s1-e8]
+  - [s1-e1, s1-e9]
+  - [s1-e2, s1-e7]
+  - [s1-e2, s1-e10]
+  - [s1-e3, s1-e4]
+  - [s1-e3, S2]

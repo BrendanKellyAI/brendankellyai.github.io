@@ -1,34 +1,128 @@
 {% extends "base.html" %}
-{% from "_macros.html" import episode_row %}
+{% import "_course.html" as c with context %}
 
 {% block title %}{{ season.code }}, {{ season.title }}, {{ site.name }}{% endblock %}
 {% block meta_description %}{{ season.description }}{% endblock %}
+{% block head_extra %}{{ super() }}{% if episodes %}<script src="/static/js/graph.js" defer></script>{% endif %}{% endblock %}
 
 {% block content %}
-<p><a href="/seasons/">Season guide</a></p>
-<span class="episode-badge">{{ season.code }}</span>
-<h1>{{ season.title }}</h1>
-<p class="brand-descriptor">{{ "Technical season" if season.type.value == "technical" else "Leadership season" }}</p>
-<p>{{ season.description }}</p>
+{% set done, total = season_progress(season.code) %}
+{% set live = episodes | selectattr("status.value", "equalto", "published") | list %}
+{% set ideas = season_concepts(season.code) %}
+{% set graph = season_graph(season.code) %}
+{% set leads = graph.nodes | selectattr("kind", "equalto", "season") | rejectattr("id", "equalto", season.code) | list %}
 
-{% if episodes %}
-<ul class="episode-list">
-  {% for episode in episodes %}
-  {{ episode_row(episode) }}
-  {% endfor %}
-</ul>
-{% else %}
-<p>Episodes announced at the season intro.</p>
-{% endif %}
+<section class="season-hero">
+  <div class="wrap season-hero-inner{% if not episodes %} is-solo{% endif %}">
+    <div class="pitch">
+      <p class="crumb"><a href="/">Course map</a> &middot; Season {{ season.number }} of {{ course.seasons | length }}</p>
+      <p class="kicker">{{ season.type.value | capitalize }} season{% if season.code == site.current_season %}, now running{% endif %}</p>
+      <h1><span class="season-code">{{ season.code }}</span> {{ season.title }}</h1>
+      <p class="pitch-sub">{{ season.description }}</p>
+      {% if episodes %}
+      <ul class="proof">
+        <li><strong>{{ done }}</strong> lessons live</li>
+        <li><strong>{{ total - done }}</strong> on the way</li>
+        {% if ideas %}<li><strong>{{ ideas | length }}</strong> core ideas</li>{% endif %}
+      </ul>
+      {% if live %}
+      <div class="pitch-actions">
+        <a class="start" href="{{ c.episode_href(live[0]) }}">Start the season</a>
+        <a class="ghost" href="{{ c.episode_href(live[-1]) }}">Latest: {{ live[-1].title }}</a>
+      </div>
+      {% endif %}
+      {% else %}
+      <p class="planned-note">This season is planned. Its lessons are announced in the season intro.</p>
+      {% endif %}
+    </div>
+    {% if episodes %}
+    <figure class="graph graph-season" data-graph>
+      <div class="graph-card" data-graph-card hidden>
+        <p class="graph-card-kind" data-card-kind></p>
+        <p class="graph-card-title" data-card-title></p>
+        <p class="graph-card-body" data-card-body></p>
+        <p class="graph-card-cta" data-card-cta>Click to open</p>
+      </div>
+      <figcaption class="graph-legend">
+        <span><i class="dot dot-live"></i>Lesson</span>
+        <span><i class="dot dot-planned"></i>Coming soon</span>
+        <span><i class="dot dot-concept"></i>Idea</span>
+        <span><i class="dot dot-season"></i>Where it leads</span>
+      </figcaption>
+    </figure>
+    <script type="application/json" id="course-graph">{{ graph | tojson }}</script>
+    {% endif %}
+  </div>
+</section>
 
-<nav aria-label="Season navigation">
-  <ul class="link-list">
+<div class="wrap season-body">
+  <section class="path" aria-labelledby="path-heading">
+    <h2 id="path-heading">Lessons, in order</h2>
+    {% if episodes %}
+    <ol class="path-list">
+      {% for ep in episodes %}
+      {% if ep.status.value == "published" %}
+      {% set n = slides_for(ep) | length %}
+      <li class="step is-live" data-lesson="{{ episode_url_slug(ep) }}" data-total="{{ n }}">
+        <span class="step-num" aria-hidden="true">{{ ep.number }}</span>
+        <a class="step-card" href="{{ c.episode_href(ep) }}">
+          <img src="/static/episodes/{{ episode_url_slug(ep) }}/{{ ep.cover_image }}" alt="" loading="lazy" width="1080" height="1350">
+          <span class="step-text">
+            <span class="step-meta"><span class="card-code">{{ ep.code }}</span> {{ format_label(ep.format.value) }} &middot; {{ n }} slides &middot; {{ ep.publish_date | format_date }}</span>
+            <span class="step-title">{{ ep.title }}</span>
+            <span class="step-sum">{{ ep.summary }}</span>
+            {% if ep.decision_rule %}<span class="step-rule"><span>Rule</span> {{ ep.decision_rule }}</span>{% endif %}
+            <span class="card-progress" aria-hidden="true"><span></span></span>
+          </span>
+          <span class="card-state" data-state></span>
+        </a>
+      </li>
+      {% else %}
+      <li class="step is-planned">
+        <span class="step-num" aria-hidden="true">{{ ep.number }}</span>
+        <div class="step-card">
+          <span class="step-text">
+            <span class="step-meta"><span class="card-code">{{ ep.code }}</span> {{ format_label(ep.format.value) }} &middot; Coming soon</span>
+            <span class="step-title">{{ ep.title }}</span>
+          </span>
+        </div>
+      </li>
+      {% endif %}
+      {% endfor %}
+    </ol>
+    {% else %}
+    <p class="planned-note">Nothing published yet.</p>
+    {% endif %}
+  </section>
+
+  <aside class="season-side">
+    {% if ideas %}
+    <section aria-labelledby="ideas-heading">
+      <h2 id="ideas-heading">Ideas you'll meet</h2>
+      <ul class="chips">{% for idea in ideas %}<li>{{ idea }}</li>{% endfor %}</ul>
+    </section>
+    {% endif %}
+    {% if leads %}
+    <section aria-labelledby="leads-heading">
+      <h2 id="leads-heading">Where it leads</h2>
+      <ul class="leads">
+        {% for node in leads %}
+        <li><a href="{{ node.href }}"><span class="card-code">{{ node.code }}</span> {{ node.label }}</a></li>
+        {% endfor %}
+      </ul>
+    </section>
+    {% endif %}
+  </aside>
+</div>
+
+<div class="wrap">
+  <nav class="pager" aria-label="Season navigation">
     {% if previous_season %}
-    <li><a href="/seasons/{{ season_url_slug(previous_season) }}/">Previous: {{ previous_season.code }} {{ previous_season.title }}</a></li>
-    {% endif %}
+    <a class="pager-link pager-prev" href="{{ c.season_href(previous_season) }}"><span class="pager-dir">Previous season</span><span class="pager-code">{{ previous_season.code }}</span><span class="pager-title">{{ previous_season.title }}</span></a>
+    {% else %}<span class="pager-link pager-empty" aria-hidden="true"></span>{% endif %}
     {% if next_season %}
-    <li><a href="/seasons/{{ season_url_slug(next_season) }}/">Next: {{ next_season.code }} {{ next_season.title }}</a></li>
+    <a class="pager-link pager-next" href="{{ c.season_href(next_season) }}"><span class="pager-dir">Next season</span><span class="pager-code">{{ next_season.code }}</span><span class="pager-title">{{ next_season.title }}</span></a>
     {% endif %}
-  </ul>
-</nav>
+  </nav>
+</div>
 {% endblock %}

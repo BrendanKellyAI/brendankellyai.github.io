@@ -15,3 +15,4 @@ og_image: og.png
 lab_path: episodes/s1-e3-embeddings
 article_url: null
 playbook_slides: []
+slide_sections: [cover, why, model, concepts, concepts, data, data, concepts, breaks, eng, eng, practice, leaders, rule, map]

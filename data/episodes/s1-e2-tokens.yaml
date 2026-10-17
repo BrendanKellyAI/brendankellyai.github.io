@@ -15,3 +15,4 @@ og_image: og.png
 lab_path: episodes/s1-e2-tokens
 article_url: null
 playbook_slides: []
+slide_sections: [cover, why, model, concepts, concepts, data, data, eng, breaks, eng, eng, practice, leaders, rule, map]

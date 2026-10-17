@@ -1,62 +1,137 @@
 {% extends "base.html" %}
-{% from "_macros.html" import decision_rule, external_link %}
+{% import "_course.html" as c with context %}
 
 {% block title %}{{ episode.code }}, {{ episode.title }}, {{ site.name }}{% endblock %}
 {% block meta_description %}{{ episode.summary }}{% endblock %}
-
 {% block structured_data %}
 <script type="application/ld+json">{{ work_jsonld | tojson }}</script>
 {% endblock %}
 
 {% block content %}
-{% if season %}
-<p><a href="/seasons/{{ season_url_slug(season) }}/">{{ season.code }} {{ season.title }}</a></p>
-{% endif %}
-<span class="episode-badge">{{ episode.code }}</span>
-<h1>{{ episode.title }}</h1>
-<p class="brand-descriptor">{{ format_label(episode.format.value) }} &middot; {{ episode.publish_date | format_date }}</p>
+{% set slug = episode_url_slug(episode) %}
+{% set slides = slides_for(episode) %}
+{% set chapters = slide_chapters(episode) %}
+{% set siblings = course.episodes_for(episode.season) if episode.season else [episode] %}
+{% set later = siblings | selectattr("number", "gt", episode.number) | list %}
+{% set following = later | first if later else None %}
+{% set ideas = episode_concepts(episode) %}
 
-<img class="episode-cover" src="/static/episodes/{{ episode_url_slug(episode) }}/{{ episode.cover_image }}"
-     alt="Cover of the {{ episode.code }} deck, {{ episode.title }}."
-     {%- if cover_size %} width="{{ cover_size[0] }}" height="{{ cover_size[1] }}"{% endif %}>
+<div class="wrap lesson-head">
+  <p class="crumb">
+    <a href="/">Course map</a>
+    {% if season %} &middot; <a href="{{ c.season_href(season) }}">{{ season.code }} {{ season.title }}</a>{% endif %}
+    &middot; {{ c.position_label(episode) | trim }}
+  </p>
+  <h1>{{ episode.title }}</h1>
+  <p class="lesson-meta"><span class="card-code">{{ episode.code }}</span> {{ format_label(episode.format.value) }} &middot; {{ slides | length }} slides &middot; {{ episode.publish_date | format_date }}</p>
+</div>
 
-<p>{{ episode.summary }}</p>
+<div class="wrap lesson-layout">
+  <section class="player" data-player data-slug="{{ slug }}" aria-label="Lesson slides">
+    {% if slides %}
+    <div class="stage">
+      <ol class="slides">
+        {% for src in slides %}
+        {% set chapter = chapters | selectattr("start", "le", loop.index) | list | last %}
+        <li class="slide" data-slide="{{ loop.index }}" data-section="{{ chapter.label if chapter else '' }}">
+          <img src="{{ src }}" alt="Slide {{ loop.index }} of {{ slides | length }}{% if chapter %}, {{ chapter.label }}{% endif %}." loading="{{ 'eager' if loop.first else 'lazy' }}" width="810" height="1013">
+        </li>
+        {% endfor %}
+      </ol>
 
-{% if episode.decision_rule %}
-{{ decision_rule(episode.decision_rule) }}
-{% endif %}
+      <div class="complete" data-complete hidden>
+        <p class="kicker">Lesson complete</p>
+        <p class="complete-title">{{ episode.title }}</p>
+        {% if episode.decision_rule %}
+        <div class="decision-rule">
+          <span class="decision-rule-label">The rule to keep</span>
+          <p class="decision-rule-statement">{{ episode.decision_rule }}</p>
+        </div>
+        {% endif %}
+        <div class="complete-actions">
+          {% if following and following.status.value == "published" %}
+          <a class="start" href="{{ c.episode_href(following) }}">Next: {{ following.code }} {{ following.title }}</a>
+          {% elif following %}
+          <p class="complete-soon">Up next: {{ following.code }} {{ following.title }}, coming soon.</p>
+          {% endif %}
+          {% if season %}<a class="ghost" href="{{ c.season_href(season) }}">Back to {{ season.code }}</a>{% endif %}
+          <button type="button" class="ghost" data-restart>Watch again</button>
+        </div>
+      </div>
+    </div>
 
-<ul class="link-list">
-  {{ external_link(episode.linkedin_url, "LinkedIn post", "LinkedIn", new_window=true) }}
-  {{ external_link("/static/episodes/" ~ episode_url_slug(episode) ~ "/" ~ episode.deck_pdf, "PDF deck", "the PDF deck", new_window=true) }}
-  {% if episode.format.value == "field_note" %}
-  {{ external_link(episode.article_url, "LinkedIn article", "LinkedIn") }}
-  {{ external_link(site.lab_repo_url ~ "/tree/main/" ~ episode.lab_path, "Experiment folder in applied-ai-lab", "GitHub") }}
-  {% elif episode.lab_path %}
-  {{ external_link(site.lab_repo_url ~ "/tree/main/" ~ episode.lab_path, "Episode folder in applied-ai-lab", "GitHub") }}
-  {% endif %}
-</ul>
+    <div class="controls" data-controls hidden>
+      <button type="button" class="ctl" data-prev aria-label="Previous slide">&larr;</button>
+      <span class="count" aria-live="polite"><span data-index>1</span> / {{ slides | length }} <span class="count-section" data-section-label></span></span>
+      <button type="button" class="ctl ctl-next" data-next>Next &rarr;</button>
+      <button type="button" class="ctl ctl-icon" data-fullscreen aria-label="Full screen">&#x26F6;</button>
+    </div>
+
+    <ol class="chapters" data-chapters hidden aria-label="Chapters">
+      {% for ch in chapters %}
+      <li style="flex-grow: {{ ch.count }}">
+        <button type="button" class="chapter chapter-{{ ch.tag or 'none' }}" data-go="{{ ch.start }}" data-start="{{ ch.start }}" data-count="{{ ch.count }}" title="{{ ch.label }}">
+          <span class="chapter-bar"><span></span></span>
+          <span class="visually-hidden">Go to {{ ch.label }}</span>
+        </button>
+      </li>
+      {% endfor %}
+    </ol>
+    {% else %}
+    <p class="planned-note">The slides for this lesson are available as a <a href="/static/episodes/{{ slug }}/{{ episode.deck_pdf }}">PDF</a>.</p>
+    {% endif %}
+  </section>
+
+  <aside class="lesson-side">
+    {% if season %}
+    <nav aria-labelledby="season-list-heading">
+      <h2 id="season-list-heading"><a href="{{ c.season_href(season) }}">{{ season.code }} {{ season.title }}</a></h2>
+      <ol class="mini-path">
+        {% for ep in siblings %}
+        {% set here = ep.code == episode.code %}
+        <li class="{{ 'is-live' if ep.status.value == 'published' else 'is-planned' }}{% if here %} is-here{% endif %}" {% if ep.status.value == 'published' %}data-lesson="{{ episode_url_slug(ep) }}" data-total="{{ slides_for(ep) | length }}"{% endif %}>
+          <span class="mini-num" aria-hidden="true">{{ ep.number }}</span>
+          {% if ep.status.value == "published" and not here %}
+          <a href="{{ c.episode_href(ep) }}">{{ ep.title }}</a>
+          {% elif here %}
+          <span aria-current="page">{{ ep.title }}</span>
+          {% else %}
+          <span>{{ ep.title }}<span class="visually-hidden">, coming soon</span></span>
+          {% endif %}
+          <span class="card-progress" aria-hidden="true"><span></span></span>
+          <span class="card-state visually-hidden" data-state></span>
+        </li>
+        {% endfor %}
+      </ol>
+    </nav>
+    {% endif %}
+  </aside>
+</div>
+
+<section class="wrap notes" aria-labelledby="notes-heading">
+  <div class="notes-main">
+    <h2 id="notes-heading">Lesson notes</h2>
+    <p class="notes-sum">{{ episode.summary }}</p>
+    {% if episode.decision_rule %}
+    <div class="decision-rule">
+      <span class="decision-rule-label">Decision rule</span>
+      <p class="decision-rule-statement">{{ episode.decision_rule }}</p>
+    </div>
+    {% endif %}
+    {% if ideas %}
+    <h3 class="notes-sub">Ideas in this lesson</h3>
+    <ul class="chips">{% for idea in ideas %}<li>{{ idea }}</li>{% endfor %}</ul>
+    {% endif %}
+  </div>
+  <div class="notes-side">
+    <h2>Take it further</h2>
+    {{ c.materials(episode) }}
+  </div>
+</section>
 
 {% if episode.format.value == "playbook" and episode.playbook_slides %}
-<h2>Template walkthrough</h2>
-<ol class="playbook-slides">
-  {% for slide in episode.playbook_slides %}
-  <li><img src="/static/episodes/{{ episode_url_slug(episode) }}/{{ slide.file }}" alt="{{ slide.alt }}"></li>
-  {% endfor %}
-</ol>
+<section class="wrap">{{ c.playbook(episode) }}</section>
 {% endif %}
 
-<nav aria-label="Episode navigation">
-  <ul class="link-list">
-    {% if previous_episode %}
-    <li><a href="/episodes/{{ episode_url_slug(previous_episode) }}/">Previous: {{ previous_episode.code }} {{ previous_episode.title }}</a></li>
-    {% endif %}
-    {% if next_episode %}
-    <li><a href="/episodes/{{ episode_url_slug(next_episode) }}/">Next: {{ next_episode.code }} {{ next_episode.title }}</a></li>
-    {% endif %}
-    {% if season %}
-    <li><a href="/seasons/{{ season_url_slug(season) }}/">Back to {{ season.code }} {{ season.title }}</a></li>
-    {% endif %}
-  </ul>
-</nav>
+<div class="wrap">{{ c.pager(episode, previous_episode) }}</div>
 {% endblock %}

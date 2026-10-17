@@ -1,5 +1,6 @@
 from datetime import date
 
+from hub.context import install_course_globals
 from hub.loaders import DATA_DIR
 from hub.models import Episode, Season
 from hub.render import (
@@ -125,6 +126,7 @@ def test_environment_renders_episode_page_for_a_published_episode():
     )
     site = load_site_data(DATA_DIR).site
     env = make_environment()
+    install_course_globals(env, load_site_data(DATA_DIR))
     template = env.get_template("episode.html")
     html = template.render(
         site=site,
@@ -140,15 +142,16 @@ def test_environment_renders_episode_page_for_a_published_episode():
     assert "Decision rule" in html
     assert "Measure cost, latency, and limits in tokens." in html
     assert "/static/episodes/s1-e2-tokens/bk-s1-e2-tokens-v1.pdf" in html
-    assert "/static/episodes/s1-e2-tokens/cover.png" in html
+    # No slides were rendered for this episode, so the page falls back to the PDF.
+    assert "The slides for this lesson are available as a" in html
     assert "episodes/s1-e2-tokens" in html
 
     new_tab = 'target="_blank" rel="noopener noreferrer"'
-    assert f'href="https://www.linkedin.com/posts/example" {new_tab}' in html
     assert f'href="/static/episodes/s1-e2-tokens/bk-s1-e2-tokens-v1.pdf" {new_tab}' in html
-    assert "(opens LinkedIn in a new tab)" in html
     assert "(opens the PDF deck in a new tab)" in html
-    assert html.count('target="_blank"') == 2
+    assert html.count('target="_blank"') == 1
+    # Content pages never link to the LinkedIn post; LinkedIn is for announcements only.
+    assert "https://www.linkedin.com/posts/example" not in html
 
 
 def test_environment_renders_playbook_slides():
@@ -173,6 +176,7 @@ def test_environment_renders_playbook_slides():
     )
     site = load_site_data(DATA_DIR).site
     env = make_environment()
+    install_course_globals(env, load_site_data(DATA_DIR))
     template = env.get_template("episode.html")
     html = template.render(
         site=site,
@@ -211,6 +215,7 @@ def test_environment_renders_field_note_links():
     )
     site = load_site_data(DATA_DIR).site
     env = make_environment()
+    install_course_globals(env, load_site_data(DATA_DIR))
     template = env.get_template("episode.html")
     html = template.render(
         site=site,
@@ -222,8 +227,10 @@ def test_environment_renders_field_note_links():
         social_image_path="/static/episodes/s1-e7-lost-in-the-middle/og.png",
         work_jsonld=creative_work_jsonld(site, episode, SEASON_S1),
     )
-    assert "LinkedIn article" in html
-    assert "Experiment folder in applied-ai-lab" in html
+    assert "Read the article" in html
+    assert "https://www.linkedin.com/pulse/example" in html
+    assert "Run the experiment" in html
+    assert "field-notes/s1-e7-lost-in-the-middle" in html
 
 
 def test_environment_renders_s0_episode_without_season():
@@ -246,6 +253,7 @@ def test_environment_renders_s0_episode_without_season():
     )
     site = load_site_data(DATA_DIR).site
     env = make_environment()
+    install_course_globals(env, load_site_data(DATA_DIR))
     template = env.get_template("episode.html")
     html = template.render(
         site=site,

@@ -8,7 +8,9 @@ authors = [{ name = "Brendan Kelly" }]
 requires-python = ">=3.12"
 dependencies = [
     "jinja2>=3.1.6",
+    "pillow>=13.0.0",
     "pydantic>=2.13.5",
+    "pypdfium2>=5.14.0",
     "pyyaml>=6.0.3",
 ]
 

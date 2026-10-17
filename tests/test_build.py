@@ -1,4 +1,5 @@
 import pytest
+from conftest import write_pdf
 
 from hub.build import build
 from hub.loaders import DATA_DIR
@@ -64,7 +65,7 @@ og_image: og.png
 def _make_episode_static_files(static_dir, episode_dir_name, deck_filename):
     episode_dir = static_dir / "episodes" / episode_dir_name
     episode_dir.mkdir(parents=True)
-    (episode_dir / deck_filename).write_bytes(b"%PDF-1.4 fake")
+    write_pdf(episode_dir / deck_filename)
     (episode_dir / "cover.png").write_bytes(b"cover")
     (episode_dir / "og.png").write_bytes(b"og")
 
@@ -163,7 +164,12 @@ def test_build_writes_pages_for_published_episodes(fixture_project, tmp_path):
     data_dir, static_dir = fixture_project
     output_dir = tmp_path / "_site"
 
-    build(output_dir=output_dir, data_dir=data_dir, static_source_dir=static_dir)
+    build(
+        output_dir=output_dir,
+        data_dir=data_dir,
+        static_source_dir=static_dir,
+        cache_dir=tmp_path / "cache",
+    )
 
     s0_page = output_dir / "episodes" / "s0-series-intro" / "index.html"
     s1e2_page = output_dir / "episodes" / "s1-e2-tokens" / "index.html"
@@ -184,7 +190,7 @@ def test_build_writes_pages_for_published_episodes(fixture_project, tmp_path):
     s1_page_html = (output_dir / "seasons" / "s1-how-llms-work" / "index.html").read_text(
         encoding="utf-8"
     )
-    assert "Coming soon" not in s1_page_html
+    assert "step is-planned" not in s1_page_html
     assert "Tokens" in s1_page_html
 
 
@@ -200,7 +206,12 @@ def test_build_fails_on_validation_error(tmp_path):
     static_dir.mkdir()
 
     with pytest.raises(SystemExit):
-        build(output_dir=tmp_path / "_site", data_dir=data_dir, static_source_dir=static_dir)
+        build(
+                output_dir=tmp_path / "_site",
+                data_dir=data_dir,
+                static_source_dir=static_dir,
+                cache_dir=tmp_path / "cache",
+            )
 
 
 def test_data_dir_default_matches_real_project_data():
