@@ -3,7 +3,7 @@
 
 {% block title %}{{ season.code }}, {{ season.title }}, {{ site.name }}{% endblock %}
 {% block meta_description %}{{ season.description }}{% endblock %}
-{% block head_extra %}{{ super() }}{% if episodes %}<script src="/static/js/graph.js" defer></script>{% endif %}{% endblock %}
+{% block head_extra %}{{ super() }}{% if episodes %}<script src="{{ asset_url('/static/js/graph.js') }}" defer></script>{% endif %}{% endblock %}
 
 {% block content %}
 {% set done, total = season_progress(season.code) %}

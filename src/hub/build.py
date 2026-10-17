@@ -213,7 +213,7 @@ def build(
     output_dir.mkdir(parents=True)
 
     data = load_site_data(data_dir)
-    env = make_environment()
+    env = make_environment(static_source_dir)
     slides = _render_all_slides(data, static_source_dir, cache_dir)
     install_course_globals(env, data, slides)
 

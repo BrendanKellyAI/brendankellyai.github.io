@@ -131,10 +131,9 @@ a.pager-link:hover { border-color: var(--green); }
 .proof strong { display: block; color: var(--white); font-size: 1.5rem; line-height: 1.1; }
 .home-hero .resume { margin: 1.2rem 0 0; }
 
-.graph { position: relative; margin: 0; height: 460px; }
+.graph { position: relative; margin: 0; height: 540px; }
 @media (min-width: 980px) { .graph { height: 620px; } }
-.graph-svg { width: 100%; height: 100%; display: block; touch-action: none; user-select: none; opacity: 0; transition: opacity 0.6s; }
-.graph.is-ready .graph-svg { opacity: 1; }
+.graph-svg { width: 100%; height: 100%; display: block; touch-action: none; user-select: none; }
 .graph-fallback { color: var(--slate); }
 .edge { stroke: #2a4b78; stroke-width: 1.2; vector-effect: non-scaling-stroke; transition: stroke 0.15s, opacity 0.15s; }
 .edge-concept { stroke-dasharray: 2 3; }
@@ -205,7 +204,7 @@ a.pager-link:hover { border-color: var(--green); }
 .mono-lg { width: 4.5rem; height: 4.5rem; font-size: 1.5rem; flex: none; }
 .closer { text-align: center; padding-bottom: 5rem; }
 .closer h2 { font-size: clamp(1.6rem, 4vw, 2.4rem); max-width: 26ch; margin: 0 auto 1.5rem; }
-@media (prefers-reduced-motion: reduce) { .graph-svg, .inside-steps img, .node circle { transition: none; } }
+@media (prefers-reduced-motion: reduce) { .inside-steps img, .node circle { transition: none; } }
 
 /* Season landing page */
 .season-hero { border-bottom: 1px solid var(--hair); background: radial-gradient(ellipse at 70% 40%, #0f2a50 0%, var(--bg) 65%); }
@@ -214,7 +213,7 @@ a.pager-link:hover { border-color: var(--green); }
 @media (min-width: 980px) { .season-hero-inner:not(.is-solo) { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); } }
 .season-hero h1 { font-size: clamp(2.2rem, 5vw, 3.6rem); letter-spacing: -0.035em; line-height: 1.02; }
 .season-code { display: inline-block; font-family: var(--font-mono); font-size: 0.4em; vertical-align: 0.6em; background: var(--green); color: var(--navy); padding: 0.1em 0.45em; letter-spacing: 0; }
-.graph-season { height: 400px; }
+.graph-season { height: 480px; }
 @media (min-width: 980px) { .graph-season { height: 480px; } }
 .planned-note { color: var(--slate); }
 .season-body { display: grid; gap: 2.5rem; padding-top: 3rem; }
@@ -347,3 +346,18 @@ a.step-card:hover { border-color: var(--green); }
 .not-found { padding-top: 4rem; padding-bottom: 5rem; max-width: 46rem; }
 .playbook-slides { list-style: none; padding: 0; display: grid; gap: 1rem; }
 @media (max-width: 600px) { .about-head { flex-direction: column; } }
+
+/* Small phones: keep the header on one line */
+.brand, .bar ul a { white-space: nowrap; }
+@media (max-width: 420px) {
+  .bar-inner { gap: 0.8rem; }
+  .brand { font-size: 0.95rem; gap: 0.45rem; }
+  .bar ul { gap: 0.9rem; font-size: 0.9rem; }
+}
+@media (hover: none) { .graph-hint { display: none; } }
+
+/* Narrow screens: lesson labels crowd the map, so show them on tap or hover only */
+@media (max-width: 640px) {
+  .node-lesson.is-live text { opacity: 0; }
+  .graph-svg.is-focusing .node.is-hot text, .graph-svg.is-focusing .node.is-near text { opacity: 1; }
+}
