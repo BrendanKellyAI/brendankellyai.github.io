@@ -83,6 +83,12 @@
 
   for (var t = 0; t < 420; t++) { tick(1 - t / 600); }
 
+  // The settled map is wider than tall. On a portrait screen, stand it upright so the long side
+  // runs down the page and labels get room instead of piling up.
+  if (host.clientHeight > host.clientWidth * 1.1) {
+    nodes.forEach(function (n) { var x = n.x; n.x = n.y; n.y = x; });
+  }
+
   // Build the SVG.
   var svg = document.createElementNS(SVG, "svg");
   svg.setAttribute("class", "graph-svg");
@@ -126,8 +132,17 @@
     n.el = group;
     nodeLayer.appendChild(group);
 
-    group.addEventListener("pointerenter", function () { focus(n); });
-    group.addEventListener("pointerleave", function () { if (!dragging) { blur(); } });
+    // Mouse: hover previews a node. Touch: the first tap previews it, the second opens it.
+    group.addEventListener("pointerenter", function (event) { if (event.pointerType === "mouse") { focus(n); } });
+    group.addEventListener("pointerleave", function (event) {
+      if (event.pointerType === "mouse" && !dragging) { blur(); }
+    });
+    group.addEventListener("click", function (event) {
+      if (lastPointer !== "mouse" && !n.el.classList.contains("is-hot")) {
+        event.preventDefault();
+        focus(n);
+      }
+    });
     group.addEventListener("focus", function () { focus(n); });
     group.addEventListener("blur", blur);
     group.addEventListener("pointerdown", function (event) { startDrag(n, event); });
@@ -206,6 +221,10 @@
     point.x = event.clientX; point.y = event.clientY;
     return point.matrixTransform(svg.getScreenCTM().inverse());
   }
+  var lastPointer = "mouse";
+  svg.addEventListener("pointerdown", function (event) { lastPointer = event.pointerType; }, true);
+  svg.addEventListener("click", function (event) { if (event.target === svg) { blur(); } });
+
   function startDrag(n, event) {
     if (event.button !== 0) { return; }
     dragging = n; moved = false; n.fixed = true;

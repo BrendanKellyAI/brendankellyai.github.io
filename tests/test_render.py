@@ -5,6 +5,7 @@ from hub.loaders import DATA_DIR
 from hub.models import Episode, Season
 from hub.render import (
     adjacent,
+    asset_url,
     episode_url_slug,
     format_date,
     format_label,
@@ -267,3 +268,20 @@ def test_environment_renders_s0_episode_without_season():
     )
     assert "Applied AI: the series" in html
     assert "Decision rule" not in html
+
+
+def test_asset_url_adds_a_content_hash(tmp_path):
+    (tmp_path / "css").mkdir()
+    (tmp_path / "css" / "style.css").write_text("body {}", encoding="utf-8")
+
+    first = asset_url("/static/css/style.css", tmp_path)
+    (tmp_path / "css" / "style.css").write_text("body { color: red; }", encoding="utf-8")
+    second = asset_url("/static/css/style.css", tmp_path)
+
+    assert first.startswith("/static/css/style.css?v=")
+    assert first != second, "a changed file gets a new URL"
+
+
+def test_asset_url_leaves_unknown_paths_alone(tmp_path):
+    assert asset_url("/static/js/missing.js", tmp_path) == "/static/js/missing.js"
+    assert asset_url("https://example.com/x.js", tmp_path) == "https://example.com/x.js"

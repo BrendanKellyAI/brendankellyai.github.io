@@ -3,7 +3,7 @@
 
 {% block title %}Applied AI, a course by {{ site.name }}{% endblock %}
 {% block meta_description %}Short visual lessons on how AI really works, from the first token to agents in production. Every claim tested in code.{% endblock %}
-{% block head_extra %}{{ super() }}<script src="/static/js/graph.js" defer></script>{% endblock %}
+{% block head_extra %}{{ super() }}<script src="{{ asset_url('/static/js/graph.js') }}" defer></script>{% endblock %}
 
 {% block content %}
 {% set ordered = course.published_in_order %}

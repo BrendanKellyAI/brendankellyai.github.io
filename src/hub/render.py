@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import hashlib
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -11,6 +12,8 @@ from hub.loaders import DATA_DIR, ROOT, load_course_map, load_episodes, load_sea
 from hub.models import CourseMap, Episode, EpisodeStatus, Season, SiteSettings
 
 TEMPLATES_DIR = ROOT / "templates"
+STATIC_DIR = ROOT / "static"
+STATIC_URL_PREFIX = "/static/"
 
 FORMAT_LABELS = {
     "series_intro": "Series intro",
@@ -112,7 +115,19 @@ def load_site_data(data_dir=DATA_DIR) -> SiteData:
     )
 
 
-def make_environment() -> Environment:
+def asset_url(path: str, static_dir: Path = STATIC_DIR) -> str:
+    """A static file's URL with a short content hash, so browsers never pair new pages with an
+    old cached stylesheet or script after a deploy. Unknown paths are returned unchanged."""
+    if not path.startswith(STATIC_URL_PREFIX):
+        return path
+    file_path = static_dir / path.removeprefix(STATIC_URL_PREFIX)
+    if not file_path.is_file():
+        return path
+    digest = hashlib.sha256(file_path.read_bytes()).hexdigest()[:10]
+    return f"{path}?v={digest}"
+
+
+def make_environment(static_dir: Path = STATIC_DIR) -> Environment:
     env = Environment(
         loader=FileSystemLoader(TEMPLATES_DIR),
         autoescape=select_autoescape(["html", "xml"]),
@@ -125,6 +140,7 @@ def make_environment() -> Environment:
     env.globals["TO_BE_SUPPLIED"] = TO_BE_SUPPLIED
     env.globals["has_value"] = has_value
     env.filters["format_date"] = format_date
+    env.globals["asset_url"] = lambda path: asset_url(path, static_dir)
     return env
 
 
