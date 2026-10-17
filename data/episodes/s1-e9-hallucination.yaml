@@ -4,14 +4,15 @@ number: 9
 slug: hallucination
 title: Hallucination
 format: explainer
-status: planned
-publish_date: null
-summary: null
-decision_rule: null
+status: published
+publish_date: 2026-10-06
+summary: "Fluent answers can be confidently wrong, and the only fabrication in this test came from the keyword scoring, not the model, so check error rates by reading answers."
+decision_rule: "Never ship an answer you cannot trace: ground it in a source, let the model say it does not know, and measure the error rate by reading, not just by keyword."
 linkedin_url: null
-deck_pdf: null
-cover_image: null
-og_image: null
-lab_path: null
+deck_pdf: bk-s1-e9-hallucination-v2.pdf
+cover_image: cover.png
+og_image: og.png
+lab_path: episodes/s1-e9-hallucination
 article_url: null
 playbook_slides: []
+slide_sections: [cover, try, why, model, concepts, concepts, experiment, setup, data, breaks, breaks, data, caveat, eng, recap, breaks, concepts, eng, practice, leaders, rule, map]

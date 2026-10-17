@@ -182,7 +182,7 @@
   var resizeTimer;
   window.addEventListener("resize", function () {
     window.clearTimeout(resizeTimer);
-    resizeTimer = window.setTimeout(fit, 150);
+    resizeTimer = window.setTimeout(function () { fit(); declutter(); }, 150);
   });
 
   function focus(n) {
@@ -246,16 +246,46 @@
 
   var heat = 0;
   var running = false;
+
+  // Hide labels that would overlap one already shown. Seasons come first, then the newest
+  // lessons; a hidden label still appears when its node is hovered, focused, or tapped.
+  function labelPriority(n) {
+    if (n.kind === "season") { return 0; }
+    return 1 + (nodes.length - n.index);
+  }
+  function declutter() {
+    // Every dot is an obstacle, except a label's own node, which sits just below it.
+    var dots = nodes.map(function (n) {
+      var r = parseFloat(n.circle.getAttribute("r")) || 0;
+      return { node: n, x: n.x - r, y: n.y - r, w: 2 * r, h: 2 * r };
+    });
+    var placed = [];
+    nodes
+      .filter(function (n) { return n.kind === "season" || (n.kind === "lesson" && n.live); })
+      .sort(function (a, b) { return labelPriority(a) - labelPriority(b); })
+      .forEach(function (n) {
+        n.el.classList.remove("label-hidden");
+        var box = n.text.getBBox();
+        var rect = { x: n.x + box.x, y: n.y + box.y, w: box.width, h: box.height };
+        function hits(r) {
+          return rect.x < r.x + r.w && r.x < rect.x + rect.w && rect.y < r.y + r.h && r.y < rect.y + rect.h;
+        }
+        var clash = placed.some(hits) || dots.some(function (d) { return d.node !== n && hits(d); });
+        if (clash) { n.el.classList.add("label-hidden"); } else { placed.push(rect); }
+      });
+  }
+
   function loop() {
     running = true;
     tick(heat);
     render();
     heat *= 0.97;
-    if (heat > 0.02 || dragging) { window.requestAnimationFrame(loop); } else { running = false; }
+    if (heat > 0.02 || dragging) { window.requestAnimationFrame(loop); } else { running = false; declutter(); }
   }
 
   render();
   fit();
+  declutter();
   host.classList.add("is-ready");
   if (!reduceMotion) {
     // A gentle settle on load, like opening a graph view.
