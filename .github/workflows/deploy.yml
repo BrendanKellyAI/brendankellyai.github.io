@@ -49,6 +49,15 @@ jobs:
       - name: Test
         run: uv run pytest
 
+      # Slide images are rendered from each deck PDF. Cached by deck file name, so only a
+      # newly published or re-versioned deck is rendered on each run.
+      - name: Cache rendered slides
+        uses: actions/cache@v4
+        with:
+          path: .cache/slides
+          key: slides-${{ hashFiles('static/episodes/**/*.pdf') }}
+          restore-keys: slides-
+
       - name: Build
         run: uv run python -m hub.build
 

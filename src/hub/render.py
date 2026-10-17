@@ -7,8 +7,8 @@ from pathlib import Path
 
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
-from hub.loaders import DATA_DIR, ROOT, load_episodes, load_seasons, load_site
-from hub.models import Episode, EpisodeStatus, Season, SiteSettings
+from hub.loaders import DATA_DIR, ROOT, load_course_map, load_episodes, load_seasons, load_site
+from hub.models import CourseMap, Episode, EpisodeStatus, Season, SiteSettings
 
 TEMPLATES_DIR = ROOT / "templates"
 
@@ -64,6 +64,7 @@ class SiteData:
     seasons: list[Season]
     episodes_by_season: dict[str, list[Episode]] = field(default_factory=dict)
     all_episodes: list[Episode] = field(default_factory=list)
+    course_map: CourseMap = field(default_factory=CourseMap)
 
     def episodes_for(self, season_code: str) -> list[Episode]:
         return self.episodes_by_season.get(season_code, [])
@@ -71,6 +72,15 @@ class SiteData:
     @property
     def published_episodes(self) -> list[Episode]:
         return [ep for ep in self.all_episodes if ep.status == EpisodeStatus.PUBLISHED]
+
+    @property
+    def published_in_order(self) -> list[Episode]:
+        """Published episodes in course order: series intro, then season by season."""
+        season_numbers = {season.code: season.number for season in self.seasons}
+        return sorted(
+            self.published_episodes,
+            key=lambda ep: (season_numbers.get(ep.season, 0) if ep.season else 0, ep.number),
+        )
 
     @property
     def latest_episode(self) -> Episode | None:
@@ -94,7 +104,11 @@ def load_site_data(data_dir=DATA_DIR) -> SiteData:
         season_episodes.sort(key=lambda ep: ep.number)
 
     return SiteData(
-        site=site, seasons=seasons, episodes_by_season=episodes_by_season, all_episodes=episodes
+        site=site,
+        seasons=seasons,
+        episodes_by_season=episodes_by_season,
+        all_episodes=episodes,
+        course_map=load_course_map(data_dir / "course-map.yaml"),
     )
 
 
@@ -120,3 +134,16 @@ def adjacent(items: list, current) -> tuple:
     previous = items[index - 1] if index > 0 else None
     following = items[index + 1] if index < len(items) - 1 else None
     return previous, following
+
+
+def episode_position(data: SiteData, episode: Episode) -> tuple[int, int]:
+    """1-based position of an episode within its season, and the season's episode count."""
+    episodes = data.episodes_for(episode.season) if episode.season else [episode]
+    return episodes.index(episode) + 1, len(episodes)
+
+
+def season_progress(data: SiteData, season_code: str) -> tuple[int, int]:
+    """Published and total episode counts for a season."""
+    episodes = data.episodes_for(season_code)
+    published = [ep for ep in episodes if ep.status == EpisodeStatus.PUBLISHED]
+    return len(published), len(episodes)

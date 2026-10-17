@@ -1,28 +1,57 @@
 {% extends "base.html" %}
-{% from "_macros.html" import season_tile %}
+{% import "_course.html" as c with context %}
 
-{% block title %}The season guide, {{ site.name }}{% endblock %}
-{% block meta_description %}Every season of {{ site.descriptor }}, in order.{% endblock %}
-
+{% block title %}Course outline, {{ site.name }}{% endblock %}
+{% block meta_description %}Every season and lesson of {{ site.descriptor }}, in order.{% endblock %}
 {% block structured_data %}
 <script type="application/ld+json">{{ series_jsonld | tojson }}</script>
 {% endblock %}
 
 {% block content %}
-<h1>The season guide</h1>
-<p>Two technical seasons, then one leadership season that applies them.</p>
+{% set live_total = course.published_episodes | length %}
+<section class="wrap outline-head">
+  <p class="crumb"><a href="/">Course map</a> &middot; Outline</p>
+  <h1>The whole course, in order</h1>
+  <p class="pitch-sub">{{ course.seasons | length }} seasons. Two technical seasons on how AI works in production, then a leadership season that applies them. {{ live_total }} lessons are live so far; each one links to the lesson before and after, so you can join anywhere.</p>
+</section>
 
-<div class="season-legend">
-  <span><span class="season-legend-swatch technical" aria-hidden="true"></span>Technical season</span>
-  <span><span class="season-legend-swatch leadership" aria-hidden="true"></span>Leadership season</span>
-  <span><span class="season-legend-swatch current" aria-hidden="true"></span>Current season</span>
-</div>
-
-<div class="season-grid">
-  {% for season in seasons %}
-  {{ season_tile(season, season.code == site.current_season) }}
+<ol class="wrap outline">
+  {% for s in course.seasons %}
+  {% set eps = course.episodes_for(s.code) %}
+  {% set done, total = season_progress(s.code) %}
+  <li class="outline-season is-{{ s.type.value }}{% if s.code == site.current_season %} is-current{% endif %}">
+    <div class="outline-season-head">
+      <span class="season-code">{{ s.code }}</span>
+      <div>
+        <h2><a href="{{ c.season_href(s) }}">{{ s.title }}</a></h2>
+        <p class="outline-type">{{ s.type.value | capitalize }} season{% if s.code == site.current_season %}, now running{% endif %}{% if total %} &middot; {{ done }} of {{ total }} lessons live{% endif %}</p>
+      </div>
+    </div>
+    <p class="outline-desc">{{ s.description }}</p>
+    {% if eps %}
+    <ol class="outline-lessons">
+      {% for ep in eps %}
+      {% if ep.status.value == "published" %}
+      <li class="is-live" data-lesson="{{ episode_url_slug(ep) }}" data-total="{{ slides_for(ep) | length }}">
+        <span class="mini-num" aria-hidden="true">{{ ep.number }}</span>
+        <a href="{{ c.episode_href(ep) }}">{{ ep.title }}</a>
+        <span class="outline-count">{{ slides_for(ep) | length }} slides</span>
+        <span class="card-state visually-hidden" data-state></span>
+      </li>
+      {% else %}
+      <li class="is-planned">
+        <span class="mini-num" aria-hidden="true">{{ ep.number }}</span>
+        <span>{{ ep.title }}</span>
+        <span class="outline-count">Coming soon</span>
+      </li>
+      {% endif %}
+      {% endfor %}
+    </ol>
+    {% else %}
+    <p class="planned-note">Lessons are announced in the season intro.</p>
+    {% endif %}
+  </li>
   {% endfor %}
-</div>
-
-<p>The field moves quickly. Seasons and episodes may be added as the series progresses.</p>
+</ol>
+<p class="wrap planned-note outline-foot">The field moves quickly. Seasons and lessons may be added as the course progresses.</p>
 {% endblock %}

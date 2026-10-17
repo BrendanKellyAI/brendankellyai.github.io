@@ -1,9 +1,11 @@
-__pycache__/
 *.pyc
-.pytest_cache/
-.ruff_cache/
+.cache/
 .coverage
-.venv/
-_site/
+.pytest_cache/
 .python-version
+.ruff_cache/
+.venv/
+__pycache__/
+_preview/
+_site/
 uv.lock.bak

@@ -1,4 +1,4 @@
-from hub.loaders import load_episodes, load_seasons, load_site
+from hub.loaders import load_course_map, load_episodes, load_seasons, load_site
 from hub.models import Episode, Season, SiteSettings
 
 
@@ -21,3 +21,15 @@ def test_load_episodes_returns_fourteen_episodes():
     assert all(isinstance(episode, Episode) for episode in episodes.values())
     codes = {episode.code for episode in episodes.values()}
     assert codes == {"S0", *(f"S1 E{n}" for n in range(13))}
+
+
+def test_load_course_map_reads_the_real_map():
+    course_map = load_course_map()
+    assert course_map.sections["rule"] == "Decision rule"
+    assert course_map.concepts
+
+
+def test_load_course_map_is_empty_when_the_file_is_missing(tmp_path):
+    course_map = load_course_map(tmp_path / "course-map.yaml")
+    assert course_map.sections == {}
+    assert course_map.concepts == []

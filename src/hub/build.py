@@ -2,10 +2,12 @@
 
 from __future__ import annotations
 
+import argparse
 import shutil
 import sys
 from pathlib import Path
 
+from hub.context import install_course_globals
 from hub.discovery import entry_timestamp, feed_episodes, feed_updated, sitemap_paths
 from hub.loaders import DATA_DIR, ROOT
 from hub.models import EpisodeStatus
@@ -18,6 +20,7 @@ from hub.render import (
     png_size,
     season_url_slug,
 )
+from hub.slides import CACHE_DIR, copy_slides, render_slides
 from hub.structured_data import creative_work_jsonld, creative_work_series_jsonld, person_jsonld
 from hub.validation import validate_all
 
@@ -168,6 +171,23 @@ def _copy_static(output_dir: Path, static_source_dir: Path) -> None:
     shutil.copytree(static_source_dir, target)
 
 
+def _render_all_slides(data: SiteData, static_source_dir: Path, cache_dir: Path) -> dict:
+    """Rendered slide images for every published episode, keyed by episode URL slug."""
+    slides: dict[str, list[Path]] = {}
+    for episode in data.published_episodes:
+        if not episode.deck_pdf:
+            continue
+        slug = episode_url_slug(episode)
+        pdf_path = static_source_dir / "episodes" / slug / episode.deck_pdf
+        slides[slug] = render_slides(pdf_path, cache_dir)
+    return slides
+
+
+def _copy_all_slides(slides: dict, output_dir: Path) -> None:
+    for slug, images in slides.items():
+        copy_slides(images, output_dir / "static" / "episodes" / slug / "slides")
+
+
 def _copy_favicons(output_dir: Path, static_source_dir: Path) -> None:
     icons_dir = static_source_dir / "icons"
     for filename in FAVICON_FILES:
@@ -178,6 +198,7 @@ def build(
     output_dir: Path = OUTPUT_DIR,
     data_dir: Path = DATA_DIR,
     static_source_dir: Path = STATIC_SOURCE_DIR,
+    cache_dir: Path = CACHE_DIR,
 ) -> None:
     result = validate_all(data_dir, static_source_dir / "episodes")
     for warning in result.warnings:
@@ -193,6 +214,8 @@ def build(
 
     data = load_site_data(data_dir)
     env = make_environment()
+    slides = _render_all_slides(data, static_source_dir, cache_dir)
+    install_course_globals(env, data, slides)
 
     _render_home(env, data, output_dir)
     _render_seasons_index(env, data, output_dir)
@@ -204,8 +227,16 @@ def build(
     _render_robots(env, data, output_dir)
     _render_feed(env, data, output_dir)
     _copy_static(output_dir, static_source_dir)
+    _copy_all_slides(slides, output_dir)
     _copy_favicons(output_dir, static_source_dir)
 
 
+def main() -> None:
+    parser = argparse.ArgumentParser(description="Build the hub into a static site.")
+    parser.add_argument("--out", type=Path, default=OUTPUT_DIR, help="output directory")
+    args = parser.parse_args()
+    build(output_dir=args.out)
+
+
 if __name__ == "__main__":
-    build()
+    main()

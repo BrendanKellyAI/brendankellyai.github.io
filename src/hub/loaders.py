@@ -6,7 +6,7 @@ from pathlib import Path
 
 import yaml
 
-from hub.models import Episode, Season, SiteSettings
+from hub.models import CourseMap, Episode, Season, SiteSettings
 
 ROOT = Path(__file__).resolve().parents[2]
 DATA_DIR = ROOT / "data"
@@ -30,3 +30,10 @@ def load_episodes(directory: Path = DATA_DIR / "episodes") -> dict[Path, Episode
         episode_path: Episode.model_validate(_read_yaml(episode_path))
         for episode_path in sorted(directory.glob("*.yaml"))
     }
+
+
+def load_course_map(path: Path = DATA_DIR / "course-map.yaml") -> CourseMap:
+    """The course map, or an empty one when the file does not exist."""
+    if not path.exists():
+        return CourseMap()
+    return CourseMap.model_validate(_read_yaml(path) or {})

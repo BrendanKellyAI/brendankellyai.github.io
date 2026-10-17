@@ -1,44 +1,122 @@
 {% extends "base.html" %}
-{% from "_macros.html" import season_tile, placeholder %}
+{% import "_course.html" as c with context %}
 
-{% block title %}{{ site.name }}, {{ site.descriptor }}{% endblock %}
-{% block meta_description %}{{ site.description if has_value(site.description) else site.descriptor }}{% endblock %}
+{% block title %}Applied AI, a course by {{ site.name }}{% endblock %}
+{% block meta_description %}Short visual lessons on how AI really works, from the first token to agents in production. Every claim tested in code.{% endblock %}
+{% block head_extra %}{{ super() }}<script src="/static/js/graph.js" defer></script>{% endblock %}
 
 {% block content %}
-<h1>{{ site.name }}</h1>
-<p class="brand-descriptor">{{ site.descriptor }}</p>
+{% set ordered = course.published_in_order %}
+{% set lessons_live = ordered | length %}
+{% set current = course.seasons | selectattr("code", "equalto", site.current_season) | first %}
+{% set showcase = course.latest_episode %}
 
-{% if has_value(site.description) %}
-<p>{{ site.description }}</p>
-{% else %}
-{{ placeholder("Site description to be supplied by Brendan Kelly.") }}
+<section class="home-hero">
+  <div class="wrap home-hero-inner">
+    <div class="pitch">
+      <p class="kicker">A free course by {{ site.name }}</p>
+      <h1>Learn how AI actually works.</h1>
+      <p class="pitch-sub">Short visual lessons, from the first token to agents in production. Every claim is tested in code you can run, and every lesson ends with one rule you can use at work the next day.</p>
+      <div class="resume" data-resume hidden>
+        <p class="resume-label">Continue where you left off</p>
+        <a class="resume-link" href="#"><span data-resume-title></span> <span class="resume-pos" data-resume-pos></span></a>
+      </div>
+      <div class="pitch-actions">
+        {% if ordered %}<a class="start" href="{{ c.episode_href(ordered[0]) }}">Start the course</a>{% endif %}
+        <a class="ghost" href="{{ c.season_href(current) }}">Browse {{ current.code }}: {{ current.title }}</a>
+      </div>
+      <ul class="proof">
+        <li><strong>{{ lessons_live }}</strong> lessons live</li>
+        <li><strong>{{ course.seasons | length }}</strong> seasons mapped</li>
+        <li><strong>All</strong> code published</li>
+      </ul>
+    </div>
+
+    <figure class="graph" data-graph>
+      <noscript><p class="graph-fallback">The course map needs JavaScript. Every lesson is listed below.</p></noscript>
+      <div class="graph-card" data-graph-card hidden>
+        <p class="graph-card-kind" data-card-kind></p>
+        <p class="graph-card-title" data-card-title></p>
+        <p class="graph-card-body" data-card-body></p>
+        <p class="graph-card-cta" data-card-cta>Click to open</p>
+      </div>
+      <figcaption class="graph-legend">
+        <span><i class="dot dot-live"></i>Lesson</span>
+        <span><i class="dot dot-planned"></i>Coming soon</span>
+        <span><i class="dot dot-concept"></i>Idea</span>
+        <span><i class="dot dot-season"></i>Season</span>
+        <span class="graph-hint">Hover to explore, drag to rearrange</span>
+      </figcaption>
+    </figure>
+  </div>
+  <script type="application/json" id="course-graph">{{ course_graph() | tojson }}</script>
+</section>
+
+{% if showcase %}
+{% set tags = showcase.slide_sections %}
+{% set slides = slides_for(showcase) %}
+{% set picks = [("model", "A mental model you can picture", "Each idea starts as one clear picture, not a wall of jargon."),
+                ("data", "Tested with real data", "Claims are measured, with the code published so you can rerun them."),
+                ("rule", "One rule to keep", "Every lesson ends with a decision you can apply the next day.")] %}
+<section class="wrap inside" aria-labelledby="inside-heading">
+  <p class="kicker">Inside every lesson</p>
+  <h2 id="inside-heading">A handful of slides. One idea that sticks.</h2>
+  <ol class="inside-steps">
+    {% for tag, title, text in picks %}
+    {% if tag in tags and slides %}
+    <li>
+      <a href="{{ c.episode_href(showcase) }}#slide-{{ tags.index(tag) + 1 }}">
+        <img src="{{ slides[tags.index(tag)] }}" alt="Example slide from {{ showcase.code }}, {{ showcase.title }}: {{ title | lower }}." loading="lazy" width="810" height="1013">
+      </a>
+      <h3>{{ title }}</h3>
+      <p>{{ text }}</p>
+    </li>
+    {% endif %}
+    {% endfor %}
+  </ol>
+  <p class="inside-src">Slides from {{ showcase.code }}, {{ showcase.title }}.</p>
+</section>
 {% endif %}
 
-<h2>The season guide</h2>
-<div class="season-grid">
-  {% for season in seasons %}
-  {{ season_tile(season, season.code == site.current_season) }}
-  {% endfor %}
-</div>
-<p><a href="/seasons/">See the full season guide</a></p>
-
-<h2>Latest episode</h2>
-{% if latest_episode %}
-<p>
-  <span class="episode-badge">{{ latest_episode.code }}</span>
-  <a href="/episodes/{{ episode_url_slug(latest_episode) }}/">{{ latest_episode.title }}</a>
-</p>
-<p>{{ latest_episode.summary }}</p>
-{% else %}
-<p>No episodes have been published yet. The series intro is coming soon.</p>
+{% if ordered %}
+<section class="wrap rules" aria-labelledby="rules-heading">
+  <p class="kicker">What you'll take away</p>
+  <h2 id="rules-heading">Rules worth keeping</h2>
+  {{ c.rule_index() }}
+</section>
 {% endif %}
 
-<h2>Where to follow</h2>
-<ul class="link-list">
-  <li><a href="{{ site.linkedin_profile_url }}">Follow on LinkedIn<span class="visually-hidden"> (opens LinkedIn)</span></a></li>
-  {% if has_value(site.newsletter_url) %}
-  <li><a href="{{ site.newsletter_url }}">Subscribe to {{ site.newsletter_name }}</a></li>
-  {% endif %}
-  <li><a href="{{ site.lab_repo_url }}">applied-ai-lab on GitHub<span class="visually-hidden"> (opens GitHub)</span></a></li>
-</ul>
+<section class="wrap road" aria-labelledby="road-heading">
+  <p class="kicker">Where the course goes</p>
+  <h2 id="road-heading">From how models work to how to lead with them</h2>
+  <p class="road-sub">Two technical seasons, then a leadership season that applies them.</p>
+  <ol class="road-grid">
+    {% for s in course.seasons %}
+    <li class="is-{{ s.type.value }}{% if s.code == site.current_season %} is-current{% endif %}">
+      <a href="{{ c.season_href(s) }}">
+        <span class="card-code">{{ s.code }}</span>
+        <span class="road-title">{{ s.title }}</span>
+        <span class="road-type">{{ "Now running" if s.code == site.current_season else s.type.value | capitalize }}</span>
+      </a>
+    </li>
+    {% endfor %}
+  </ol>
+</section>
+
+<section class="wrap teacher" aria-labelledby="teacher-heading">
+  <span class="mono mono-lg" aria-hidden="true">BK</span>
+  <div>
+    <p class="kicker">Who's teaching</p>
+    <h2 id="teacher-heading">{{ site.name }}</h2>
+    <p>{{ site.about_bio }}</p>
+    <p><a href="{{ site.lab_repo_url }}">See the code behind every lesson<span class="visually-hidden"> (opens GitHub)</span></a></p>
+  </div>
+</section>
+
+{% if ordered %}
+<section class="wrap closer">
+  <h2>Start at the beginning. Each lesson takes a few minutes.</h2>
+  <a class="start" href="{{ c.episode_href(ordered[0]) }}">Start the course</a>
+</section>
+{% endif %}
 {% endblock %}

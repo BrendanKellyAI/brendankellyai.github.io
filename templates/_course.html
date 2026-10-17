@@ -1,0 +1,94 @@
+{# Course components shared by the page templates. #}
+
+{% macro episode_href(episode) %}/episodes/{{ episode_url_slug(episode) }}/{% endmacro %}
+
+{% macro season_href(season) %}/seasons/{{ season_url_slug(season) }}/{% endmacro %}
+
+{# "Episode 3 of 12": numbers start at E0 (the season intro), so the last number is the count. #}
+{% macro position_label(episode) %}
+{% if episode.season %}
+{% set last = course.episodes_for(episode.season) | map(attribute="number") | max %}
+{% if episode.number == 0 %}Season intro{% else %}Episode {{ episode.number }} of {{ last }}{% endif %}
+{% else %}Series intro{% endif %}
+{% endmacro %}
+
+{# Episode materials, most useful first. Content pages never link to LinkedIn. #}
+{% macro materials(episode) %}
+<ul class="materials">
+  <li class="material material-deck">
+    <a href="/static/episodes/{{ episode_url_slug(episode) }}/{{ episode.deck_pdf }}" target="_blank" rel="noopener noreferrer">
+      <span class="material-label">Read the deck</span>
+      <span class="material-note">PDF<span class="visually-hidden"> (opens the PDF deck in a new tab)</span></span>
+    </a>
+  </li>
+  {% if episode.lab_path %}
+  <li class="material material-code">
+    <a href="{{ site.lab_repo_url }}/tree/main/{{ episode.lab_path }}">
+      <span class="material-label">{{ "Run the experiment" if episode.format.value == "field_note" else "See the code" }}</span>
+      <span class="material-note">applied-ai-lab on GitHub<span class="visually-hidden"> (opens GitHub)</span></span>
+    </a>
+  </li>
+  {% endif %}
+  {% if episode.article_url %}
+  <li class="material material-article">
+    <a href="{{ episode.article_url }}">
+      <span class="material-label">Read the article</span>
+      <span class="material-note">Long form<span class="visually-hidden"> (opens LinkedIn)</span></span>
+    </a>
+  </li>
+  {% endif %}
+</ul>
+{% endmacro %}
+
+{# Previous and next in course order. An unpublished next episode shows as coming soon. #}
+{% macro pager(episode, previous_episode) %}
+{% set later = course.episodes_for(episode.season) | selectattr("number", "gt", episode.number) | list if episode.season else [] %}
+{% set following = later | first if later else None %}
+<nav class="pager" aria-label="Episode navigation">
+  {% if previous_episode %}
+  <a class="pager-link pager-prev" href="{{ episode_href(previous_episode) }}">
+    <span class="pager-dir">Previous</span>
+    <span class="pager-code">{{ previous_episode.code }}</span>
+    <span class="pager-title">{{ previous_episode.title }}</span>
+  </a>
+  {% else %}
+  <span class="pager-link pager-empty" aria-hidden="true"></span>
+  {% endif %}
+  {% if following and following.status.value == "published" %}
+  <a class="pager-link pager-next" href="{{ episode_href(following) }}">
+    <span class="pager-dir">Next</span>
+    <span class="pager-code">{{ following.code }}</span>
+    <span class="pager-title">{{ following.title }}</span>
+  </a>
+  {% elif following %}
+  <div class="pager-link pager-next pager-soon">
+    <span class="pager-dir">Up next, coming soon</span>
+    <span class="pager-code">{{ following.code }}</span>
+    <span class="pager-title">{{ following.title }}</span>
+  </div>
+  {% endif %}
+</nav>
+{% endmacro %}
+
+{# Every decision rule so far, in course order: the course's takeaways on one screen. #}
+{% macro rule_index() %}
+<ol class="rule-index">
+  {% for ep in course.published_in_order if ep.decision_rule %}
+  <li>
+    <a class="rule-index-code" href="{{ episode_href(ep) }}">{{ ep.code }}<span class="visually-hidden">, {{ ep.title }}</span></a>
+    <p class="rule-index-text">{{ ep.decision_rule }}</p>
+  </li>
+  {% endfor %}
+</ol>
+{% endmacro %}
+
+{% macro playbook(episode) %}
+{% if episode.format.value == "playbook" and episode.playbook_slides %}
+<h2>Template walkthrough</h2>
+<ol class="playbook-slides">
+  {% for slide in episode.playbook_slides %}
+  <li><img src="/static/episodes/{{ episode_url_slug(episode) }}/{{ slide.file }}" alt="{{ slide.alt }}"></li>
+  {% endfor %}
+</ol>
+{% endif %}
+{% endmacro %}

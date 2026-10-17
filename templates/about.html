@@ -1,26 +1,50 @@
 {% extends "base.html" %}
-{% from "_macros.html" import placeholder %}
+{% import "_course.html" as c with context %}
 
 {% block title %}About, {{ site.name }}{% endblock %}
-{% block meta_description %}About {{ site.name }}, the author of {{ site.descriptor }}.{% endblock %}
-
+{% block meta_description %}About {{ site.name }}, who writes and tests {{ site.descriptor }}.{% endblock %}
 {% block structured_data %}
 <script type="application/ld+json">{{ person_jsonld | tojson }}</script>
 {% endblock %}
 
 {% block content %}
-<h1>About</h1>
+{% set ordered = course.published_in_order %}
+<section class="wrap about-head">
+  <span class="mono mono-lg" aria-hidden="true">BK</span>
+  <div>
+    <p class="kicker">Who's teaching</p>
+    <h1>{{ site.name }}</h1>
+    {% if has_value(site.about_bio) %}
+    <p class="pitch-sub">{{ site.about_bio }}</p>
+    {% else %}
+    <p class="planned-note">Biography to be supplied by {{ site.name }}.</p>
+    {% endif %}
+    <div class="pitch-actions">
+      {% if ordered %}<a class="start" href="{{ c.episode_href(ordered[0]) }}">Start the course</a>{% endif %}
+      <a class="ghost" href="{{ site.lab_repo_url }}">See the code<span class="visually-hidden"> (opens GitHub)</span></a>
+    </div>
+  </div>
+</section>
 
-{% if has_value(site.about_bio) %}
-<p>{{ site.about_bio }}</p>
-{% else %}
-{{ placeholder("Biography to be supplied by Brendan Kelly.") }}
-{% endif %}
+<section class="wrap about-how" aria-labelledby="how-heading">
+  <h2 id="how-heading">How the course is made</h2>
+  <ul class="principles">
+    <li><strong>Tested, not asserted.</strong> Each claim is checked against code and results published in applied-ai-lab.</li>
+    <li><strong>One rule per lesson.</strong> Every lesson ends with a decision rule you can use the next day.</li>
+    <li><strong>Honest about failure.</strong> When a claim does not hold up, the lesson says so.</li>
+    <li><strong>For engineers and leaders.</strong> Technical seasons explain how it works; leadership seasons decide what to do with it.</li>
+  </ul>
+</section>
 
-<h2>Follow and contact</h2>
-<ul class="link-list">
-  <li><a href="{{ site.linkedin_profile_url }}">LinkedIn<span class="visually-hidden"> (opens LinkedIn)</span></a></li>
-</ul>
-
-<p>Code is published under the MIT licence in <a href="{{ site.lab_repo_url }}">applied-ai-lab<span class="visually-hidden"> (opens GitHub)</span></a>. Decks and articles are not.</p>
+<section class="wrap about-follow" aria-labelledby="follow-heading">
+  <h2 id="follow-heading">Follow along</h2>
+  <ul class="materials">
+    <li class="material"><a href="{{ site.lab_repo_url }}"><span class="material-label">applied-ai-lab</span><span class="material-note">The code behind every lesson, on GitHub<span class="visually-hidden"> (opens GitHub)</span></span></a></li>
+    <li class="material"><a href="{{ site.linkedin_profile_url }}"><span class="material-label">LinkedIn</span><span class="material-note">Where new lessons are announced<span class="visually-hidden"> (opens LinkedIn)</span></span></a></li>
+    {% if has_value(site.newsletter_url) %}
+    <li class="material"><a href="{{ site.newsletter_url }}"><span class="material-label">{{ site.newsletter_name }}</span><span class="material-note">Newsletter</span></a></li>
+    {% endif %}
+    <li class="material"><a href="/feed.xml"><span class="material-label">Atom feed</span><span class="material-note">New lessons in your feed reader</span></a></li>
+  </ul>
+</section>
 {% endblock %}

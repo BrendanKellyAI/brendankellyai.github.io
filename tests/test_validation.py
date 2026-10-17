@@ -1,12 +1,13 @@
 from pathlib import Path
 
-from hub.models import Episode, Season
+from hub.models import Concept, CourseMap, Episode, Season
 from hub.validation import (
     MAX_PDF_MB,
     ValidationResult,
     check_no_dashes_in_files,
     main,
     validate_all,
+    validate_course_map,
     validate_episodes,
     validate_site,
 )
@@ -285,3 +286,34 @@ def test_main_returns_one_when_validation_fails(monkeypatch, capsys):
     monkeypatch.setattr("hub.validation.validate_all", lambda: failing_result)
     assert main() == 1
     assert "something is wrong" in capsys.readouterr().err
+
+
+def test_course_map_with_valid_links_and_sections_passes():
+    ep = episode(slide_sections=["model", "data"])
+    course_map = CourseMap(
+        sections={"model": "Mental model", "data": "Data"},
+        concepts=[Concept(id="tokens", label="Tokens", links=["s1-e2", "S1"])],
+        links=[["s1-e2", "S1"]],
+    )
+    result = ValidationResult()
+
+    validate_course_map(course_map, {path_for(ep): ep}, [SEASON_S1], result)
+
+    assert result.ok, result.errors
+
+
+def test_course_map_rejects_unknown_targets_bad_links_and_unknown_sections():
+    ep = episode(slide_sections=["model", "typo"])
+    course_map = CourseMap(
+        sections={"model": "Mental model"},
+        concepts=[Concept(id="tokens", label="Tokens", links=["s1-e9"])],
+        links=[["s1-e2", "S7"], ["s1-e2"]],
+    )
+    result = ValidationResult()
+
+    validate_course_map(course_map, {path_for(ep): ep}, [SEASON_S1], result)
+
+    assert any("concept 'tokens' links to unknown 's1-e9'" in e for e in result.errors)
+    assert any("names unknown 'S7'" in e for e in result.errors)
+    assert any("must name exactly two items" in e for e in result.errors)
+    assert any("slide_sections uses tags not in course-map.yaml" in e for e in result.errors)
