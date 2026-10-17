@@ -22,7 +22,7 @@
       {% if episodes %}
       <ul class="proof">
         <li><strong>{{ done }}</strong> lessons live</li>
-        <li><strong>{{ total - done }}</strong> on the way</li>
+        {% if total > done %}<li><strong>{{ total - done }}</strong> on the way</li>{% endif %}
         {% if ideas %}<li><strong>{{ ideas | length }}</strong> core ideas</li>{% endif %}
       </ul>
       {% if live %}

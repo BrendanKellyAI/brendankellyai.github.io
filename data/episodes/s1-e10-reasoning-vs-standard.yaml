@@ -4,14 +4,15 @@ number: 10
 slug: reasoning-vs-standard
 title: "Field note: reasoning versus standard"
 format: field_note
-status: planned
-publish_date: null
-summary: null
-decision_rule: null
+status: published
+publish_date: 2026-10-07
+summary: "Across three providers and 720 calls, high reasoning gained about 20 points on multi-step tasks and nothing on lookups or simple sums, mostly from one model."
+decision_rule: "Turn reasoning on for problems that need several steps held in mind at once. Leave it off for lookups and simple sums, and pilot before you commit."
 linkedin_url: null
-deck_pdf: null
-cover_image: null
-og_image: null
+deck_pdf: bk-s1-e10-reasoning-vs-standard-v2.pdf
+cover_image: cover.png
+og_image: og.png
 lab_path: field-notes/s1-e10-reasoning-vs-standard
 article_url: null
 playbook_slides: []
+slide_sections: [cover, fieldnote, why, turn, finding, method, method, method, data, data, concepts, data, concepts, data, breaks, eng, leaders, rule, open, map]

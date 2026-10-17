@@ -19,6 +19,27 @@ sections:
   leaders: For leaders
   rule: Decision rule
   map: Series map
+  # Field notes, experiments, and the recap
+  newformat: New format
+  fieldnote: Field note
+  try: Try this
+  turn: Your turn
+  finding: Finding
+  method: Method
+  experiment: The experiment
+  setup: The setup
+  caveat: Read this with the result
+  recap: Recap
+  open: Open questions
+  quiz: Pop quiz
+  guide: Episode guide
+  act1: Act 1
+  act2: Act 2
+  act3: Act 3
+  callback: Callback
+  myth: Myth vs measured
+  behind: Behind the scenes
+  save: Save this
 
 concepts:
   - id: tokens
@@ -60,6 +81,12 @@ concepts:
   - id: reasoning
     label: Reasoning
     links: [s1-e2, s1-e10, s1-e11]
+  - id: measurement
+    label: Measuring, not quoting
+    links: [s1-e7, s1-e8, s1-e9, s1-e10, s1-e11, s1-e12, S8]
+  - id: latency
+    label: Latency
+    links: [s1-e5, s1-e6, s1-e10, s1-e11, S13]
   - id: agents
     label: Agents
     links: [S5, S10, S11, S14]
@@ -74,3 +101,7 @@ links:
   - [s1-e2, s1-e10]
   - [s1-e3, s1-e4]
   - [s1-e3, S2]
+  - [s1-e4, s1-e7]
+  - [s1-e5, s1-e4]
+  - [s1-e9, s1-e6]
+  - [s1-e10, s1-e11]

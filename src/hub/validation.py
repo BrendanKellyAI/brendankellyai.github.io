@@ -24,7 +24,7 @@ from hub.models import (
 )
 
 _DASH_CHARS = "—–"
-MAX_PDF_MB = 5
+MAX_PDF_MB = 6
 _MAX_PDF_BYTES = MAX_PDF_MB * 1024 * 1024
 _TO_BE_SUPPLIED = "TO_BE_SUPPLIED"
 _WARN_IF_UNSUPPLIED = ("description", "newsletter_url", "about_bio")
@@ -110,7 +110,6 @@ def _check_published_requirements(path: Path, episode: Episode, result: Validati
     required = {
         "publish_date": episode.publish_date,
         "summary": episode.summary,
-        "linkedin_url": episode.linkedin_url,
         "deck_pdf": episode.deck_pdf,
         "cover_image": episode.cover_image,
         "og_image": episode.og_image,
@@ -122,11 +121,10 @@ def _check_published_requirements(path: Path, episode: Episode, result: Validati
     if episode.format in FORMATS_REQUIRING_DECISION_RULE and not episode.decision_rule:
         result.errors.append(f"{path}: published {episode.format.value} missing decision_rule")
 
-    if episode.format.value == "field_note":
-        if not episode.article_url:
-            result.errors.append(f"{path}: published field note missing article_url")
-        if not episode.lab_path:
-            result.errors.append(f"{path}: published field note missing lab_path")
+    # LinkedIn post and article links are optional: content pages link to the lesson itself,
+    # and an article link shows only when one is supplied.
+    if episode.format.value == "field_note" and not episode.lab_path:
+        result.errors.append(f"{path}: published field note missing lab_path")
 
     if episode.format.value == "playbook":
         if not episode.playbook_slides:

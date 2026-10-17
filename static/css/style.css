@@ -361,3 +361,7 @@ a.step-card:hover { border-color: var(--green); }
   .node-lesson.is-live text { opacity: 0; }
   .graph-svg.is-focusing .node.is-hot text, .graph-svg.is-focusing .node.is-near text { opacity: 1; }
 }
+
+/* Labels hidden to avoid overlaps come back when their node is in focus */
+.node.label-hidden text { opacity: 0; }
+.graph-svg.is-focusing .node.label-hidden.is-hot text, .graph-svg.is-focusing .node.label-hidden.is-near text { opacity: 1; }

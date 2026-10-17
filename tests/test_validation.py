@@ -44,7 +44,6 @@ def path_for(ep: Episode) -> Path:
 PUBLISHED_REQUIRED_FIELDS = {
     "publish_date": "2026-10-06",
     "summary": "Tokens are the unit behind every cost and latency figure.",
-    "linkedin_url": "https://www.linkedin.com/posts/example",
     "deck_pdf": "bk-s1-e2-tokens-v1.pdf",
     "cover_image": "cover.png",
     "og_image": "og.png",
@@ -135,7 +134,7 @@ def test_published_series_intro_does_not_require_decision_rule():
     assert not any("decision_rule" in error for error in result.errors)
 
 
-def test_published_field_note_missing_article_url_and_lab_path_fails():
+def test_published_field_note_missing_lab_path_fails():
     ep = episode(
         format="field_note",
         status="published",
@@ -144,8 +143,19 @@ def test_published_field_note_missing_article_url_and_lab_path_fails():
     )
     result = ValidationResult()
     validate_episodes({path_for(ep): ep}, [SEASON_S1], Path("static/episodes"), result)
-    assert any("missing article_url" in error for error in result.errors)
     assert any("missing lab_path" in error for error in result.errors)
+    assert not any("article_url" in error for error in result.errors), "article_url is optional"
+
+
+def test_published_episode_does_not_need_linkedin_url():
+    ep = episode(
+        status="published",
+        decision_rule="Measure cost, latency, and limits in tokens.",
+        **PUBLISHED_REQUIRED_FIELDS,
+    )
+    result = ValidationResult()
+    validate_episodes({path_for(ep): ep}, [SEASON_S1], Path("static/episodes"), result)
+    assert not any("linkedin_url" in error for error in result.errors)
 
 
 def test_published_playbook_missing_slides_fails():

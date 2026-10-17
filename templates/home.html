@@ -9,7 +9,14 @@
 {% set ordered = course.published_in_order %}
 {% set lessons_live = ordered | length %}
 {% set current = course.seasons | selectattr("code", "equalto", site.current_season) | first %}
-{% set showcase = course.latest_episode %}
+{# Showcase the newest lesson that has all three kinds of slide the section describes. #}
+{% set pick = namespace(episode=None) %}
+{% for ep in course.published_in_order | reverse %}
+{% if not pick.episode and "model" in ep.slide_sections and "data" in ep.slide_sections and "rule" in ep.slide_sections %}
+{% set pick.episode = ep %}
+{% endif %}
+{% endfor %}
+{% set showcase = pick.episode %}
 
 <section class="home-hero">
   <div class="wrap home-hero-inner">
