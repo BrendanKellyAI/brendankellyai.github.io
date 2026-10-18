@@ -96,6 +96,16 @@
   </section>
 
   <aside class="season-side">
+    {% if season.tools %}
+    <section aria-labelledby="tools-heading">
+      <h2 id="tools-heading">Tools you can use</h2>
+      <ul class="tools">
+        {% for tool in season.tools %}
+        <li><a href="{{ tool.url }}" rel="noopener"><span class="tool-title">{{ tool.title }}</span><span class="tool-desc">{{ tool.description }}</span></a></li>
+        {% endfor %}
+      </ul>
+    </section>
+    {% endif %}
     {% if ideas %}
     <section aria-labelledby="ideas-heading">
       <h2 id="ideas-heading">Ideas you'll meet</h2>

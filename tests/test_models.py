@@ -1,7 +1,7 @@
 import pytest
 from pydantic import ValidationError
 
-from hub.models import Episode, EpisodeFormat, Season, SeasonType, SiteSettings
+from hub.models import Episode, EpisodeFormat, Season, SeasonTool, SeasonType, SiteSettings
 
 VALID_SEASON = {
     "code": "S1",
@@ -145,3 +145,47 @@ def test_deck_filename_invalid_pattern_rejected():
 def test_deck_filename_wrong_code_rejected():
     with pytest.raises(ValidationError, match="deck_pdf"):
         Episode.model_validate({**VALID_EPISODE, "deck_pdf": "bk-s1-e3-tokens-v1.pdf"})
+
+
+VALID_TOOL = {
+    "title": "Scorecard template",
+    "description": "A blank scorecard.",
+    "url": "https://example.com/scorecard.csv",
+}
+
+
+def test_season_tools_default_to_empty():
+    assert Season.model_validate(VALID_SEASON).tools == []
+
+
+def test_season_accepts_tools():
+    season = Season.model_validate({**VALID_SEASON, "tools": [VALID_TOOL]})
+    assert season.tools == [SeasonTool.model_validate(VALID_TOOL)]
+
+
+@pytest.mark.parametrize("field", ["title", "description", "url"])
+def test_season_tool_requires_every_field(field):
+    data = {key: value for key, value in VALID_TOOL.items() if key != field}
+    with pytest.raises(ValidationError):
+        SeasonTool.model_validate(data)
+
+
+def test_season_tool_rejects_blank_title():
+    with pytest.raises(ValidationError):
+        SeasonTool.model_validate({**VALID_TOOL, "title": "  "})
+
+
+@pytest.mark.parametrize("url", ["http://example.com/a", "/local/path", "https://a b"])
+def test_season_tool_rejects_bad_url(url):
+    with pytest.raises(ValidationError):
+        SeasonTool.model_validate({**VALID_TOOL, "url": url})
+
+
+def test_season_tool_rejects_dashes():
+    with pytest.raises(ValidationError):
+        SeasonTool.model_validate({**VALID_TOOL, "description": "A blank — scorecard."})
+
+
+def test_season_extra_tool_field_is_rejected():
+    with pytest.raises(ValidationError):
+        Season.model_validate({**VALID_SEASON, "tools": [{**VALID_TOOL, "extra": "x"}]})

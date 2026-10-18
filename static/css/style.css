@@ -247,6 +247,12 @@ a.step-card:hover { border-color: var(--green); }
 .leads li { border-bottom: 1px solid var(--hair); }
 .leads a { display: block; padding: 0.5rem 0; text-decoration: none; }
 .leads a:hover { color: var(--green); }
+.tools { list-style: none; padding: 0; margin: 0 0 2rem; }
+.tools li { border-bottom: 1px solid var(--hair); }
+.tools a { display: block; padding: 0.6rem 0; text-decoration: none; }
+.tools a:hover .tool-title { color: var(--green); }
+.tool-title { display: block; color: var(--white); font-weight: 700; }
+.tool-desc { display: block; font-size: 0.9rem; color: var(--slate); }
 @media (min-width: 980px) { .season-side { position: sticky; top: 1.5rem; align-self: start; } }
 
 /* Episode page */

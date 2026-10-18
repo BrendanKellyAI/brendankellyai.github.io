@@ -207,12 +207,44 @@ def test_build_fails_on_validation_error(tmp_path):
 
     with pytest.raises(SystemExit):
         build(
-                output_dir=tmp_path / "_site",
-                data_dir=data_dir,
-                static_source_dir=static_dir,
-                cache_dir=tmp_path / "cache",
-            )
+            output_dir=tmp_path / "_site",
+            data_dir=data_dir,
+            static_source_dir=static_dir,
+            cache_dir=tmp_path / "cache",
+        )
 
 
 def test_data_dir_default_matches_real_project_data():
     assert DATA_DIR.name == "data"
+
+
+def _build_with_seasons(fixture_project, tmp_path, seasons_yaml):
+    data_dir, static_dir = fixture_project
+    (data_dir / "seasons.yaml").write_text(seasons_yaml, encoding="utf-8")
+    output_dir = tmp_path / "_site"
+    build(
+        output_dir=output_dir,
+        data_dir=data_dir,
+        static_source_dir=static_dir,
+        cache_dir=tmp_path / "cache",
+    )
+    return (output_dir / "seasons" / "s1-how-llms-work" / "index.html").read_text(encoding="utf-8")
+
+
+def test_season_page_renders_tools_when_set(fixture_project, tmp_path):
+    tools_yaml = (
+        "  tools:\n"
+        "    - title: Scorecard template\n"
+        "      description: A blank scorecard.\n"
+        "      url: https://example.com/scorecard.csv\n"
+    )
+    html = _build_with_seasons(fixture_project, tmp_path, SEASONS_YAML + tools_yaml)
+    assert "Tools you can use" in html
+    assert 'href="https://example.com/scorecard.csv"' in html
+    assert "Scorecard template" in html
+    assert "A blank scorecard." in html
+
+
+def test_season_page_omits_tools_when_not_set(fixture_project, tmp_path):
+    html = _build_with_seasons(fixture_project, tmp_path, SEASONS_YAML)
+    assert "Tools you can use" not in html

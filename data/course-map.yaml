@@ -99,13 +99,13 @@ concepts:
     links: [s1-e9, S2, S7, s2-e1, s2-e10]
   - id: evaluation
     label: Evaluation
-    links: [s1-e9, S8, S10, s2-e3, s2-e14]
+    links: [s1-e9, S8, S10, s2-e3, s2-e14, s3-e3]
   - id: reasoning
     label: Reasoning
     links: [s1-e2, s1-e10, s1-e11]
   - id: measurement
     label: Measuring, not quoting
-    links: [s1-e7, s1-e8, s1-e9, s1-e10, s1-e11, s1-e12, S8, s2-e0, s2-e2, s2-e3]
+    links: [s1-e7, s1-e8, s1-e9, s1-e10, s1-e11, s1-e12, S8, s2-e0, s2-e2, s2-e3, s3-e3, s3-e7, s3-e9]
   - id: latency
     label: Latency
     links: [s1-e5, s1-e6, s1-e10, s1-e11, S13]
@@ -133,3 +133,6 @@ links:
   - [s2-e1, s2-e2]
   - [s2-e1, s1-e7]
   - [s2-e2, s2-e3]
+  - [s3-e3, s2-e3]
+  - [s3-e7, s2-e8]
+  - [s3-e9, s2-e12]

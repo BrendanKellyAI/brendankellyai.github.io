@@ -17,13 +17,14 @@ def test_load_seasons_returns_fifteen_seasons():
 
 def test_load_episodes_returns_every_planned_episode():
     episodes = load_episodes()
-    assert len(episodes) == 31
+    assert len(episodes) == 44
     assert all(isinstance(episode, Episode) for episode in episodes.values())
     codes = {episode.code for episode in episodes.values()}
     assert codes == {
         "S0",
         *(f"S1 E{n}" for n in range(13)),
         *(f"S2 E{n}" for n in range(17)),
+        *(f"S3 E{n}" for n in range(13)),
     }
 
 

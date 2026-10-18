@@ -96,7 +96,7 @@ def test_load_site_data_groups_episodes_by_season():
     assert len(data.seasons) == 15
     assert len(data.episodes_for("S1")) == 13
     assert [ep.number for ep in data.episodes_for("S2")] == list(range(17))
-    assert data.episodes_for("S3") == []
+    assert [ep.number for ep in data.episodes_for("S3")] == list(range(13))
     published = data.published_episodes
     assert all(ep.status.value == "published" for ep in published)
     if published:

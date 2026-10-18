@@ -6,7 +6,7 @@ import re
 from datetime import date
 from enum import StrEnum
 
-from pydantic import BaseModel, ConfigDict, model_validator
+from pydantic import BaseModel, ConfigDict, field_validator, model_validator
 
 _DASH_CHARS = "—–"
 _SUMMARY_MAX_WORDS = 30
@@ -88,6 +88,28 @@ class SiteSettings(NoDashModel):
     launch: bool = False
 
 
+class SeasonTool(NoDashModel):
+    """A template or guide offered on the season page."""
+
+    title: str
+    description: str
+    url: str
+
+    @field_validator("title", "description")
+    @classmethod
+    def _not_blank(cls, value: str) -> str:
+        if not value.strip():
+            raise ValueError("must not be blank")
+        return value
+
+    @field_validator("url")
+    @classmethod
+    def _https_url(cls, value: str) -> str:
+        if not value.startswith("https://") or " " in value:
+            raise ValueError(f"url must be an https:// address without spaces: {value!r}")
+        return value
+
+
 class Season(NoDashModel):
     code: str
     number: int
@@ -95,6 +117,7 @@ class Season(NoDashModel):
     title: str
     type: SeasonType
     description: str
+    tools: list[SeasonTool] = []
 
 
 class Episode(NoDashModel):
