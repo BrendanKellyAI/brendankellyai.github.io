@@ -20,13 +20,13 @@
   description: Where AI earns its place, and choices that outlast the next model release.
   tools:
     - title: Scorecard template
-      description: A blank use case scorecard (CSV) for rating your own candidates against the season's criteria.
+      description: A blank scorecard (CSV) with one worked example row, ready for the lab strategy score command.
       url: https://github.com/BrendanKellyAI/applied-ai-lab/blob/main/season3/templates/scorecard.csv
     - title: Scorecard guide
-      description: How to fill in each scorecard column, with the evidence to gather and the traps to avoid.
+      description: The scoring rule in plain English: gates, criteria with anchors, autonomy, sourcing, weights and a worked row.
       url: https://github.com/BrendanKellyAI/applied-ai-lab/blob/main/season3/templates/scorecard-guide.md
     - title: One-page AI strategy template
-      description: A single page that records the chosen use case, the trust level, what you own and when to stop.
+      description: Nine sections for the board, from the outcomes you want to the first move and what you will not do.
       url: https://github.com/BrendanKellyAI/applied-ai-lab/blob/main/season3/templates/one-page-strategy.md
 
 - code: S4
