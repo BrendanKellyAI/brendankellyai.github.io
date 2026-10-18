@@ -22,6 +22,8 @@ OG_BAND_HEIGHT = 100  # the green band on existing og images
 OG_FOOTER_RULE_Y = 530  # where the footer rule sits on existing og images
 OG_SIDE_MARGIN = 64
 BLOCK_GAP = 24  # rows of plain background that separate two blocks of content
+BAND_PADDING = 8  # green kept above and below the monogram in the og band
+EDGE_ROWS = 6  # rows at the top and bottom of the slide's band that are never content
 
 
 def _render_first_slide(pdf_path: Path, width: int) -> Image.Image:
@@ -60,6 +62,31 @@ def _blocks(rows: list[bool], start: int, end: int) -> list[tuple[int, int]]:
     return [(top, bottom + 1) for top, bottom in blocks]
 
 
+def _paste_band(og: Image.Image, slide: Image.Image, band_bottom: int) -> None:
+    """Rebuild the green band at og height from the slide's own band elements.
+
+    The episode code (left) and the BK monogram (right) are cut out separately, shrunk only
+    if taller than the og band allows, and placed at their original left and right margins.
+    Decks draw the monogram at slightly different sizes, so a fixed strip would clip it.
+    """
+    width = slide.width
+    green = slide.getpixel((5, 5))
+    og.paste(Image.new("RGB", (og.width, OG_BAND_HEIGHT), green), (0, 0))
+    pixels = slide.load()
+    # Skip the band's edge rows, where anti-aliasing against the slide below looks like content.
+    inner = range(EDGE_ROWS, band_bottom - EDGE_ROWS)
+    columns = [any(_differs(pixels[x, y], green) for y in inner[::2]) for x in range(width)]
+    for left, right in _blocks(columns, 0, width):
+        rows = [y for y in inner if any(_differs(pixels[x, y], green) for x in range(left, right))]
+        element = slide.crop((left, rows[0], right, rows[-1] + 1))
+        room = OG_BAND_HEIGHT - 2 * BAND_PADDING
+        if element.height > room:
+            scale = room / element.height
+            element = element.resize((max(1, int(element.width * scale)), room), Image.LANCZOS)
+        x = left if left < width // 2 else right - element.width
+        og.paste(element, (x, (OG_BAND_HEIGHT - element.height) // 2))
+
+
 def make_og(slide: Image.Image) -> Image.Image:
     width, height = slide.size
     background = slide.getpixel((5, height // 2))  # the left margin is always plain slide
@@ -71,11 +98,7 @@ def make_og(slide: Image.Image) -> Image.Image:
     title_top, title_bottom = content[0][0], content[-3][1]
 
     og = Image.new("RGB", OG_SIZE, background)
-    # The slide's band is taller than the og band, so take its middle strip at full size
-    # rather than squashing the episode code and the BK monogram.
-    middle = band_bottom // 2
-    band = slide.crop((0, middle - OG_BAND_HEIGHT // 2, width, middle + OG_BAND_HEIGHT // 2))
-    og.paste(band, (0, 0))
+    _paste_band(og, slide, band_bottom)
 
     footer = slide.crop((0, footer_top, width, content[-1][1] + 8))
     og.paste(footer, (0, OG_FOOTER_RULE_Y))

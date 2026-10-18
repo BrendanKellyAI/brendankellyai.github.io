@@ -10,6 +10,8 @@ from pydantic import BaseModel, ConfigDict, model_validator
 
 _DASH_CHARS = "—–"
 _SUMMARY_MAX_WORDS = 30
+# Seasons were planned at 12 episodes; Season 2 runs to 16. The cap only catches typos.
+MAX_EPISODE_NUMBER = 20
 _SENTENCE_END = (".", "!", "?")
 _SENTENCE_BREAK = re.compile(r"[.!?](?=\s|$)")
 
@@ -122,8 +124,8 @@ class Episode(NoDashModel):
 
     @model_validator(mode="after")
     def _check_number_range(self) -> Episode:
-        if not 0 <= self.number <= 12:
-            raise ValueError(f"episode number {self.number} is outside 0-12")
+        if not 0 <= self.number <= MAX_EPISODE_NUMBER:
+            raise ValueError(f"episode number {self.number} is outside 0-{MAX_EPISODE_NUMBER}")
         return self
 
     @model_validator(mode="after")

@@ -1,0 +1,18 @@
+code: "S2 E1"
+season: S2
+number: 1
+slug: why-retrieval-exists
+title: "Why retrieval exists"
+format: explainer
+status: published
+publish_date: 2026-10-17
+summary: "Retrieval hands the model the right passage at the moment of the question, which fixes stale and private facts but moves the failure to search."
+decision_rule: "Use retrieval when the answer lives in your own data. Then log what it retrieved, and measure search and answer separately."
+linkedin_url: null
+deck_pdf: bk-s2-e1-why-retrieval-exists-v2.pdf
+cover_image: cover.png
+og_image: og.png
+lab_path: null
+article_url: null
+playbook_slides: []
+slide_sections: [cover, why, why, model, worked, concepts, data, concepts, data, breaks, breaks, eng, leaders, wheregoes, rule, map]

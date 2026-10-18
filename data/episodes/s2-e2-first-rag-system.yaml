@@ -1,0 +1,18 @@
+code: "S2 E2"
+season: S2
+number: 2
+slug: first-rag-system
+title: "Your first RAG system"
+format: explainer
+status: published
+publish_date: 2026-10-18
+summary: "A complete RAG system with the simplest choice at every stage, run on all 520 test questions, shows most wrong answers never reached the model."
+decision_rule: "Build the simplest complete pipeline and measure it before tuning any stage."
+linkedin_url: null
+deck_pdf: bk-s2-e2-first-rag-system-v1.pdf
+cover_image: cover.png
+og_image: og.png
+lab_path: episodes/s2-e2-first-rag-system
+article_url: null
+playbook_slides: []
+slide_sections: [cover, why, model, model, ahead, ahead, ahead, ahead, live, live, live, live, live, testing, terms, finding, finding, finding, alsoshowed, breaks, eng, cost, leaders, scoreboard, rule, map]

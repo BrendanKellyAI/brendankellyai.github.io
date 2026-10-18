@@ -40,6 +40,28 @@ sections:
   myth: Myth vs measured
   behind: Behind the scenes
   save: Save this
+  # Season 2
+  insight: The insight
+  approach: The approach
+  casestudy: The case study
+  testset: The test set
+  incode: In code
+  seasonmap: The season map
+  scoreboard: The scoreboard
+  therule: The rule
+  howtoread: How to read it
+  fieldnotes: Field notes
+  whereitends: Where it ends
+  learn: What you will learn
+  opencode: Open code
+  worked: Worked example
+  wheregoes: Where this goes
+  ahead: Ahead of time
+  live: Live, every question
+  testing: Testing only
+  terms: Key terms
+  alsoshowed: What else the run showed
+  cost: Cost
 
 concepts:
   - id: tokens
@@ -62,31 +84,34 @@ concepts:
     links: [s1-e2]
   - id: vectors
     label: Vectors
-    links: [s1-e3, s1-e4]
+    links: [s1-e3, s1-e4, s2-e4, s2-e12]
   - id: similarity
     label: Cosine similarity
-    links: [s1-e3, S2]
+    links: [s1-e3, S2, s2-e1, s2-e5]
   - id: attention
     label: Attention
     links: [s1-e4, s1-e5, s1-e7]
   - id: context
     label: Context
-    links: [s1-e1, s1-e6, s1-e7, S2]
+    links: [s1-e1, s1-e6, s1-e7, S2, s2-e1, s2-e13]
   - id: grounding
     label: Grounding
-    links: [s1-e9, S2, S7]
+    links: [s1-e9, S2, S7, s2-e1, s2-e10]
   - id: evaluation
     label: Evaluation
-    links: [s1-e9, S8, S10]
+    links: [s1-e9, S8, S10, s2-e3, s2-e14]
   - id: reasoning
     label: Reasoning
     links: [s1-e2, s1-e10, s1-e11]
   - id: measurement
     label: Measuring, not quoting
-    links: [s1-e7, s1-e8, s1-e9, s1-e10, s1-e11, s1-e12, S8]
+    links: [s1-e7, s1-e8, s1-e9, s1-e10, s1-e11, s1-e12, S8, s2-e0, s2-e2, s2-e3]
   - id: latency
     label: Latency
     links: [s1-e5, s1-e6, s1-e10, s1-e11, S13]
+  - id: retrieval
+    label: Retrieval
+    links: [s1-e3, s2-e0, s2-e1, s2-e2, s2-e5, s2-e7, s2-e8, s2-e15]
   - id: agents
     label: Agents
     links: [S5, S10, S11, S14]
@@ -105,3 +130,6 @@ links:
   - [s1-e5, s1-e4]
   - [s1-e9, s1-e6]
   - [s1-e10, s1-e11]
+  - [s2-e1, s2-e2]
+  - [s2-e1, s1-e7]
+  - [s2-e2, s2-e3]

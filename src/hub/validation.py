@@ -24,7 +24,7 @@ from hub.models import (
 )
 
 _DASH_CHARS = "—–"
-MAX_PDF_MB = 6
+MAX_PDF_MB = 8
 _MAX_PDF_BYTES = MAX_PDF_MB * 1024 * 1024
 _TO_BE_SUPPLIED = "TO_BE_SUPPLIED"
 _WARN_IF_UNSUPPLIED = ("description", "newsletter_url", "about_bio")
