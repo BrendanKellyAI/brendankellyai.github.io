@@ -89,13 +89,17 @@ def test_em_dash_rejected_in_nested_playbook_slide():
 
 
 def test_episode_number_below_range_rejected():
-    with pytest.raises(ValidationError, match="0-12"):
+    with pytest.raises(ValidationError, match="0-20"):
         Episode.model_validate({**VALID_EPISODE, "number": -1})
 
 
 def test_episode_number_above_range_rejected():
-    with pytest.raises(ValidationError, match="0-12"):
-        Episode.model_validate({**VALID_EPISODE, "number": 13})
+    with pytest.raises(ValidationError, match="0-20"):
+        Episode.model_validate({**VALID_EPISODE, "number": 21})
+
+
+def test_episode_number_sixteen_is_allowed():
+    assert Episode.model_validate({**VALID_EPISODE, "number": 16}).number == 16
 
 
 def test_summary_over_word_limit_rejected():

@@ -1,0 +1,18 @@
+code: "S2 E0"
+season: S2
+number: 0
+slug: season-intro
+title: "Season 2: Retrieval and RAG"
+format: season_intro
+status: published
+publish_date: 2026-10-16
+summary: "Season introduction: build an assistant that answers from your own documents, then measure every stage until you know why it is right and why it is wrong."
+decision_rule: "Build the simplest complete system. Measure it. Change one stage at a time, and keep only what clears a bar set in advance."
+linkedin_url: null
+deck_pdf: bk-s2-e0-season-intro-v2.pdf
+cover_image: cover.png
+og_image: og.png
+lab_path: null
+article_url: null
+playbook_slides: []
+slide_sections: [cover, why, why, model, insight, approach, casestudy, casestudy, casestudy, testset, incode, seasonmap, scoreboard, therule, howtoread, guide, fieldnotes, whereitends, whereitends, learn, opencode, rule, map]
