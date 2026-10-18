@@ -282,9 +282,19 @@ a.step-card:hover { border-color: var(--green); }
 .chapter.is-active .chapter-bar span { background: var(--green); }
 .chapter-rule .chapter-bar { box-shadow: inset 0 0 0 1px var(--green); }
 
-.player:fullscreen { background: var(--bg); padding: 1.5rem; display: flex; flex-direction: column; justify-content: center; }
-.player:fullscreen .stage { border: 0; background: transparent; flex: 1; }
-.player:fullscreen .slide img { max-height: calc(100vh - 9rem); }
+/* Swipe and zoom. Outside full screen the browser keeps vertical scrolling and page zoom;
+   in full screen the player handles every gesture itself. */
+.is-player .stage { touch-action: pan-y pinch-zoom; overflow: hidden; }
+.is-player .slide img { transform-origin: 0 0; user-select: none; -webkit-user-select: none; -webkit-user-drag: none; }
+.zoom { display: none; gap: 0.4rem; }
+
+/* Full screen: the browser's own, or a full-window view where it is not supported (iPhone) */
+.player.is-fullscreen { position: fixed; inset: 0; z-index: 100; margin: 0; max-width: none; background: var(--bg); padding: 1rem; display: flex; flex-direction: column; justify-content: center; }
+.player.is-fullscreen .stage { border: 0; background: transparent; flex: 1; min-height: 0; touch-action: none; }
+.player.is-fullscreen .slide img { max-height: calc(100dvh - 9rem); min-height: 0; cursor: zoom-in; }
+.player.is-fullscreen .chapters { display: none; }
+html.player-open, html.player-open body { overflow: hidden; }
+@media (hover: hover) and (min-width: 700px) { .player.is-fullscreen .zoom { display: inline-flex; } }
 
 .lesson-side h2 { font-size: 1rem; margin-bottom: 0.8rem; }
 .lesson-side h2 a { text-decoration: none; }
