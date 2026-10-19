@@ -30,7 +30,10 @@
       ad_personalization: "denied",
     });
     window.gtag("js", new Date());
-    window.gtag("config", gaId);
+    window.gtag("config", gaId, {
+      allow_google_signals: false,
+      allow_ad_personalization_signals: false,
+    });
     var script = document.createElement("script");
     script.async = true;
     script.src = "https://www.googletagmanager.com/gtag/js?id=" + encodeURIComponent(gaId);

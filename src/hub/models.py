@@ -89,6 +89,10 @@ class SiteSettings(NoDashModel):
     # Google Analytics measurement ID, such as G-ABC123. Empty means no analytics at all.
     # When set, GA loads only after a visitor accepts the consent banner.
     analytics_id: str = ""
+    # Privacy notice (/privacy/): how long analytics data is kept, as set in Google Analytics,
+    # and when the notice last changed. Privacy requests go to linkedin_profile_url.
+    analytics_retention: str = "2 months"
+    privacy_updated: date | None = None
 
     @model_validator(mode="after")
     def _check_analytics_id(self) -> SiteSettings:

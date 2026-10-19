@@ -10,3 +10,6 @@ about_bio: Brendan Kelly is a Director of Software Engineering with more than 20
 current_season: S2
 launch: true
 analytics_id: G-FCWF98SQSH
+# Privacy notice (/privacy/). Privacy requests go to linkedin_profile_url above.
+analytics_retention: 2 months
+privacy_updated: 2026-10-19

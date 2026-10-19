@@ -1,0 +1,168 @@
+{% extends "base.html" %}
+
+{% block title %}Privacy notice, {{ site.name }}{% endblock %}
+{% block meta_description %}How {{ site.descriptor }} handles personal data, cookies, and browser storage, and your rights under the GDPR.{% endblock %}
+
+{% block content %}
+{% set analytics = site.analytics_id %}
+<article class="wrap legal">
+  <p class="crumb"><a href="/">Home</a> &middot; Privacy</p>
+  <h1>Privacy notice</h1>
+  <p class="pitch-sub">How this site handles personal data, cookies, and browser storage, written to meet the EU General Data Protection Regulation (GDPR) and the Irish rules on cookies.</p>
+  {% if site.privacy_updated %}<p class="legal-updated">Last updated {{ site.privacy_updated | format_date }}.</p>{% endif %}
+
+  <section aria-labelledby="short-heading">
+    <h2 id="short-heading">In short</h2>
+    <ul>
+      <li>There are no accounts, forms, comments, or sign-ups on this site, so you never give me your name or email address here.</li>
+      <li>Your progress through the lessons is kept only in your own browser, and is never sent anywhere.</li>
+      {% if analytics %}
+      <li>Google Analytics runs only if you accept it. If you decline, or never choose, nothing is sent to Google and no analytics cookies are set.</li>
+      {% else %}
+      <li>The site uses no analytics and sets no cookies.</li>
+      {% endif %}
+      <li>GitHub, which hosts the site, logs visitors' IP addresses for security, as every web host does.</li>
+      <li>Nothing is sold, and nothing is used for advertising.</li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="controller-heading">
+    <h2 id="controller-heading">Who is responsible for your data</h2>
+    <p>The controller of personal data processed through this site is {{ site.name }}, an individual based in Ireland, who runs {{ site.base_url | replace("https://", "") }} as a personal, non-commercial course.</p>
+    <p>For anything about your data, including the rights listed below, <a href="{{ site.linkedin_profile_url }}">send me a message on LinkedIn<span class="visually-hidden"> (opens LinkedIn)</span></a>. That is the contact point for privacy requests.</p>
+    <p>As a small personal site, it is not required to appoint a data protection officer (Article 37 GDPR).</p>
+  </section>
+
+  <section aria-labelledby="what-heading">
+    <h2 id="what-heading">What is collected, why, and for how long</h2>
+    <div class="legal-table-wrap">
+      <table class="legal-table">
+        <thead>
+          <tr><th scope="col">What</th><th scope="col">Data</th><th scope="col">Why</th><th scope="col">Legal basis</th><th scope="col">Kept for</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">Hosting, by GitHub Pages</th>
+            <td>Your IP address, browser details, the page requested, and the time, in GitHub's server logs.</td>
+            <td>Delivering the site and keeping it secure. GitHub logs this for every visitor; the site owner cannot see or switch off these logs.</td>
+            <td>Legitimate interests (Article 6(1)(f) GDPR): a site cannot be served or protected without them.</td>
+            <td>As set out in GitHub's privacy statement.</td>
+          </tr>
+          {% if analytics %}
+          <tr>
+            <th scope="row">Analytics, by Google Analytics 4, only if you accept</th>
+            <td>Pages viewed, the page that referred you, approximate location (city, region, country), device, browser and screen size, and a random identifier in a cookie.</td>
+            <td>Seeing which lessons are read, so the course can be improved.</td>
+            <td>Your consent (Article 6(1)(a) GDPR, and Regulation 5(3) of the ePrivacy Regulations, S.I. No. 336 of 2011).</td>
+            <td>{{ site.analytics_retention }} in Google Analytics; the cookies themselves up to 2 years, unless you clear them or withdraw consent.</td>
+          </tr>
+          {% endif %}
+          <tr>
+            <th scope="row">Lesson progress, in your browser only</th>
+            <td>Which lessons and slides you have viewed, and the last one you opened.</td>
+            <td>Letting you pick up where you left off, and showing your progress.</td>
+            <td>Stored on your device to provide the course features you are using (Regulation 5(5) of S.I. No. 336 of 2011). It never leaves your browser, so no one else can access it.</td>
+            <td>Until you clear your browser's site data.</td>
+          </tr>
+          {% if analytics %}
+          <tr>
+            <th scope="row">Your analytics choice, in your browser only</th>
+            <td>Whether you accepted or declined analytics.</td>
+            <td>Remembering your choice, so the banner does not ask again on every page.</td>
+            <td>Strictly necessary to respect your choice (Regulation 5(5) of S.I. No. 336 of 2011).</td>
+            <td>Until you clear your browser's site data.</td>
+          </tr>
+          {% endif %}
+          <tr>
+            <th scope="row">If you message me on LinkedIn</th>
+            <td>Your LinkedIn profile name and whatever you write.</td>
+            <td>Replying to you and, for a privacy request, dealing with it. LinkedIn also holds the message, under its own privacy policy.</td>
+            <td>Legitimate interests in answering correspondence (Article 6(1)(f) GDPR); for a rights request, the legal obligation to respond (Article 6(1)(c)).</td>
+            <td>As long as needed to deal with your message. I delete my copy of the conversation within 12 months of the last reply; you can delete yours in LinkedIn at any time.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section aria-labelledby="cookies-heading">
+    <h2 id="cookies-heading">Cookies and browser storage</h2>
+    {% if analytics %}
+    <p>Cookies are set only after you accept analytics. Everything else is stored in your browser's local storage, which this site reads but never sends anywhere.</p>
+    <div class="legal-table-wrap">
+      <table class="legal-table">
+        <thead>
+          <tr><th scope="col">Name</th><th scope="col">Type</th><th scope="col">Set by</th><th scope="col">Purpose</th><th scope="col">Lasts</th></tr>
+        </thead>
+        <tbody>
+          <tr><th scope="row"><code>_ga</code></th><td>Cookie, analytics</td><td>Google Analytics, after you accept</td><td>Tells visits from the same browser apart.</td><td>2 years</td></tr>
+          <tr><th scope="row"><code>_ga_{{ analytics[2:] }}</code></th><td>Cookie, analytics</td><td>Google Analytics, after you accept</td><td>Keeps track of the current visit.</td><td>2 years</td></tr>
+          <tr><th scope="row"><code>appliedai.consent</code></th><td>Local storage, strictly necessary</td><td>This site</td><td>Remembers whether you accepted or declined analytics.</td><td>Until cleared</td></tr>
+          <tr><th scope="row"><code>appliedai.lessons</code></th><td>Local storage, course features</td><td>This site</td><td>Remembers your progress through the lessons.</td><td>Until cleared</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Advertising cookies, ad personalisation, and Google signals are switched off. You can change your analytics choice at any time with <strong>Cookie settings</strong> at the foot of every page; declining removes the analytics cookies.</p>
+    {% else %}
+    <p>The site sets no cookies. Your lesson progress (<code>appliedai.lessons</code>) is kept in your browser's local storage and never sent anywhere.</p>
+    {% endif %}
+    <p>Clearing this site's data in your browser removes all of the above.</p>
+  </section>
+
+  <section aria-labelledby="recipients-heading">
+    <h2 id="recipients-heading">Who receives data</h2>
+    <ul>
+      <li><strong>GitHub</strong> (GitHub, Inc. and GitHub B.V.) hosts the site. See the <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement">GitHub General Privacy Statement</a>.</li>
+      {% if analytics %}
+      <li><strong>Google</strong> provides Google Analytics, as a processor acting on my instructions, and only if you accept. See <a href="https://policies.google.com/technologies/partner-sites">how Google uses information from sites that use its services</a> and the <a href="https://policies.google.com/privacy">Google Privacy Policy</a>.</li>
+      {% endif %}
+      <li><strong>LinkedIn</strong> holds any message you send me there, as it does all LinkedIn messages. See the <a href="https://www.linkedin.com/legal/privacy-policy">LinkedIn Privacy Policy</a>.</li>
+      <li>No one else. Your data is never sold, rented, or shared for advertising.</li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="transfers-heading">
+    <h2 id="transfers-heading">Transfers outside the EU</h2>
+    <p>GitHub may process data in the United States. It states that it complies with the EU-U.S. Data Privacy Framework and generally relies on the European Commission's standard contractual clauses for transfers out of the EU.</p>
+    {% if analytics %}
+    <p>Google Analytics collects data from EU visitors on servers in the EU and does not log or store EU visitors' IP addresses; it uses them only to work out an approximate location, then discards them. Google may process analytics data outside the EU, under safeguards recognised by the European Commission, such as standard contractual clauses.</p>
+    {% endif %}
+  </section>
+
+  <section aria-labelledby="rights-heading">
+    <h2 id="rights-heading">Your rights</h2>
+    <p>Under the GDPR you have the right to:</p>
+    <ul>
+      <li>access the personal data held about you (Article 15);</li>
+      <li>have inaccurate data corrected (Article 16);</li>
+      <li>have your data erased (Article 17);</li>
+      <li>restrict how it is used (Article 18);</li>
+      <li>receive it in a portable form (Article 20);</li>
+      <li>object to processing based on legitimate interests (Article 21);</li>
+      {% if analytics %}
+      <li>withdraw your consent to analytics at any time, without affecting what happened before (Article 7(3)), with Cookie settings at the foot of any page.</li>
+      {% endif %}
+    </ul>
+    <p>To use any of these rights, <a href="{{ site.linkedin_profile_url }}">send me a message on LinkedIn<span class="visually-hidden"> (opens LinkedIn)</span></a>. You will get a reply within one month, as the GDPR requires (Article 12(3)). There is no charge.</p>
+    {% if analytics %}
+    <p>Analytics data is linked only to a random identifier in your browser's cookie, not to your name, so the quickest way to stop it and remove the cookies is to decline in Cookie settings.</p>
+    {% endif %}
+  </section>
+
+  <section aria-labelledby="complaints-heading">
+    <h2 id="complaints-heading">Complaints</h2>
+    <p>If you are unhappy with how your data is handled, please get in touch first. You also have the right to complain to the Data Protection Commission, Ireland's supervisory authority: 21 Fitzwilliam Square South, Dublin 2, D02 RD28, or <a href="https://www.dataprotection.ie">dataprotection.ie</a>. You can instead complain to the authority in the EU country where you live or work.</p>
+  </section>
+
+  <section aria-labelledby="other-heading">
+    <h2 id="other-heading">Other things you should know</h2>
+    <ul>
+      <li><strong>No automated decisions.</strong> No decisions about you are made by automated means, and no profiles are built (Article 22).</li>
+      <li><strong>Not aimed at children.</strong> The course is written for working professionals.</li>
+      <li><strong>Other sites.</strong> Links to LinkedIn, GitHub, and other sites take you to services with their own privacy policies.</li>
+      <li><strong>Security.</strong> The site is static and served only over HTTPS. It has no database, and holds no personal data of its own.</li>
+      <li><strong>Changes.</strong> When this notice changes, the date at the top changes too.</li>
+    </ul>
+  </section>
+</article>
+{% endblock %}

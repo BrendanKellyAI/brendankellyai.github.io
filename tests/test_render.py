@@ -312,4 +312,33 @@ def test_no_analytics_markup_without_an_analytics_id():
     html = _render_about(site)
     assert "data-consent" not in html
     assert "consent.js" not in html
-    assert "no analytics and no cookies" in html
+    assert 'href="/privacy/"' in html
+
+
+def _render_privacy(site):
+    env = make_environment()
+    install_course_globals(env, load_site_data(DATA_DIR))
+    return env.get_template("privacy.html").render(site=site, social_image_path="/x.png")
+
+
+def test_privacy_page_covers_analytics_when_enabled():
+    site = load_site_data(DATA_DIR).site.model_copy(
+        update={"analytics_id": "G-ABC1234"}
+    )
+    html = _render_privacy(site)
+    # Privacy requests go to LinkedIn; no email address is published.
+    assert "send me a message on LinkedIn" in html
+    assert site.linkedin_profile_url in html
+    assert "mailto:" not in html
+    assert "_ga_ABC1234" in html
+    assert "Data Protection Commission" in html
+    assert "Article 6(1)(a)" in html
+
+
+def test_privacy_page_without_analytics_says_no_cookies():
+    site = load_site_data(DATA_DIR).site.model_copy(
+        update={"analytics_id": ""}
+    )
+    html = _render_privacy(site)
+    assert "The site uses no analytics and sets no cookies." in html
+    assert "_ga" not in html
