@@ -145,3 +145,17 @@ def test_deck_filename_invalid_pattern_rejected():
 def test_deck_filename_wrong_code_rejected():
     with pytest.raises(ValidationError, match="deck_pdf"):
         Episode.model_validate({**VALID_EPISODE, "deck_pdf": "bk-s1-e3-tokens-v1.pdf"})
+
+
+def test_site_analytics_id_defaults_to_none():
+    assert SiteSettings.model_validate(VALID_SITE).analytics_id == ""
+
+
+def test_site_accepts_a_ga4_analytics_id():
+    site = SiteSettings.model_validate({**VALID_SITE, "analytics_id": "G-FCWF98SQSH"})
+    assert site.analytics_id == "G-FCWF98SQSH"
+
+
+def test_site_rejects_a_malformed_analytics_id():
+    with pytest.raises(ValidationError, match="analytics_id"):
+        SiteSettings.model_validate({**VALID_SITE, "analytics_id": "UA-12345-1"})

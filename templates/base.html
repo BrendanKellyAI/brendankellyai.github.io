@@ -33,6 +33,9 @@
   <link rel="alternate" type="application/atom+xml" title="{{ site.name }}, {{ site.descriptor }}" href="/feed.xml">
   <link rel="stylesheet" href="{{ asset_url('/static/css/style.css') }}">
   <script src="{{ asset_url('/static/js/player.js') }}" defer></script>
+  {% if site.analytics_id %}
+  <script src="{{ asset_url('/static/js/consent.js') }}" defer></script>
+  {% endif %}
   {% block structured_data %}{% endblock %}
   {% block head_extra %}{% endblock %}
 </head>
@@ -58,8 +61,20 @@
     <p>Applied AI, a course by {{ site.name }}. Code in <a href="{{ site.lab_repo_url }}">applied-ai-lab<span class="visually-hidden"> (opens GitHub)</span></a>.</p>
     <p class="foot-follow">New lessons are announced on <a href="{{ site.linkedin_profile_url }}">LinkedIn<span class="visually-hidden"> (opens LinkedIn)</span></a> and the <a href="/feed.xml">feed</a>.</p>
     <p class="foot-follow">Code is published under the MIT licence in applied-ai-lab. Decks and articles are not.</p>
+    {% if site.analytics_id %}
+    <p class="foot-follow"><a href="/about/#privacy">Privacy</a> &middot; <button type="button" class="link-button" data-consent-open hidden>Cookie settings</button></p>
+    {% endif %}
   </div>
 </footer>
   {% endblock %}
+  {% if site.analytics_id %}
+  <div class="consent" data-consent data-ga-id="{{ site.analytics_id }}" role="region" aria-label="Analytics consent" hidden>
+    <p class="consent-text">May I count your visit? With your consent, Google Analytics records which pages are read, so I can see which lessons help. Nothing is sent to Google if you decline. <a href="/about/#privacy">Privacy</a></p>
+    <div class="consent-actions">
+      <button type="button" class="ctl" data-consent-decline>Decline</button>
+      <button type="button" class="ctl ctl-next" data-consent-accept>Accept</button>
+    </div>
+  </div>
+  {% endif %}
 </body>
 </html>

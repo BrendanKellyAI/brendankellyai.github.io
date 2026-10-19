@@ -86,6 +86,15 @@ class SiteSettings(NoDashModel):
     about_bio: str
     current_season: str
     launch: bool = False
+    # Google Analytics measurement ID, such as G-ABC123. Empty means no analytics at all.
+    # When set, GA loads only after a visitor accepts the consent banner.
+    analytics_id: str = ""
+
+    @model_validator(mode="after")
+    def _check_analytics_id(self) -> SiteSettings:
+        if self.analytics_id and not re.fullmatch(r"G-[A-Z0-9]{4,20}", self.analytics_id):
+            raise ValueError(f"analytics_id {self.analytics_id!r} is not a GA4 ID like G-ABC123")
+        return self
 
 
 class Season(NoDashModel):

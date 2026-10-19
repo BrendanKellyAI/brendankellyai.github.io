@@ -47,4 +47,14 @@
     <li class="material"><a href="/feed.xml"><span class="material-label">Atom feed</span><span class="material-note">New lessons in your feed reader</span></a></li>
   </ul>
 </section>
+
+<section class="wrap about-follow" id="privacy" aria-labelledby="privacy-heading">
+  <h2 id="privacy-heading">Privacy</h2>
+  <p>Your place in each lesson is kept only in your own browser, and never sent anywhere.</p>
+  {% if site.analytics_id %}
+  <p>If you accept analytics, Google Analytics records which pages you visit, roughly where from, and on what kind of device, so I can see which lessons are read. Advertising features are switched off. If you decline, the analytics script is never loaded and nothing is sent to Google. You can change your choice at any time with Cookie settings at the foot of every page.</p>
+  {% else %}
+  <p>The site uses no analytics and no cookies.</p>
+  {% endif %}
+</section>
 {% endblock %}
