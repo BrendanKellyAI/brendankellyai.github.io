@@ -390,3 +390,19 @@ html.player-open, html.player-open body { overflow: hidden; }
 .link-button[hidden] { display: none; }
 
 .rules-more { margin-top: 1.2rem; color: var(--slate); }
+
+/* Privacy notice */
+.legal { max-width: 56rem; padding-top: 2.5rem; padding-bottom: 4rem; }
+.legal h1 { font-size: clamp(2.2rem, 5vw, 3.2rem); letter-spacing: -0.035em; line-height: 1.05; }
+.legal h2 { font-size: 1.3rem; margin-top: 2.5rem; }
+.legal ul { padding-left: 1.2rem; }
+.legal li { margin: 0.35rem 0; }
+.legal strong { color: var(--white); }
+.legal code { font-family: var(--font-mono); font-size: 0.85em; color: var(--green); }
+.legal-updated { color: var(--slate); font-size: 0.9rem; }
+.legal-table-wrap { overflow-x: auto; margin: 1rem 0; border: 1px solid var(--hair); border-radius: 10px; }
+.legal-table { border-collapse: collapse; width: 100%; min-width: 44rem; font-size: 0.88rem; }
+.legal-table th, .legal-table td { text-align: left; vertical-align: top; padding: 0.7rem 0.8rem; border-bottom: 1px solid var(--hair); }
+.legal-table thead th { color: var(--slate); font-weight: 700; font-size: 0.78rem; background: var(--navy); }
+.legal-table tbody th { color: var(--white); font-weight: 700; }
+.legal-table tbody tr:last-child th, .legal-table tbody tr:last-child td { border-bottom: 0; }
