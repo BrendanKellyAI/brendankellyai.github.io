@@ -62,6 +62,14 @@ schema error, a broken internal link, or an un-supplied `TO_BE_SUPPLIED` placeho
 This repository's GitHub Pages source must be set to "GitHub Actions" (Settings > Pages) for the
 workflow's deploy step to work. It is currently set to deploy from the `main` branch directly.
 
+## Analytics
+
+Google Analytics is set by `analytics_id` in `data/site.yaml` (a GA4 ID such as `G-ABC123`;
+leave it empty to remove analytics entirely). It loads only after a visitor accepts the consent
+banner, with advertising features switched off. Declining, or never choosing, means no GA
+script, no cookies, and no requests to Google. Visitors can change their choice from "Cookie
+settings" in the footer; the About page's Privacy section explains what is collected.
+
 ## Publish an episode
 
 Every episode already has a file in `data/episodes/`, with `status: planned`. To publish one:

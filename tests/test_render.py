@@ -286,3 +286,30 @@ def test_asset_url_adds_a_content_hash(tmp_path):
 def test_asset_url_leaves_unknown_paths_alone(tmp_path):
     assert asset_url("/static/js/missing.js", tmp_path) == "/static/js/missing.js"
     assert asset_url("https://example.com/x.js", tmp_path) == "https://example.com/x.js"
+
+
+def _render_about(site):
+    env = make_environment()
+    install_course_globals(env, load_site_data(DATA_DIR))
+    return env.get_template("about.html").render(
+        site=site, active_nav="about", social_image_path="/x.png", person_jsonld={}
+    )
+
+
+def test_analytics_waits_for_consent():
+    site = load_site_data(DATA_DIR).site.model_copy(update={"analytics_id": "G-ABC1234"})
+    html = _render_about(site)
+    # Only the consent banner and script are in the page; GA itself is never loaded by markup.
+    assert 'data-ga-id="G-ABC1234"' in html
+    assert "/static/js/consent.js" in html
+    assert "googletagmanager" not in html
+    assert "Cookie settings" in html
+    assert 'id="privacy"' in html
+
+
+def test_no_analytics_markup_without_an_analytics_id():
+    site = load_site_data(DATA_DIR).site.model_copy(update={"analytics_id": ""})
+    html = _render_about(site)
+    assert "data-consent" not in html
+    assert "consent.js" not in html
+    assert "no analytics and no cookies" in html
