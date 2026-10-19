@@ -45,7 +45,8 @@
         <p class="graph-card-kind" data-card-kind></p>
         <p class="graph-card-title" data-card-title></p>
         <p class="graph-card-body" data-card-body></p>
-        <p class="graph-card-cta" data-card-cta>Click to open</p>
+        <ul class="graph-card-links" data-card-links hidden></ul>
+        <a class="graph-card-cta" data-card-cta href="/" hidden>Open lesson</a>
       </div>
       <figcaption class="graph-legend">
         <span><i class="dot dot-live"></i>Lesson</span>
@@ -89,7 +90,8 @@
 <section class="wrap rules" aria-labelledby="rules-heading">
   <p class="kicker">What you'll take away</p>
   <h2 id="rules-heading">Rules worth keeping</h2>
-  {{ c.rule_index() }}
+  {{ c.rule_index(limit=6) }}
+  <p class="rules-more">Every lesson ends with one. <a href="/seasons/">See them all, lesson by lesson</a></p>
 </section>
 {% endif %}
 
