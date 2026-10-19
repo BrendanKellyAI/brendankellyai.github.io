@@ -29,7 +29,7 @@
   <section aria-labelledby="controller-heading">
     <h2 id="controller-heading">Who is responsible for your data</h2>
     <p>The controller of personal data processed through this site is {{ site.name }}, an individual based in Ireland, who runs {{ site.base_url | replace("https://", "") }} as a personal, non-commercial course.</p>
-    <p>For anything about your data, including the rights listed below, email <a href="mailto:{{ site.privacy_email }}">{{ site.privacy_email }}</a>.</p>
+    <p>For anything about your data, including the rights listed below, <a href="{{ site.linkedin_profile_url }}">send me a message on LinkedIn<span class="visually-hidden"> (opens LinkedIn)</span></a>. That is the contact point for privacy requests.</p>
     <p>As a small personal site, it is not required to appoint a data protection officer (Article 37 GDPR).</p>
   </section>
 
@@ -74,11 +74,11 @@
           </tr>
           {% endif %}
           <tr>
-            <th scope="row">If you email me</th>
-            <td>Your email address and whatever you write.</td>
-            <td>Replying to you and, for a privacy request, dealing with it.</td>
+            <th scope="row">If you message me on LinkedIn</th>
+            <td>Your LinkedIn profile name and whatever you write.</td>
+            <td>Replying to you and, for a privacy request, dealing with it. LinkedIn also holds the message, under its own privacy policy.</td>
             <td>Legitimate interests in answering correspondence (Article 6(1)(f) GDPR); for a rights request, the legal obligation to respond (Article 6(1)(c)).</td>
-            <td>As long as needed to deal with your message, and no longer than 12 months after the last reply.</td>
+            <td>As long as needed to deal with your message. I delete my copy of the conversation within 12 months of the last reply; you can delete yours in LinkedIn at any time.</td>
           </tr>
         </tbody>
       </table>
@@ -116,6 +116,7 @@
       {% if analytics %}
       <li><strong>Google</strong> provides Google Analytics, as a processor acting on my instructions, and only if you accept. See <a href="https://policies.google.com/technologies/partner-sites">how Google uses information from sites that use its services</a> and the <a href="https://policies.google.com/privacy">Google Privacy Policy</a>.</li>
       {% endif %}
+      <li><strong>LinkedIn</strong> holds any message you send me there, as it does all LinkedIn messages. See the <a href="https://www.linkedin.com/legal/privacy-policy">LinkedIn Privacy Policy</a>.</li>
       <li>No one else. Your data is never sold, rented, or shared for advertising.</li>
     </ul>
   </section>
@@ -142,7 +143,7 @@
       <li>withdraw your consent to analytics at any time, without affecting what happened before (Article 7(3)), with Cookie settings at the foot of any page.</li>
       {% endif %}
     </ul>
-    <p>To use any of these rights, email <a href="mailto:{{ site.privacy_email }}">{{ site.privacy_email }}</a>. You will get a reply within one month, as the GDPR requires (Article 12(3)). There is no charge.</p>
+    <p>To use any of these rights, <a href="{{ site.linkedin_profile_url }}">send me a message on LinkedIn<span class="visually-hidden"> (opens LinkedIn)</span></a>. You will get a reply within one month, as the GDPR requires (Article 12(3)). There is no charge.</p>
     {% if analytics %}
     <p>Analytics data is linked only to a random identifier in your browser's cookie, not to your name, so the quickest way to stop it and remove the cookies is to decline in Cookie settings.</p>
     {% endif %}
