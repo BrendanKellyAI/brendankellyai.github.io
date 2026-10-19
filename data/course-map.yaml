@@ -62,6 +62,8 @@ sections:
   terms: Key terms
   alsoshowed: What else the run showed
   cost: Cost
+  part1: "Part 1: Which half failed"
+  part2: "Part 2: Can the judge be trusted"
 
 concepts:
   - id: tokens
