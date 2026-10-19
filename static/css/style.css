@@ -158,12 +158,17 @@ a.pager-link:hover { border-color: var(--green); }
 .graph-svg.is-focusing .edge.is-near { opacity: 1; stroke: var(--green); }
 .node.is-hot circle { stroke: var(--white); stroke-width: 3; }
 .node:focus-visible circle { stroke: var(--green); stroke-width: 4; }
-.graph-card { position: absolute; top: 0.5rem; right: 0.5rem; width: min(19rem, 70%); background: rgba(11, 31, 58, 0.94); border: 1px solid var(--hair); border-radius: 10px; padding: 0.8rem 1rem; pointer-events: none; }
+.graph-card { position: absolute; top: 0.5rem; right: 0.5rem; z-index: 2; width: min(19rem, 70%); background: rgba(11, 31, 58, 0.96); border: 1px solid var(--hair); border-radius: 10px; padding: 0.8rem 1rem; }
 .graph-card p { margin: 0; }
 .graph-card-kind { font-size: 0.75rem; color: var(--green); font-weight: 700; }
 .graph-card-title { color: var(--white); font-weight: 700; font-size: 1.05rem; }
 .graph-card-body { font-size: 0.85rem; margin-top: 0.2rem !important; }
-.graph-card-cta { font-size: 0.75rem; color: var(--slate); margin-top: 0.4rem !important; }
+.graph-card-cta { display: inline-block; margin-top: 0.6rem; background: var(--green); color: var(--navy); font-weight: 700; font-size: 0.85rem; padding: 0.35rem 0.8rem; border-radius: 999px; text-decoration: none; }
+.graph-card-cta:hover { background: var(--white); color: var(--navy); }
+.graph-card-cta[hidden], .graph-card-links[hidden] { display: none; }
+.graph-card-links { list-style: none; margin: 0.5rem 0 0; padding: 0; font-size: 0.85rem; }
+.graph-card-links li { padding: 0.1rem 0; }
+.graph-card-links a { color: var(--white); text-decoration-color: var(--green); }
 .graph-legend { position: absolute; left: 0; bottom: 0; display: flex; flex-wrap: wrap; gap: 0.4rem 1rem; font-size: 0.75rem; color: var(--slate); }
 .dot { display: inline-block; width: 0.6rem; height: 0.6rem; border-radius: 50%; margin-right: 0.35rem; vertical-align: -0.05rem; }
 .dot-live { background: var(--green); }
@@ -383,3 +388,5 @@ html.player-open, html.player-open body { overflow: hidden; }
 .consent-actions { display: flex; gap: 0.6rem; justify-content: flex-end; }
 .link-button { background: none; border: 0; padding: 0; font: inherit; color: var(--white); text-decoration: underline; text-decoration-color: var(--green); text-underline-offset: 0.2em; cursor: pointer; }
 .link-button[hidden] { display: none; }
+
+.rules-more { margin-top: 1.2rem; color: var(--slate); }

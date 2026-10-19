@@ -133,9 +133,11 @@
     nodeLayer.appendChild(group);
 
     // Mouse: hover previews a node. Touch: the first tap previews it, the second opens it.
-    group.addEventListener("pointerenter", function (event) { if (event.pointerType === "mouse") { focus(n); } });
+    group.addEventListener("pointerenter", function (event) {
+      if (event.pointerType === "mouse") { cancelHide(); focus(n); }
+    });
     group.addEventListener("pointerleave", function (event) {
-      if (event.pointerType === "mouse" && !dragging) { blur(); }
+      if (event.pointerType === "mouse" && !dragging) { scheduleHide(); }
     });
     group.addEventListener("click", function (event) {
       if (lastPointer !== "mouse" && !n.el.classList.contains("is-hot")) {
@@ -144,13 +146,32 @@
       }
     });
     group.addEventListener("focus", function () { focus(n); });
-    group.addEventListener("blur", blur);
+    group.addEventListener("blur", function () { scheduleHide(); });
     group.addEventListener("pointerdown", function (event) { startDrag(n, event); });
   });
 
   host.appendChild(svg);
 
   var card = host.querySelector("[data-graph-card]");
+
+  // The card stays open briefly after the pointer leaves a dot, and for as long as the pointer
+  // or keyboard focus is on the card, so its links can be reached and clicked.
+  var HIDE_DELAY_MS = 350;
+  var hideTimer = null;
+  function cancelHide() { window.clearTimeout(hideTimer); hideTimer = null; }
+  function scheduleHide() {
+    cancelHide();
+    hideTimer = window.setTimeout(function () {
+      if (card && (card.matches(":hover") || card.contains(document.activeElement))) { return; }
+      blur();
+    }, HIDE_DELAY_MS);
+  }
+  if (card) {
+    card.addEventListener("pointerenter", cancelHide);
+    card.addEventListener("pointerleave", scheduleHide);
+    card.addEventListener("focusin", cancelHide);
+    card.addEventListener("focusout", scheduleHide);
+  }
 
   function render() {
     links.forEach(function (l) {
@@ -209,7 +230,26 @@
     var body = n.summary || (n.kind === "concept" && connected.length ? "Comes up in " + connected.join(", ") + "." : "");
     if (n.kind === "season" && n.progress && n.progress[1]) { body += " " + n.progress[0] + " of " + n.progress[1] + " lessons published."; }
     card.querySelector("[data-card-body]").textContent = body;
-    card.querySelector("[data-card-cta]").hidden = !n.href;
+    var cta = card.querySelector("[data-card-cta]");
+    cta.hidden = !n.href;
+    if (n.href) {
+      cta.href = n.href;
+      cta.textContent = n.kind === "season" ? "Open season \u2192" : "Open lesson \u2192";
+    }
+    // An idea links to every live lesson that covers it.
+    var list = card.querySelector("[data-card-links]");
+    list.textContent = "";
+    if (n.kind === "concept") {
+      n.near.filter(function (m) { return m.kind === "lesson" && m.href; }).forEach(function (m) {
+        var item = document.createElement("li");
+        var link = document.createElement("a");
+        link.href = m.href;
+        link.textContent = m.code + " " + (m.title || m.label);
+        item.appendChild(link);
+        list.appendChild(item);
+      });
+    }
+    list.hidden = !list.children.length;
     card.hidden = false;
   }
 
@@ -225,22 +265,33 @@
   svg.addEventListener("pointerdown", function (event) { lastPointer = event.pointerType; }, true);
   svg.addEventListener("click", function (event) { if (event.target === svg) { blur(); } });
 
+  // A press only becomes a drag once the pointer travels DRAG_MIN_PX on screen, so a click
+  // with a little hand jitter, or slightly off a dot's centre, still opens the lesson.
+  var DRAG_MIN_PX = 5;
+  var grab = null;
   function startDrag(n, event) {
     if (event.button !== 0) { return; }
-    dragging = n; moved = false; n.fixed = true;
-    svg.setPointerCapture && svg.setPointerCapture(event.pointerId);
+    var p = toGraph(event);
+    dragging = n; moved = false;
+    grab = { x: event.clientX, y: event.clientY, dx: n.x - p.x, dy: n.y - p.y };
   }
   svg.addEventListener("pointermove", function (event) {
     if (!dragging) { return; }
+    if (!moved) {
+      if (Math.hypot(event.clientX - grab.x, event.clientY - grab.y) < DRAG_MIN_PX) { return; }
+      moved = true;
+      dragging.fixed = true;
+      if (svg.setPointerCapture) { svg.setPointerCapture(event.pointerId); }
+    }
     var p = toGraph(event);
-    moved = moved || Math.abs(p.x - dragging.x) + Math.abs(p.y - dragging.y) > 2;
-    dragging.x = p.x; dragging.y = p.y;
+    dragging.x = p.x + grab.dx; dragging.y = p.y + grab.dy;
     heat = Math.max(heat, 0.35);
     if (!running) { loop(); }
   });
   svg.addEventListener("pointerup", function () {
     if (dragging) { dragging.fixed = false; }
     dragging = null;
+    if (moved) { declutter(); }
   });
   svg.addEventListener("click", function (event) { if (moved) { event.preventDefault(); moved = false; } }, true);
 
