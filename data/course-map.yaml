@@ -64,6 +64,17 @@ sections:
   cost: Cost
   part1: "Part 1: Which half failed"
   part2: "Part 2: Can the judge be trusted"
+  aside: An honest aside
+  wherevector: Where vector fails
+  wherekeyword: Where keyword fails
+  ourq: Our question
+  thetest: The test
+  lesson1: Lesson 1
+  lesson2: Lesson 2
+  checked: Built to be checked
+  ways1: "The three ways: how they run"
+  ways2: "The three ways: on a real question"
+  decision: The decision
 
 concepts:
   - id: tokens
