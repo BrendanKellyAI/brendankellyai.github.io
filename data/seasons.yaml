@@ -4,6 +4,9 @@
   title: How LLMs work
   type: technical
   description: What a large language model does, from tokens and attention to hallucination and reasoning.
+  pdf_url: https://github.com/BrendanKellyAI/brendankellyai.github.io/releases/download/season-1/applied-ai-season-1-how-llms-work.pdf
+  pdf_pages: 190
+  pdf_size_mb: 36.1
 
 - code: S2
   number: 2

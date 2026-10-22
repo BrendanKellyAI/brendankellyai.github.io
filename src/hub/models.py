@@ -108,6 +108,19 @@ class Season(NoDashModel):
     title: str
     type: SeasonType
     description: str
+    # The whole season in one PDF, hosted on a GitHub release (see scripts/publish_season_pdf.py).
+    pdf_url: str | None = None
+    pdf_pages: int | None = None
+    pdf_size_mb: float | None = None
+
+    @model_validator(mode="after")
+    def _check_pdf(self) -> Season:
+        fields = (self.pdf_url, self.pdf_pages, self.pdf_size_mb)
+        if any(value is not None for value in fields) and None in fields:
+            raise ValueError(f"{self.code}: set pdf_url, pdf_pages, and pdf_size_mb together")
+        if self.pdf_url and not self.pdf_url.startswith("https://"):
+            raise ValueError(f"{self.code}: pdf_url must be an https:// link")
+        return self
 
 
 class Episode(NoDashModel):

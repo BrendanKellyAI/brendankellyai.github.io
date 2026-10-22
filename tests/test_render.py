@@ -342,3 +342,25 @@ def test_privacy_page_without_analytics_says_no_cookies():
     html = _render_privacy(site)
     assert "The site uses no analytics and sets no cookies." in html
     assert "_ga" not in html
+
+
+def test_season_pdf_link_shows_only_when_published():
+    env = make_environment()
+    data = load_site_data(DATA_DIR)
+    install_course_globals(env, data)
+    template = env.get_template("season.html")
+    with_pdf = SEASON_S1.model_copy(
+        update={"pdf_url": "https://example.com/s1.pdf", "pdf_pages": 190, "pdf_size_mb": 36.1}
+    )
+
+    def render(season):
+        return template.render(
+            site=data.site, season=season, episodes=data.episodes_for("S1"),
+            previous_season=None, next_season=None, social_image_path="/x.png",
+        )
+
+    html = render(with_pdf)
+    assert 'href="https://example.com/s1.pdf"' in html
+    assert "Read the whole season" in html
+    assert "190 slides" in html
+    assert "Read the whole season" not in render(SEASON_S1)
