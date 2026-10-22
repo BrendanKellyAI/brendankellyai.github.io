@@ -31,6 +31,7 @@
         <a class="ghost" href="{{ c.episode_href(live[-1]) }}">Latest: {{ live[-1].title }}</a>
       </div>
       {% endif %}
+      {{ c.season_pdf(season) }}
       {% else %}
       <p class="planned-note">This season is planned. Its lessons are announced in the season intro.</p>
       {% endif %}

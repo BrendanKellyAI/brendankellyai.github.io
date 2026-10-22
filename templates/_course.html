@@ -84,6 +84,16 @@
 </ol>
 {% endmacro %}
 
+{# The whole season in one PDF, when one has been published. #}
+{% macro season_pdf(season, class_name="season-pdf") %}
+{% if season and season.pdf_url %}
+<a class="{{ class_name }}" href="{{ season.pdf_url }}">
+  <span class="season-pdf-label">Read the whole season</span>
+  <span class="season-pdf-note">Every lesson in one PDF &middot; {{ season.pdf_pages }} slides &middot; {{ season.pdf_size_mb | round | int }} MB<span class="visually-hidden"> (downloads from GitHub)</span></span>
+</a>
+{% endif %}
+{% endmacro %}
+
 {% macro playbook(episode) %}
 {% if episode.format.value == "playbook" and episode.playbook_slides %}
 <h2>Template walkthrough</h2>

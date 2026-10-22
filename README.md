@@ -105,6 +105,20 @@ Every episode already has a file in `data/episodes/`, with `status: planned`. To
 To fix a deck after publishing, add the corrected PDF with the next version number, point
 `deck_pdf` at it, and delete the old file.
 
+## Publish a whole-season PDF
+
+When a season is complete, combine its decks into one PDF, then run:
+
+```
+uv run python scripts/publish_season_pdf.py S1 "C:/path/to/AppliedAI-Season-1-Combined.pdf"
+```
+
+The file is too large to keep in the site, so the script uploads it to a GitHub release named
+`season-<n>` on this repository (replacing it if you run it again) and records the download link,
+page count, and size on the season in `data/seasons.yaml`. Commit that change and push to `main`.
+The season page, the course outline, and each of the season's lessons then show a "Read the whole
+season" download. Needs the GitHub CLI (`gh`), signed in.
+
 ## Licence
 
 Code in this repository is MIT licensed. Decks, articles, and other episode content are not.
