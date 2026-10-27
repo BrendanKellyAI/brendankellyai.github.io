@@ -75,6 +75,8 @@ sections:
   ways1: "The three ways: how they run"
   ways2: "The three ways: on a real question"
   decision: The decision
+  honest: An honest choice
+  before: Before the results
 
 concepts:
   - id: tokens
