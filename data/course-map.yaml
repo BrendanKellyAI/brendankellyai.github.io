@@ -22,6 +22,7 @@ sections:
   # Field notes, experiments, and the recap
   newformat: New format
   fieldnote: Field note
+  refresher: Refresher
   try: Try this
   turn: Your turn
   finding: Finding
