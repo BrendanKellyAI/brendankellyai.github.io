@@ -41,7 +41,7 @@
   slug: ai-economics
   title: AI economics
   type: leadership
-  description: Build versus buy, managed versus self-hosted, lock-in, and the unit economics of AI features.
+  description: "The numbers behind AI decisions: unit economics, total cost of ownership, switching costs, and when self-hosting pays."
 
 - code: S7
   number: 7
