@@ -23,6 +23,10 @@ sections:
   newformat: New format
   fieldnote: Field note
   refresher: Refresher
+  option1: "Option 1: long context"
+  option2: "Option 2: structured data"
+  option3: "Option 3: fine-tuning"
+  option4: "Option 4: tools"
   try: Try this
   turn: Your turn
   finding: Finding
