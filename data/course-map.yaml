@@ -82,6 +82,24 @@ sections:
   decision: The decision
   honest: An honest choice
   before: Before the results
+  season: The season
+  system: The system
+  climb: The climb
+  joined: What joined
+  didnot: What did not
+  onequestion: One question
+  left: What is left
+  surprises: Surprises
+  honestnotes: Honest notes
+  rules: The rules
+  lessons: Lessons
+  whatnext: What is next
+  # Season 3
+  thecase: The case
+  answer: The answer
+  thisseason: This season
+  readwhen: Read it when
+  tools: The tools
 
 concepts:
   - id: tokens
@@ -132,6 +150,9 @@ concepts:
   - id: retrieval
     label: Retrieval
     links: [s1-e3, s2-e0, s2-e1, s2-e2, s2-e5, s2-e7, s2-e8, s2-e15]
+  - id: strategy
+    label: Strategy
+    links: [s3-e0, s3-e1, s3-e6, s3-e10, s3-e11, S6]
   - id: agents
     label: Agents
     links: [S5, S10, S11, S14]
