@@ -1,0 +1,18 @@
+code: "S3 E0"
+season: S3
+number: 0
+slug: season-intro
+title: "Season 3: AI strategy and use case selection"
+format: season_intro
+status: published
+publish_date: 2026-11-08
+summary: "Season introduction: the first leadership season takes eight AI ideas through one written scoring rule, to decide what to do first and when to stop."
+decision_rule: "Before you ask what AI can do, ask what you want to be different. Choose use cases by a rule fixed in advance, and put a stop condition on the first one."
+linkedin_url: null
+deck_pdf: bk-s3-e0-season-intro-v2.pdf
+cover_image: cover.png
+og_image: og.png
+lab_path: null
+article_url: null
+playbook_slides: []
+slide_sections: [cover, thecase, turn, answer, why, thisseason, thecase, turn, answer, howtoread, thisseason, readwhen, readwhen, fieldnotes, tools, whatnext, leaders, map]
