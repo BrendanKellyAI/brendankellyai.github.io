@@ -100,6 +100,10 @@ sections:
   thisseason: This season
   readwhen: Read it when
   tools: The tools
+  thisepisode: This episode
+  lesson3: Lesson 3
+  lesson: The lesson
+  scorecard: Scorecard
 
 concepts:
   - id: tokens
