@@ -297,13 +297,16 @@ def _render_about(site):
     )
 
 
-def test_analytics_waits_for_consent():
+def test_analytics_tag_on_every_page_with_consent_defaults_first():
     site = load_site_data(DATA_DIR).site.model_copy(update={"analytics_id": "G-ABC1234"})
     html = _render_about(site)
-    # Only the consent banner and script are in the page; GA itself is never loaded by markup.
+    # Consent Mode: the defaults script runs before the GA tag, and the banner sets cookies.
+    defaults = html.index("/static/js/analytics.js")
+    tag = html.index("https://www.googletagmanager.com/gtag/js?id=G-ABC1234")
+    assert defaults < tag
     assert 'data-ga-id="G-ABC1234"' in html
     assert "/static/js/consent.js" in html
-    assert "googletagmanager" not in html
+    assert "data-consent" in html
     assert "Cookie settings" in html
     assert 'id="privacy"' in html
 
@@ -313,6 +316,8 @@ def test_no_analytics_markup_without_an_analytics_id():
     html = _render_about(site)
     assert "data-consent" not in html
     assert "consent.js" not in html
+    assert "analytics.js" not in html
+    assert "googletagmanager" not in html
     assert 'href="/privacy/"' in html
 
 
@@ -334,6 +339,8 @@ def test_privacy_page_covers_analytics_when_enabled():
     assert "_ga_ABC1234" in html
     assert "Data Protection Commission" in html
     assert "Article 6(1)(a)" in html
+    assert "Analytics without cookies" in html
+    assert "counts the visit without cookies" in html
 
 
 def test_privacy_page_without_analytics_says_no_cookies():
