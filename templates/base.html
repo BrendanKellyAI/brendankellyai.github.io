@@ -34,6 +34,9 @@
   <link rel="stylesheet" href="{{ asset_url('/static/css/style.css') }}">
   <script src="{{ asset_url('/static/js/player.js') }}" defer></script>
   {% if site.analytics_id %}
+  {# Consent Mode defaults first, then the GA tag, on every page. consent.js runs the banner. #}
+  <script src="{{ asset_url('/static/js/analytics.js') }}" data-ga-id="{{ site.analytics_id }}"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id={{ site.analytics_id }}"></script>
   <script src="{{ asset_url('/static/js/consent.js') }}" defer></script>
   {% endif %}
   {% block structured_data %}{% endblock %}
@@ -66,8 +69,8 @@
 </footer>
   {% endblock %}
   {% if site.analytics_id %}
-  <div class="consent" data-consent data-ga-id="{{ site.analytics_id }}" role="region" aria-label="Analytics consent" hidden>
-    <p class="consent-text">May I count your visit? With your consent, Google Analytics records which pages are read, so I can see which lessons help. Nothing is sent to Google if you decline. <a href="/privacy/">Privacy notice</a></p>
+  <div class="consent" data-consent role="region" aria-label="Analytics cookies" hidden>
+    <p class="consent-text">May I use analytics cookies? Google Analytics counts which pages are read, so I can see which lessons help. If you accept, it also uses cookies to recognise return visits. If you decline, it counts your visit without cookies. <a href="/privacy/">Privacy notice</a></p>
     <div class="consent-actions">
       <button type="button" class="ctl" data-consent-decline>Decline</button>
       <button type="button" class="ctl ctl-next" data-consent-accept>Accept</button>

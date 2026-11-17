@@ -65,10 +65,12 @@ workflow's deploy step to work. It is currently set to deploy from the `main` br
 ## Analytics
 
 Google Analytics is set by `analytics_id` in `data/site.yaml` (a GA4 ID such as `G-ABC123`;
-leave it empty to remove analytics entirely). It loads only after a visitor accepts the consent
-banner, with advertising features switched off. Declining, or never choosing, means no GA
-script, no cookies, and no requests to Google. Visitors can change their choice from "Cookie
-settings" in the footer; the About page's Privacy section explains what is collected.
+leave it empty to remove analytics entirely). The GA tag loads on every page for every visitor,
+in Consent Mode, with advertising features switched off. `static/js/analytics.js` sets the
+defaults before the tag: analytics cookies are denied unless the visitor has accepted, so GA
+counts the visit with cookieless pings. Accepting the banner lets GA use its cookies; declining
+keeps them off and removes any already set. Visitors can change their choice from "Cookie
+settings" in the footer; `/privacy/` explains what is collected.
 
 ## Publish an episode
 

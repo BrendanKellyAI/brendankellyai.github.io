@@ -1,14 +1,12 @@
-// Analytics consent. Google Analytics loads only after a visitor accepts; until then nothing is
-// requested from Google and no analytics cookies are set. The choice is kept in this browser and
-// can be changed from "Cookie settings" in the footer. Withdrawing consent removes GA's cookies.
+// Analytics cookie consent. Google Analytics itself always runs (see analytics.js), in Consent
+// Mode: without consent it counts visits with no cookies. Accepting lets GA use its cookies;
+// declining keeps them off and removes any already set. The choice is kept in this browser and
+// can be changed from "Cookie settings" in the footer.
 (function () {
   "use strict";
   var KEY = "appliedai.consent";
   var banner = document.querySelector("[data-consent]");
   if (!banner) { return; }
-  var gaId = banner.getAttribute("data-ga-id");
-  if (!/^G-[A-Z0-9]{4,20}$/.test(gaId || "")) { return; }
-  var loaded = false;
 
   function read() {
     try { return window.localStorage.getItem(KEY); } catch (error) { return null; }
@@ -16,28 +14,10 @@
   function write(value) {
     try { window.localStorage.setItem(KEY, value); } catch (error) { /* storage blocked: ask again next visit */ }
   }
-
-  function loadAnalytics() {
-    if (loaded) { return; }
-    loaded = true;
-    window.dataLayer = window.dataLayer || [];
-    window.gtag = function () { window.dataLayer.push(arguments); };
-    // Analytics only: no advertising storage, ad personalisation, or ad user data.
-    window.gtag("consent", "default", {
-      analytics_storage: "granted",
-      ad_storage: "denied",
-      ad_user_data: "denied",
-      ad_personalization: "denied",
-    });
-    window.gtag("js", new Date());
-    window.gtag("config", gaId, {
-      allow_google_signals: false,
-      allow_ad_personalization_signals: false,
-    });
-    var script = document.createElement("script");
-    script.async = true;
-    script.src = "https://www.googletagmanager.com/gtag/js?id=" + encodeURIComponent(gaId);
-    document.head.appendChild(script);
+  function setAnalyticsStorage(value) {
+    if (typeof window.gtag === "function") {
+      window.gtag("consent", "update", { analytics_storage: value });
+    }
   }
 
   // GA's cookies are _ga and _ga_<id>, set on the site's domain and its parent domain.
@@ -60,15 +40,13 @@
   banner.querySelector("[data-consent-accept]").addEventListener("click", function () {
     write("granted");
     hide();
-    loadAnalytics();
+    setAnalyticsStorage("granted");
   });
   banner.querySelector("[data-consent-decline]").addEventListener("click", function () {
-    var wasGranted = read() === "granted";
     write("denied");
     hide();
+    setAnalyticsStorage("denied");
     removeAnalyticsCookies();
-    // A script already running cannot be unloaded; a reload makes sure it stops.
-    if (wasGranted && loaded) { window.location.reload(); }
   });
   document.querySelectorAll("[data-consent-open]").forEach(function (button) {
     button.hidden = false;
@@ -76,5 +54,5 @@
   });
 
   var choice = read();
-  if (choice === "granted") { loadAnalytics(); } else if (choice !== "denied") { show(); }
+  if (choice !== "granted" && choice !== "denied") { show(); }
 })();

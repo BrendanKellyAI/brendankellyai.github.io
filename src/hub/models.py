@@ -87,7 +87,7 @@ class SiteSettings(NoDashModel):
     current_season: str
     launch: bool = False
     # Google Analytics measurement ID, such as G-ABC123. Empty means no analytics at all.
-    # When set, GA loads only after a visitor accepts the consent banner.
+    # When set, GA loads on every page in Consent Mode: cookies only after a visitor accepts.
     analytics_id: str = ""
     # Privacy notice (/privacy/): how long analytics data is kept, as set in Google Analytics,
     # and when the notice last changed. Privacy requests go to linkedin_profile_url.

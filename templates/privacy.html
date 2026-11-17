@@ -17,7 +17,7 @@
       <li>There are no accounts, forms, comments, or sign-ups on this site, so you never give me your name or email address here.</li>
       <li>Your progress through the lessons is kept only in your own browser, and is never sent anywhere.</li>
       {% if analytics %}
-      <li>Google Analytics runs only if you accept it. If you decline, or never choose, nothing is sent to Google and no analytics cookies are set.</li>
+      <li>Google Analytics counts page views on every visit. Its cookies are set only if you accept them. If you decline, or never choose, it counts the visit without cookies and stores nothing on your device.</li>
       {% else %}
       <li>The site uses no analytics and sets no cookies.</li>
       {% endif %}
@@ -50,9 +50,16 @@
           </tr>
           {% if analytics %}
           <tr>
-            <th scope="row">Analytics, by Google Analytics 4, only if you accept</th>
-            <td>Pages viewed, the page that referred you, approximate location (city, region, country), device, browser and screen size, and a random identifier in a cookie.</td>
+            <th scope="row">Analytics without cookies, by Google Analytics 4, on every visit</th>
+            <td>Page viewed, the page that referred you, approximate location (city, region, country), device, browser and screen size, sent with no cookie and no identifier stored on your device. Google uses these to estimate the number of visits.</td>
             <td>Seeing which lessons are read, so the course can be improved.</td>
+            <td>Legitimate interests (Article 6(1)(f) GDPR) in measuring how the course is used, in a way that stores nothing on your device and cannot recognise you on a later visit.</td>
+            <td>{{ site.analytics_retention }} in Google Analytics.</td>
+          </tr>
+          <tr>
+            <th scope="row">Analytics with cookies, by Google Analytics 4, only if you accept</th>
+            <td>The same as above, plus a random identifier in a cookie, so that return visits from the same browser can be told apart.</td>
+            <td>Counting returning readers and how they move through the course.</td>
             <td>Your consent (Article 6(1)(a) GDPR, and Regulation 5(3) of the ePrivacy Regulations, S.I. No. 336 of 2011).</td>
             <td>{{ site.analytics_retention }} in Google Analytics; the cookies themselves up to 2 years, unless you clear them or withdraw consent.</td>
           </tr>
@@ -67,7 +74,7 @@
           {% if analytics %}
           <tr>
             <th scope="row">Your analytics choice, in your browser only</th>
-            <td>Whether you accepted or declined analytics.</td>
+            <td>Whether you accepted or declined analytics cookies.</td>
             <td>Remembering your choice, so the banner does not ask again on every page.</td>
             <td>Strictly necessary to respect your choice (Regulation 5(5) of S.I. No. 336 of 2011).</td>
             <td>Until you clear your browser's site data.</td>
@@ -88,7 +95,7 @@
   <section aria-labelledby="cookies-heading">
     <h2 id="cookies-heading">Cookies and browser storage</h2>
     {% if analytics %}
-    <p>Cookies are set only after you accept analytics. Everything else is stored in your browser's local storage, which this site reads but never sends anywhere.</p>
+    <p>Cookies are set only after you accept analytics cookies. Without that, Google Analytics still counts your visit, but sets and reads no cookies. Everything else is stored in your browser's local storage, which this site reads but never sends anywhere.</p>
     <div class="legal-table-wrap">
       <table class="legal-table">
         <thead>
@@ -97,12 +104,12 @@
         <tbody>
           <tr><th scope="row"><code>_ga</code></th><td>Cookie, analytics</td><td>Google Analytics, after you accept</td><td>Tells visits from the same browser apart.</td><td>2 years</td></tr>
           <tr><th scope="row"><code>_ga_{{ analytics[2:] }}</code></th><td>Cookie, analytics</td><td>Google Analytics, after you accept</td><td>Keeps track of the current visit.</td><td>2 years</td></tr>
-          <tr><th scope="row"><code>appliedai.consent</code></th><td>Local storage, strictly necessary</td><td>This site</td><td>Remembers whether you accepted or declined analytics.</td><td>Until cleared</td></tr>
+          <tr><th scope="row"><code>appliedai.consent</code></th><td>Local storage, strictly necessary</td><td>This site</td><td>Remembers whether you accepted or declined analytics cookies.</td><td>Until cleared</td></tr>
           <tr><th scope="row"><code>appliedai.lessons</code></th><td>Local storage, course features</td><td>This site</td><td>Remembers your progress through the lessons.</td><td>Until cleared</td></tr>
         </tbody>
       </table>
     </div>
-    <p>Advertising cookies, ad personalisation, and Google signals are switched off. You can change your analytics choice at any time with <strong>Cookie settings</strong> at the foot of every page; declining removes the analytics cookies.</p>
+    <p>Advertising cookies, ad personalisation, and Google signals are switched off. You can change your choice at any time with <strong>Cookie settings</strong> at the foot of every page; declining removes the analytics cookies. To stop cookieless counting as well, block Google Analytics in your browser, for example with a privacy extension.</p>
     {% else %}
     <p>The site sets no cookies. Your lesson progress (<code>appliedai.lessons</code>) is kept in your browser's local storage and never sent anywhere.</p>
     {% endif %}
@@ -114,7 +121,7 @@
     <ul>
       <li><strong>GitHub</strong> (GitHub, Inc. and GitHub B.V.) hosts the site. See the <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement">GitHub General Privacy Statement</a>.</li>
       {% if analytics %}
-      <li><strong>Google</strong> provides Google Analytics, as a processor acting on my instructions, and only if you accept. See <a href="https://policies.google.com/technologies/partner-sites">how Google uses information from sites that use its services</a> and the <a href="https://policies.google.com/privacy">Google Privacy Policy</a>.</li>
+      <li><strong>Google</strong> provides Google Analytics, as a processor acting on my instructions. It receives a cookieless count of every visit, and cookie-based measurement only if you accept. See <a href="https://policies.google.com/technologies/partner-sites">how Google uses information from sites that use its services</a> and the <a href="https://policies.google.com/privacy">Google Privacy Policy</a>.</li>
       {% endif %}
       <li><strong>LinkedIn</strong> holds any message you send me there, as it does all LinkedIn messages. See the <a href="https://www.linkedin.com/legal/privacy-policy">LinkedIn Privacy Policy</a>.</li>
       <li>No one else. Your data is never sold, rented, or shared for advertising.</li>
@@ -145,7 +152,7 @@
     </ul>
     <p>To use any of these rights, <a href="{{ site.linkedin_profile_url }}">send me a message on LinkedIn<span class="visually-hidden"> (opens LinkedIn)</span></a>. You will get a reply within one month, as the GDPR requires (Article 12(3)). There is no charge.</p>
     {% if analytics %}
-    <p>Analytics data is linked only to a random identifier in your browser's cookie, not to your name, so the quickest way to stop it and remove the cookies is to decline in Cookie settings.</p>
+    <p>Analytics data is never linked to your name. Declining in Cookie settings stops the cookies and removes them. You can also object to cookieless counting (Article 21): blocking Google Analytics in your browser stops it at once, or message me.</p>
     {% endif %}
   </section>
 
