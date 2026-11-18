@@ -70,16 +70,28 @@
 </nav>
 {% endmacro %}
 
-{# Every decision rule so far, in course order: the course's takeaways on one screen. #}
-{% macro rule_index() %}
+{# The most recent `limit` decision rules (all when no limit), shown in course order. #}
+{% macro rule_index(limit=None) %}
+{% set ruled = course.published_in_order | selectattr("decision_rule") | list %}
+{% set shown = ruled[-limit:] if limit else ruled %}
 <ol class="rule-index">
-  {% for ep in course.published_in_order if ep.decision_rule %}
+  {% for ep in shown %}
   <li>
     <a class="rule-index-code" href="{{ episode_href(ep) }}">{{ ep.code }}<span class="visually-hidden">, {{ ep.title }}</span></a>
     <p class="rule-index-text">{{ ep.decision_rule }}</p>
   </li>
   {% endfor %}
 </ol>
+{% endmacro %}
+
+{# The whole season in one PDF, when one has been published. #}
+{% macro season_pdf(season, class_name="season-pdf") %}
+{% if season and season.pdf_url %}
+<a class="{{ class_name }}" href="{{ season.pdf_url }}">
+  <span class="season-pdf-label">Read the whole season</span>
+  <span class="season-pdf-note">Every lesson in one PDF &middot; {{ season.pdf_pages }} slides &middot; {{ season.pdf_size_mb | round | int }} MB<span class="visually-hidden"> (downloads from GitHub)</span></span>
+</a>
+{% endif %}
 {% endmacro %}
 
 {% macro playbook(episode) %}

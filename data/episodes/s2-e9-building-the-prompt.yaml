@@ -4,14 +4,15 @@ number: 9
 slug: building-the-prompt
 title: "Building the prompt"
 format: explainer
-status: planned
-publish_date: null
-summary: null
-decision_rule: null
+status: published
+publish_date: 2026-10-27
+summary: "Allowing the model to say \"not found\" raised correct declines from 83 to 105 of 120, but not clearly enough to join, and five passages stayed the right number."
+decision_rule: "Send the fewest passages that keep the answer score, and make \"not found\" an answer the model is allowed to give."
 linkedin_url: null
-deck_pdf: null
-cover_image: null
-og_image: null
-lab_path: null
+deck_pdf: bk-s2-e9-building-the-prompt-v1.pdf
+cover_image: cover.png
+og_image: og.png
+lab_path: episodes/s2-e9-building-the-prompt
 article_url: null
 playbook_slides: []
+slide_sections: [cover, why, recap, live, model, model, thetest, thetest, before, worked, finding, breaks, finding, worked, finding, finding, decision, breaks, eng, leaders, scoreboard, rule, map]

@@ -86,6 +86,19 @@ class SiteSettings(NoDashModel):
     about_bio: str
     current_season: str
     launch: bool = False
+    # Google Analytics measurement ID, such as G-ABC123. Empty means no analytics at all.
+    # When set, GA loads on every page in Consent Mode: cookies only after a visitor accepts.
+    analytics_id: str = ""
+    # Privacy notice (/privacy/): how long analytics data is kept, as set in Google Analytics,
+    # and when the notice last changed. Privacy requests go to linkedin_profile_url.
+    analytics_retention: str = "2 months"
+    privacy_updated: date | None = None
+
+    @model_validator(mode="after")
+    def _check_analytics_id(self) -> SiteSettings:
+        if self.analytics_id and not re.fullmatch(r"G-[A-Z0-9]{4,20}", self.analytics_id):
+            raise ValueError(f"analytics_id {self.analytics_id!r} is not a GA4 ID like G-ABC123")
+        return self
 
 
 class SeasonTool(NoDashModel):
@@ -118,6 +131,19 @@ class Season(NoDashModel):
     type: SeasonType
     description: str
     tools: list[SeasonTool] = []
+    # The whole season in one PDF, hosted on a GitHub release (see scripts/publish_season_pdf.py).
+    pdf_url: str | None = None
+    pdf_pages: int | None = None
+    pdf_size_mb: float | None = None
+
+    @model_validator(mode="after")
+    def _check_pdf(self) -> Season:
+        fields = (self.pdf_url, self.pdf_pages, self.pdf_size_mb)
+        if any(value is not None for value in fields) and None in fields:
+            raise ValueError(f"{self.code}: set pdf_url, pdf_pages, and pdf_size_mb together")
+        if self.pdf_url and not self.pdf_url.startswith("https://"):
+            raise ValueError(f"{self.code}: pdf_url must be an https:// link")
+        return self
 
 
 class Episode(NoDashModel):

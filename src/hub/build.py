@@ -130,6 +130,17 @@ def _render_about(env, data: SiteData, output_dir: Path) -> None:
     _write_page(output_dir, "/about/", html)
 
 
+def _render_privacy(env, data: SiteData, output_dir: Path) -> None:
+    template = env.get_template("privacy.html")
+    html = template.render(
+        site=data.site,
+        active_nav=None,
+        canonical_path="/privacy/",
+        social_image_path=DEFAULT_OG_IMAGE_PATH,
+    )
+    _write_page(output_dir, "/privacy/", html)
+
+
 def _render_404(env, data: SiteData, output_dir: Path) -> None:
     template = env.get_template("404.html")
     html = template.render(
@@ -222,6 +233,7 @@ def build(
     _render_season_pages(env, data, output_dir)
     _render_episode_pages(env, data, output_dir, static_source_dir)
     _render_about(env, data, output_dir)
+    _render_privacy(env, data, output_dir)
     _render_404(env, data, output_dir)
     _render_sitemap(env, data, output_dir)
     _render_robots(env, data, output_dir)

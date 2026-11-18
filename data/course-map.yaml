@@ -22,6 +22,11 @@ sections:
   # Field notes, experiments, and the recap
   newformat: New format
   fieldnote: Field note
+  refresher: Refresher
+  option1: "Option 1: long context"
+  option2: "Option 2: structured data"
+  option3: "Option 3: fine-tuning"
+  option4: "Option 4: tools"
   try: Try this
   turn: Your turn
   finding: Finding
@@ -62,6 +67,44 @@ sections:
   terms: Key terms
   alsoshowed: What else the run showed
   cost: Cost
+  part1: "Part 1: Which half failed"
+  part2: "Part 2: Can the judge be trusted"
+  aside: An honest aside
+  wherevector: Where vector fails
+  wherekeyword: Where keyword fails
+  ourq: Our question
+  thetest: The test
+  lesson1: Lesson 1
+  lesson2: Lesson 2
+  checked: Built to be checked
+  ways1: "The three ways: how they run"
+  ways2: "The three ways: on a real question"
+  decision: The decision
+  honest: An honest choice
+  before: Before the results
+  season: The season
+  system: The system
+  climb: The climb
+  joined: What joined
+  didnot: What did not
+  onequestion: One question
+  left: What is left
+  surprises: Surprises
+  honestnotes: Honest notes
+  rules: The rules
+  lessons: Lessons
+  whatnext: What is next
+  # Season 3
+  thecase: The case
+  answer: The answer
+  thisseason: This season
+  readwhen: Read it when
+  tools: The tools
+  thisepisode: This episode
+  lesson3: Lesson 3
+  lesson4: Lesson 4
+  lesson: The lesson
+  scorecard: Scorecard
 
 concepts:
   - id: tokens
@@ -112,6 +155,9 @@ concepts:
   - id: retrieval
     label: Retrieval
     links: [s1-e3, s2-e0, s2-e1, s2-e2, s2-e5, s2-e7, s2-e8, s2-e15]
+  - id: strategy
+    label: Strategy
+    links: [s3-e0, s3-e1, s3-e6, s3-e10, s3-e11, S6]
   - id: agents
     label: Agents
     links: [S5, S10, S11, S14]

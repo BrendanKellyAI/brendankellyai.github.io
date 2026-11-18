@@ -62,6 +62,16 @@ schema error, a broken internal link, or an un-supplied `TO_BE_SUPPLIED` placeho
 This repository's GitHub Pages source must be set to "GitHub Actions" (Settings > Pages) for the
 workflow's deploy step to work. It is currently set to deploy from the `main` branch directly.
 
+## Analytics
+
+Google Analytics is set by `analytics_id` in `data/site.yaml` (a GA4 ID such as `G-ABC123`;
+leave it empty to remove analytics entirely). The GA tag loads on every page for every visitor,
+in Consent Mode, with advertising features switched off. `static/js/analytics.js` sets the
+defaults before the tag: analytics cookies are denied unless the visitor has accepted, so GA
+counts the visit with cookieless pings. Accepting the banner lets GA use its cookies; declining
+keeps them off and removes any already set. Visitors can change their choice from "Cookie
+settings" in the footer; `/privacy/` explains what is collected.
+
 ## Publish an episode
 
 Every episode already has a file in `data/episodes/`, with `status: planned`. To publish one:
@@ -96,6 +106,20 @@ Every episode already has a file in `data/episodes/`, with `status: planned`. To
 
 To fix a deck after publishing, add the corrected PDF with the next version number, point
 `deck_pdf` at it, and delete the old file.
+
+## Publish a whole-season PDF
+
+When a season is complete, combine its decks into one PDF, then run:
+
+```
+uv run python scripts/publish_season_pdf.py S1 "C:/path/to/AppliedAI-Season-1-Combined.pdf"
+```
+
+The file is too large to keep in the site, so the script uploads it to a GitHub release named
+`season-<n>` on this repository (replacing it if you run it again) and records the download link,
+page count, and size on the season in `data/seasons.yaml`. Commit that change and push to `main`.
+The season page, the course outline, and each of the season's lessons then show a "Read the whole
+season" download. Needs the GitHub CLI (`gh`), signed in.
 
 ## Licence
 

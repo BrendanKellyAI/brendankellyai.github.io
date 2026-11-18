@@ -189,3 +189,43 @@ def test_season_tool_rejects_dashes():
 def test_season_extra_tool_field_is_rejected():
     with pytest.raises(ValidationError):
         Season.model_validate({**VALID_SEASON, "tools": [{**VALID_TOOL, "extra": "x"}]})
+
+
+def test_site_analytics_id_defaults_to_none():
+    assert SiteSettings.model_validate(VALID_SITE).analytics_id == ""
+
+
+def test_site_accepts_a_ga4_analytics_id():
+    site = SiteSettings.model_validate({**VALID_SITE, "analytics_id": "G-FCWF98SQSH"})
+    assert site.analytics_id == "G-FCWF98SQSH"
+
+
+def test_site_rejects_a_malformed_analytics_id():
+    with pytest.raises(ValidationError, match="analytics_id"):
+        SiteSettings.model_validate({**VALID_SITE, "analytics_id": "UA-12345-1"})
+
+
+SEASON_PDF = {
+    "pdf_url": "https://github.com/example/releases/download/season-1/season-1.pdf",
+    "pdf_pages": 190,
+    "pdf_size_mb": 36.1,
+}
+
+
+def test_season_pdf_fields_are_optional():
+    assert Season.model_validate(VALID_SEASON).pdf_url is None
+
+
+def test_season_accepts_a_complete_pdf():
+    season = Season.model_validate({**VALID_SEASON, **SEASON_PDF})
+    assert season.pdf_pages == 190
+
+
+def test_season_pdf_fields_must_be_set_together():
+    with pytest.raises(ValidationError, match="together"):
+        Season.model_validate({**VALID_SEASON, "pdf_url": SEASON_PDF["pdf_url"]})
+
+
+def test_season_pdf_url_must_be_https():
+    with pytest.raises(ValidationError, match="https"):
+        Season.model_validate({**VALID_SEASON, **SEASON_PDF, "pdf_url": "http://example.com/a.pdf"})

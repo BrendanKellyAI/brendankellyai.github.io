@@ -11,7 +11,7 @@ from hub.render import SiteData, episode_url_slug, season_url_slug
 
 def sitemap_paths(data: SiteData) -> list[str]:
     """Every indexable page. The 404 page is excluded, since it is marked noindex."""
-    paths = ["/", "/seasons/", "/about/"]
+    paths = ["/", "/seasons/", "/about/", "/privacy/"]
     paths += [f"/seasons/{season_url_slug(season)}/" for season in data.seasons]
     paths += [f"/episodes/{episode_url_slug(episode)}/" for episode in data.published_episodes]
     return paths

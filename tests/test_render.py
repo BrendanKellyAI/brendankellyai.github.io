@@ -97,6 +97,7 @@ def test_load_site_data_groups_episodes_by_season():
     assert len(data.episodes_for("S1")) == 13
     assert [ep.number for ep in data.episodes_for("S2")] == list(range(17))
     assert [ep.number for ep in data.episodes_for("S3")] == list(range(13))
+    assert data.episodes_for("S4") == []
     published = data.published_episodes
     assert all(ep.status.value == "published" for ep in published)
     if published:
@@ -286,3 +287,88 @@ def test_asset_url_adds_a_content_hash(tmp_path):
 def test_asset_url_leaves_unknown_paths_alone(tmp_path):
     assert asset_url("/static/js/missing.js", tmp_path) == "/static/js/missing.js"
     assert asset_url("https://example.com/x.js", tmp_path) == "https://example.com/x.js"
+
+
+def _render_about(site):
+    env = make_environment()
+    install_course_globals(env, load_site_data(DATA_DIR))
+    return env.get_template("about.html").render(
+        site=site, active_nav="about", social_image_path="/x.png", person_jsonld={}
+    )
+
+
+def test_analytics_tag_on_every_page_with_consent_defaults_first():
+    site = load_site_data(DATA_DIR).site.model_copy(update={"analytics_id": "G-ABC1234"})
+    html = _render_about(site)
+    # Consent Mode: the defaults script runs before the GA tag, and the banner sets cookies.
+    defaults = html.index("/static/js/analytics.js")
+    tag = html.index("https://www.googletagmanager.com/gtag/js?id=G-ABC1234")
+    assert defaults < tag
+    assert 'data-ga-id="G-ABC1234"' in html
+    assert "/static/js/consent.js" in html
+    assert "data-consent" in html
+    assert "Cookie settings" in html
+    assert 'id="privacy"' in html
+
+
+def test_no_analytics_markup_without_an_analytics_id():
+    site = load_site_data(DATA_DIR).site.model_copy(update={"analytics_id": ""})
+    html = _render_about(site)
+    assert "data-consent" not in html
+    assert "consent.js" not in html
+    assert "analytics.js" not in html
+    assert "googletagmanager" not in html
+    assert 'href="/privacy/"' in html
+
+
+def _render_privacy(site):
+    env = make_environment()
+    install_course_globals(env, load_site_data(DATA_DIR))
+    return env.get_template("privacy.html").render(site=site, social_image_path="/x.png")
+
+
+def test_privacy_page_covers_analytics_when_enabled():
+    site = load_site_data(DATA_DIR).site.model_copy(
+        update={"analytics_id": "G-ABC1234"}
+    )
+    html = _render_privacy(site)
+    # Privacy requests go to LinkedIn; no email address is published.
+    assert "send me a message on LinkedIn" in html
+    assert site.linkedin_profile_url in html
+    assert "mailto:" not in html
+    assert "_ga_ABC1234" in html
+    assert "Data Protection Commission" in html
+    assert "Article 6(1)(a)" in html
+    assert "Analytics without cookies" in html
+    assert "counts the visit without cookies" in html
+
+
+def test_privacy_page_without_analytics_says_no_cookies():
+    site = load_site_data(DATA_DIR).site.model_copy(
+        update={"analytics_id": ""}
+    )
+    html = _render_privacy(site)
+    assert "The site uses no analytics and sets no cookies." in html
+    assert "_ga" not in html
+
+
+def test_season_pdf_link_shows_only_when_published():
+    env = make_environment()
+    data = load_site_data(DATA_DIR)
+    install_course_globals(env, data)
+    template = env.get_template("season.html")
+    with_pdf = SEASON_S1.model_copy(
+        update={"pdf_url": "https://example.com/s1.pdf", "pdf_pages": 190, "pdf_size_mb": 36.1}
+    )
+
+    def render(season):
+        return template.render(
+            site=data.site, season=season, episodes=data.episodes_for("S1"),
+            previous_season=None, next_season=None, social_image_path="/x.png",
+        )
+
+    html = render(with_pdf)
+    assert 'href="https://example.com/s1.pdf"' in html
+    assert "Read the whole season" in html
+    assert "190 slides" in html
+    assert "Read the whole season" not in render(SEASON_S1)

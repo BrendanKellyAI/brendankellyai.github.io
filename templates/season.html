@@ -31,6 +31,7 @@
         <a class="ghost" href="{{ c.episode_href(live[-1]) }}">Latest: {{ live[-1].title }}</a>
       </div>
       {% endif %}
+      {{ c.season_pdf(season) }}
       {% else %}
       <p class="planned-note">This season is planned. Its lessons are announced in the season intro.</p>
       {% endif %}
@@ -41,7 +42,8 @@
         <p class="graph-card-kind" data-card-kind></p>
         <p class="graph-card-title" data-card-title></p>
         <p class="graph-card-body" data-card-body></p>
-        <p class="graph-card-cta" data-card-cta>Click to open</p>
+        <ul class="graph-card-links" data-card-links hidden></ul>
+        <a class="graph-card-cta" data-card-cta href="/" hidden>Open lesson</a>
       </div>
       <figcaption class="graph-legend">
         <span><i class="dot dot-live"></i>Lesson</span>

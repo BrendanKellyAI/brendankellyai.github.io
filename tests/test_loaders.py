@@ -5,7 +5,7 @@ from hub.models import Episode, Season, SiteSettings
 def test_load_site_returns_site_settings():
     site = load_site()
     assert isinstance(site, SiteSettings)
-    assert site.current_season == "S2"
+    assert site.current_season == "S3"
 
 
 def test_load_seasons_returns_fifteen_seasons():

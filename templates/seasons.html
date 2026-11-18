@@ -28,6 +28,7 @@
       </div>
     </div>
     <p class="outline-desc">{{ s.description }}</p>
+    {{ c.season_pdf(s, "season-pdf season-pdf-compact") }}
     {% if eps %}
     <ol class="outline-lessons">
       {% for ep in eps %}

@@ -4,14 +4,15 @@ number: 5
 slug: search
 title: "Search: keyword, vector, hybrid"
 format: explainer
-status: planned
-publish_date: null
-summary: null
-decision_rule: null
+status: published
+publish_date: 2026-10-21
+summary: "Keyword search finds the error codes vector search misses, and vector finds the paraphrases keyword misses, but hybrid search fell short of vector on search, so vector stayed."
+decision_rule: "Test search on each kind of question your users ask. Keep keyword search for exact codes, and merge rankings only where your tests show it helps."
 linkedin_url: null
-deck_pdf: null
-cover_image: null
-og_image: null
-lab_path: null
+deck_pdf: bk-s2-e5-search-v3.pdf
+cover_image: cover.png
+og_image: og.png
+lab_path: episodes/s2-e5-search
 article_url: null
 playbook_slides: []
+slide_sections: [cover, why, recap, model, model, worked, wherevector, wherekeyword, ourq, live, worked, thetest, thetest, finding, breaks, finding, lesson1, lesson2, checked, breaks, eng, leaders, scoreboard, rule, map]
