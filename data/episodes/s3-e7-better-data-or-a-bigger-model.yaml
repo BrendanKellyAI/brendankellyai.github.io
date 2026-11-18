@@ -4,14 +4,15 @@ number: 7
 slug: better-data-or-a-bigger-model
 title: "Field note: better data or a bigger model?"
 format: field_note
-status: planned
-publish_date: null
-summary: null
-decision_rule: null
+status: published
+publish_date: 2026-11-18
+summary: "On Halvard's 520 questions, fixing documents and retrieval added 166 right answers; a model at 20 times the price added 8 at the start and 1 at the end."
+decision_rule: "When a new model is released, fix your documents and retrieval before you upgrade. On our test, structure and labels gave more than the bigger model did, at a twentieth of the price per token."
 linkedin_url: null
-deck_pdf: null
-cover_image: null
-og_image: null
-lab_path: null
+deck_pdf: bk-s3-e7-better-data-or-a-bigger-model-v2.pdf
+cover_image: cover.png
+og_image: og.png
+lab_path: field-notes/s3-e7-data-or-model
 article_url: null
 playbook_slides: []
+slide_sections: [cover, why, why, fieldnote, thisepisode, lesson1, lesson1, lesson1, lesson2, lesson2, lesson2, lesson2, lesson2, lesson3, lesson3, lesson3, honestnotes, leaders, eng, rule, map]
