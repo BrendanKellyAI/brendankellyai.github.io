@@ -160,6 +160,21 @@ def test_home_page_has_no_newsletter_placeholder(tmp_path):
     assert 'name="robots" content="noindex"' in not_found_html
 
 
+def test_home_page_speaks_to_forward_deployed_engineers(tmp_path):
+    output_dir = tmp_path / "_site"
+    build(output_dir=output_dir)
+    home_html = (output_dir / "index.html").read_text(encoding="utf-8")
+
+    assert "forward deployed engineers" in home_html
+    assert "Who it&#39;s for" in home_html or "Who it's for" in home_html
+    assert home_html.count('class="audience-start"') == 3
+    # The rules section shows the hand-picked rules, in the order given.
+    rules = home_html.split('id="rules-heading"')[1].split("</ol>")[0]
+    codes = ["S3 E1", "S3 E3", "S3 E4", "S2 E16", "S3 E9", "S3 E10"]
+    positions = [rules.index(f">{code}<") for code in codes]
+    assert positions == sorted(positions)
+
+
 def test_build_writes_pages_for_published_episodes(fixture_project, tmp_path):
     data_dir, static_dir = fixture_project
     output_dir = tmp_path / "_site"

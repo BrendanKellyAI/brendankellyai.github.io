@@ -2,7 +2,7 @@
 {% import "_course.html" as c with context %}
 
 {% block title %}Applied AI, a course by {{ site.name }}{% endblock %}
-{% block meta_description %}Short visual lessons on how AI really works, from the first token to agents in production. Every claim tested in code.{% endblock %}
+{% block meta_description %}Short visual lessons on how AI works and how to deploy it, for engineers, forward deployed engineers and leaders. Every claim tested in code.{% endblock %}
 {% block head_extra %}{{ super() }}<script src="{{ asset_url('/static/js/graph.js') }}" defer></script>{% endblock %}
 
 {% block content %}
@@ -21,9 +21,9 @@
 <section class="home-hero">
   <div class="wrap home-hero-inner">
     <div class="pitch">
-      <p class="kicker">A free course by {{ site.name }}</p>
+      <p class="kicker">A free course for engineers, forward deployed engineers and leaders</p>
       <h1>Learn how AI actually works.</h1>
-      <p class="pitch-sub">Short visual lessons, from the first token to agents in production. Every claim is tested in code you can run, and every lesson ends with one rule you can use at work the next day.</p>
+      <p class="pitch-sub">Short visual lessons for engineers who build AI, forward deployed engineers who ship it inside a customer's business, and the leaders who decide what to fund. Every claim is tested in code you can run, and every lesson ends with one rule you can use at work the next day.</p>
       <div class="resume" data-resume hidden>
         <p class="resume-label">Continue where you left off</p>
         <a class="resume-link" href="#"><span data-resume-title></span> <span class="resume-pos" data-resume-pos></span></a>
@@ -60,6 +60,27 @@
   <script type="application/json" id="course-graph">{{ course_graph() | tojson }}</script>
 </section>
 
+{% set audiences = [
+  ("Engineers", "How models, retrieval and adaptation actually behave, measured in code you can rerun.", "S1 E1"),
+  ("Forward deployed engineers", "From a customer's problem to a measured pilot on the customer's own data: scope it, ground it in their documents, adapt the model, and know when to stop.", "S3 E1"),
+  ("Leaders", "What to fund, in what order, how far to trust it, and when to stop.", "S3 E0"),
+] %}
+<section class="wrap audience" aria-labelledby="audience-heading">
+  <p class="kicker">Who it's for</p>
+  <h2 id="audience-heading">Built for the people who build, deploy and decide</h2>
+  <ul class="audience-grid">
+    {% for title, text, code in audiences %}
+    {% set first = course.published_in_order | selectattr("code", "equalto", code) | first %}
+    <li>
+      <h3>{{ title }}</h3>
+      <p>{{ text }}</p>
+      {% if first %}<a class="audience-start" href="{{ c.episode_href(first) }}">Start with {{ first.code }}: {{ first.title }}</a>{% endif %}
+    </li>
+    {% endfor %}
+  </ul>
+  <p class="audience-case">One invented customer, Halvard Home, runs through the course, so you see a full engagement: the CEO's ask, the scoring, the build, the measurements and the page that goes to the board.</p>
+</section>
+
 {% if showcase %}
 {% set tags = showcase.slide_sections %}
 {% set slides = slides_for(showcase) %}
@@ -89,8 +110,8 @@
 {% if ordered %}
 <section class="wrap rules" aria-labelledby="rules-heading">
   <p class="kicker">What you'll take away</p>
-  <h2 id="rules-heading">Rules worth keeping</h2>
-  {{ c.rule_index(limit=6) }}
+  <h2 id="rules-heading">Rules to take into your next customer meeting</h2>
+  {{ c.rule_index(codes=["S3 E1", "S3 E3", "S3 E4", "S2 E16", "S3 E9", "S3 E10"]) }}
   <p class="rules-more">Every lesson ends with one. <a href="/seasons/">See them all, lesson by lesson</a></p>
 </section>
 {% endif %}
@@ -98,7 +119,7 @@
 <section class="wrap road" aria-labelledby="road-heading">
   <p class="kicker">Where the course goes</p>
   <h2 id="road-heading">From how models work to how to lead with them</h2>
-  <p class="road-sub">Two technical seasons, then a leadership season that applies them.</p>
+  <p class="road-sub">Technical seasons on how it works, leadership seasons on what to do with it. Together they cover a full deployment, from the first token to production.</p>
   <ol class="road-grid">
     {% for s in course.seasons %}
     <li class="is-{{ s.type.value }}{% if s.code == site.current_season %} is-current{% endif %}">

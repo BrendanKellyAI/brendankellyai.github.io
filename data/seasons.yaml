@@ -20,7 +20,7 @@
   slug: ai-strategy
   title: AI strategy
   type: leadership
-  description: Where AI earns its place, and choices that outlast the next model release.
+  description: "Where AI earns its place, and choices that outlast the next model release, including how to scope a customer's first use case and write its stop condition."
   tools:
     - title: Scorecard template
       description: "A blank scorecard (CSV) with one worked example row, ready for the lab strategy score command."
@@ -40,7 +40,7 @@
   slug: adapting-models
   title: Adapting models
   type: technical
-  description: "Changing how a model behaves, not what it knows: prompting, structured output, fine-tuning open-weight models with LoRA, and distillation, and when each is worth it."
+  description: "Changing how a model behaves, not what it knows: prompting, structured output, fine-tuning open-weight models with LoRA, and distillation, and how to tell a customer whether their problem needs a better prompt, retrieval or a tuned model."
 
 - code: S5
   number: 5
@@ -82,35 +82,35 @@
   slug: reliability-and-traceability
   title: "Agents in production: reliability and traceability"
   type: technical
-  description: Tracing, failure modes, retries, and keeping humans in the loop.
+  description: Tracing, failure modes, retries, and keeping humans in the loop, so you can explain what went wrong in a customer's environment.
 
 - code: S11
   number: 11
   slug: security
   title: "Agents in production: security"
   type: technical
-  description: Prompt injection, guardrails, tool permissions, and limiting the blast radius.
+  description: Prompt injection, guardrails, tool permissions, and limiting the blast radius inside a customer's systems.
 
 - code: S12
   number: 12
   slug: delivery-and-adoption
   title: Delivery, adoption, and change
   type: leadership
-  description: Moving from pilot to production, aligning stakeholders, and getting AI adopted.
+  description: Moving from pilot to production, aligning a customer's stakeholders, and getting AI adopted.
 
 - code: S13
   number: 13
   slug: performance-and-cost
   title: "Agents in production: performance and cost"
   type: technical
-  description: Latency budgets, caching, inference optimisation, and token economics.
+  description: Latency budgets, caching, inference optimisation, and token economics, on the customer's hardware and budget.
 
 - code: S14
   number: 14
   slug: resilience
   title: "Agents in production: resilience"
   type: technical
-  description: What happens when an agent gets it wrong, and how to recover.
+  description: What happens when an agent gets it wrong in production, and how to recover before the customer notices.
 
 - code: S15
   number: 15

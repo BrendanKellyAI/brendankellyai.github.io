@@ -177,6 +177,16 @@ a.pager-link:hover { border-color: var(--green); }
 .dot-season { border: 2px solid var(--white); background: var(--navy); }
 .graph-hint { margin-left: auto; }
 
+/* Who it's for */
+.audience { padding-top: 4rem; }
+.audience h2 { font-size: clamp(1.7rem, 4vw, 2.4rem); max-width: 30ch; }
+.audience-grid { list-style: none; padding: 0; margin: 1.5rem 0 0; display: grid; gap: 0.8rem; grid-template-columns: repeat(auto-fit, minmax(min(18rem, 100%), 1fr)); }
+.audience-grid li { background: var(--panel); border-top: 3px solid var(--green); padding: 1.1rem 1.2rem 1.2rem; border-radius: 0 0 10px 10px; display: flex; flex-direction: column; }
+.audience-grid h3 { color: var(--white); margin: 0 0 0.4rem; font-size: 1.15rem; }
+.audience-grid p { margin: 0 0 1rem; }
+.audience-start { margin-top: auto; color: var(--green); font-weight: 700; }
+.audience-case { color: var(--slate); margin-top: 1.2rem; max-width: 60rem; }
+
 /* Inside every lesson */
 .inside, .rules, .road, .teacher, .closer { padding-top: 4rem; }
 .inside h2, .rules h2, .road h2, .season-head h2 { font-size: clamp(1.7rem, 4vw, 2.4rem); max-width: 30ch; }
