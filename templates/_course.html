@@ -71,9 +71,16 @@
 {% endmacro %}
 
 {# The most recent `limit` decision rules (all when no limit), shown in course order. #}
-{% macro rule_index(limit=None) %}
+{# Every published rule; or the newest `limit`; or the episodes named in `codes`, in that order. #}
+{% macro rule_index(limit=None, codes=None) %}
 {% set ruled = course.published_in_order | selectattr("decision_rule") | list %}
+{% if codes %}
+{% set picked = namespace(items=[]) %}
+{% for code in codes %}{% for ep in ruled if ep.code == code %}{% set picked.items = picked.items + [ep] %}{% endfor %}{% endfor %}
+{% set shown = picked.items %}
+{% else %}
 {% set shown = ruled[-limit:] if limit else ruled %}
+{% endif %}
 <ol class="rule-index">
   {% for ep in shown %}
   <li>
