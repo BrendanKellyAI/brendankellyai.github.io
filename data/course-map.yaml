@@ -105,6 +105,19 @@ sections:
   lesson4: Lesson 4
   lesson: The lesson
   scorecard: Scorecard
+  whattodo: What to do
+  check: The check
+  halvard: Halvard's page
+  options: The options
+  ceosask: The CEO's ask
+  sensitivity: Sensitivity
+  stop: Stop criteria
+  card: The card
+  # Season 4
+  taska: "Task A"
+  taskb: "Task B"
+  changeplan: Change from the plan
+  security: Security
 
 concepts:
   - id: tokens
@@ -157,7 +170,10 @@ concepts:
     links: [s1-e3, s2-e0, s2-e1, s2-e2, s2-e5, s2-e7, s2-e8, s2-e15]
   - id: strategy
     label: Strategy
-    links: [s3-e0, s3-e1, s3-e6, s3-e10, s3-e11, S6]
+    links: [s3-e0, s3-e1, s3-e6, s3-e10, s3-e11, s3-e12, S6]
+  - id: adapting
+    label: Adapting models
+    links: [s4-e0, s4-e1, s4-e5, s4-e8, s4-e12, s2-e15]
   - id: agents
     label: Agents
     links: [S5, S10, S11, S14]

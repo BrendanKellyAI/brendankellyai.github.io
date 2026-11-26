@@ -31,13 +31,16 @@
     - title: One-page AI strategy template
       description: "Nine sections for the board, from the outcomes you want to the first move and what you will not do."
       url: https://github.com/BrendanKellyAI/applied-ai-lab/blob/main/season3/templates/one-page-strategy.md
+    - title: The strategy card
+      description: "Every decision rule and question from the season, with the case result and the stop criteria."
+      url: https://github.com/BrendanKellyAI/applied-ai-lab/blob/main/season3/strategy-card.md
 
 - code: S4
   number: 4
   slug: adapting-models
   title: Adapting models
   type: technical
-  description: Prompting, structured output, fine-tuning, quantisation, and choosing the right model for the task.
+  description: "Changing how a model behaves, not what it knows: prompting, structured output, fine-tuning open-weight models with LoRA, and distillation, and when each is worth it."
 
 - code: S5
   number: 5
