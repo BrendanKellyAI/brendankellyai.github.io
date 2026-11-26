@@ -5,7 +5,7 @@ from hub.models import Episode, Season, SiteSettings
 def test_load_site_returns_site_settings():
     site = load_site()
     assert isinstance(site, SiteSettings)
-    assert site.current_season == "S3"
+    assert site.current_season == "S4"
 
 
 def test_load_seasons_returns_fifteen_seasons():
@@ -17,7 +17,7 @@ def test_load_seasons_returns_fifteen_seasons():
 
 def test_load_episodes_returns_every_planned_episode():
     episodes = load_episodes()
-    assert len(episodes) == 44
+    assert len(episodes) == 58
     assert all(isinstance(episode, Episode) for episode in episodes.values())
     codes = {episode.code for episode in episodes.values()}
     assert codes == {
@@ -25,6 +25,7 @@ def test_load_episodes_returns_every_planned_episode():
         *(f"S1 E{n}" for n in range(13)),
         *(f"S2 E{n}" for n in range(17)),
         *(f"S3 E{n}" for n in range(13)),
+        *(f"S4 E{n}" for n in range(14)),
     }
 
 

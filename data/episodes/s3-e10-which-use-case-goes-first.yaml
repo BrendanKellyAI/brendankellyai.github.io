@@ -4,14 +4,15 @@ number: 10
 slug: which-use-case-goes-first
 title: "Which use case goes first?"
 format: explainer
-status: planned
-publish_date: null
-summary: null
-decision_rule: null
+status: published
+publish_date: 2026-11-26
+summary: "Under a scoring rule fixed in advance, the library consistency check edges reply drafts for agents, 4.20 to 4.15, and the CEO's website assistant comes third."
+decision_rule: "Start with the use case that scores best under rules fixed in advance, and write the stop condition before the pilot starts."
 linkedin_url: null
-deck_pdf: null
-cover_image: null
-og_image: null
+deck_pdf: bk-s3-e10-which-use-case-goes-first-v1.pdf
+cover_image: cover.png
+og_image: og.png
 lab_path: null
 article_url: null
 playbook_slides: []
+slide_sections: [cover, recap, therule, worked, finding, finding, check, finding, decision, leaders, honestnotes, rule, map]

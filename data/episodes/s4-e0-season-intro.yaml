@@ -1,0 +1,18 @@
+code: "S4 E0"
+season: S4
+number: 0
+slug: season-intro
+title: "Season 4: Adapting models"
+format: season_intro
+status: published
+publish_date: 2026-11-26
+summary: "Season introduction: when a model knows enough but does not do what you want, climb a ladder of fixes, cheapest first, from better instructions to fine-tuning."
+decision_rule: "Fix behaviour with the cheapest rung that clears the bar: instructions, then examples, then an enforced format, and tune only when those stop improving."
+linkedin_url: null
+deck_pdf: bk-s4-e0-season-intro-v3.pdf
+cover_image: cover.png
+og_image: og.png
+lab_path: null
+article_url: null
+playbook_slides: []
+slide_sections: [cover, recap, thisseason, why, model, model, model, thisseason, thecase, taska, taskb, thetest, model, changeplan, security, thisseason, readwhen, readwhen, whatnext, leaders, map]
