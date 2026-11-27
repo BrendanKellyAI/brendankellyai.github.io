@@ -41,6 +41,13 @@
   title: Adapting models
   type: technical
   description: "Changing how a model behaves, not what it knows: prompting, structured output, fine-tuning open-weight models with LoRA, and distillation, and how to tell a customer whether their problem needs a better prompt, retrieval or a tuned model."
+  tools:
+    - title: The decision card
+      description: "Prompt, retrieve, or tune: the path from the gap you measured to the cheapest fix that clears your bar, with every rule and question from the season."
+      url: https://github.com/BrendanKellyAI/applied-ai-lab/blob/main/season4/decision-card.md
+    - title: Fine-tuning readiness checklist
+      description: "What to check before you commission a tuning project, from the gap and the labels to what tuning breaks, with Halvard's numbers as a worked case."
+      url: https://github.com/BrendanKellyAI/applied-ai-lab/blob/main/season4/finetune-readiness.md
 
 - code: S5
   number: 5

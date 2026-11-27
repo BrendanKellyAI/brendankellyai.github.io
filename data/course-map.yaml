@@ -173,7 +173,7 @@ concepts:
     links: [s3-e0, s3-e1, s3-e6, s3-e10, s3-e11, s3-e12, S6]
   - id: adapting
     label: Adapting models
-    links: [s4-e0, s4-e1, s4-e5, s4-e8, s4-e12, s2-e15]
+    links: [s4-e0, s4-e1, s4-e5, s4-e8, s4-e10, s4-e12, s2-e15]
   - id: agents
     label: Agents
     links: [S5, S10, S11, S14]
@@ -198,3 +198,6 @@ links:
   - [s3-e3, s2-e3]
   - [s3-e7, s2-e8]
   - [s3-e9, s2-e12]
+  - [s4-e8, s2-e15]
+  - [s4-e10, s1-e10]
+  - [s4-e12, s3-e9]
