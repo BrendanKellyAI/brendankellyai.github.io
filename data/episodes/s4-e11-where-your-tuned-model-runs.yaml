@@ -1,8 +1,8 @@
 code: "S4 E11"
 season: S4
 number: 11
-slug: open-weights
-title: "Open weights: tuning a model you host"
+slug: where-your-tuned-model-runs
+title: "Where your tuned model runs"
 format: explainer
 status: planned
 publish_date: null
