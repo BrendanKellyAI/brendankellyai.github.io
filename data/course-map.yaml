@@ -118,6 +118,11 @@ sections:
   taskb: "Task B"
   changeplan: Change from the plan
   security: Security
+  diagnosis: The diagnosis
+  test2: Test 2
+  test3: Test 3
+  test4: Test 4
+  summary: Summary
 
 concepts:
   - id: tokens
@@ -134,7 +139,7 @@ concepts:
     links: [s1-e1, s1-e8, s1-e9]
   - id: cost
     label: Token cost
-    links: [s1-e2, s1-e10, s1-e11, S6, S13]
+    links: [s1-e2, s1-e10, s1-e11, s4-e2, S6, S13]
   - id: tokeniser
     label: Tokeniser
     links: [s1-e2]
@@ -155,25 +160,28 @@ concepts:
     links: [s1-e9, S2, S7, s2-e1, s2-e10]
   - id: evaluation
     label: Evaluation
-    links: [s1-e9, S8, S10, s2-e3, s2-e14, s3-e3]
+    links: [s1-e9, S8, S10, s2-e3, s2-e14, s3-e3, s4-e2]
   - id: reasoning
     label: Reasoning
     links: [s1-e2, s1-e10, s1-e11]
   - id: measurement
     label: Measuring, not quoting
-    links: [s1-e7, s1-e8, s1-e9, s1-e10, s1-e11, s1-e12, S8, s2-e0, s2-e2, s2-e3, s3-e3, s3-e7, s3-e9]
+    links: [s1-e7, s1-e8, s1-e9, s1-e10, s1-e11, s1-e12, S8, s2-e0, s2-e2, s2-e3, s3-e3, s3-e7, s3-e9, s4-e1, s4-e2]
   - id: latency
     label: Latency
     links: [s1-e5, s1-e6, s1-e10, s1-e11, S13]
   - id: retrieval
     label: Retrieval
-    links: [s1-e3, s2-e0, s2-e1, s2-e2, s2-e5, s2-e7, s2-e8, s2-e15]
+    links: [s1-e3, s2-e0, s2-e1, s2-e2, s2-e5, s2-e7, s2-e8, s2-e15, s4-e1, s4-e8]
   - id: strategy
     label: Strategy
     links: [s3-e0, s3-e1, s3-e6, s3-e10, s3-e11, s3-e12, S6]
   - id: adapting
     label: Adapting models
-    links: [s4-e0, s4-e1, s4-e5, s4-e8, s4-e12, s2-e15]
+    links: [s4-e0, s4-e1, s4-e2, s4-e5, s4-e8, s4-e12, s2-e15]
+  - id: prompting
+    label: Prompting
+    links: [s2-e9, s4-e1, s4-e2, s4-e3, s4-e4]
   - id: agents
     label: Agents
     links: [S5, S10, S11, S14]
