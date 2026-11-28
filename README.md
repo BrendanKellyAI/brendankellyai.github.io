@@ -78,7 +78,7 @@ Every episode already has a file in `data/episodes/`, with `status: planned`. To
 
 1. Copy the deck into `static/episodes/<code>-<slug>/`, named `bk-<code>-<slug>-v<number>.pdf`,
    for example `static/episodes/s1-e4-attention/bk-s1-e4-attention-v1.pdf`. Decks can be up
-   to 6 MB.
+   to 12 MB.
 2. Make the lesson card image and the link preview image from the deck's first slide:
 
    ```
